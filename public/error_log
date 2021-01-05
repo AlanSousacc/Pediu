@@ -1,0 +1,30 @@
+[06-Sep-2020 13:36:03 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 13:36:03 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 13:36:03 America/Fortaleza] PHP Fatal error:  require(): Failed opening required '/home3/acptic24/public_html/laravel/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 14:09:16 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 14:09:16 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 14:09:16 America/Fortaleza] PHP Fatal error:  require(): Failed opening required '/home3/acptic24/public_html/laravel/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 14:09:20 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 14:09:20 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[06-Sep-2020 14:09:20 America/Fortaleza] PHP Fatal error:  require(): Failed opening required '/home3/acptic24/public_html/laravel/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:08:47 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:08:47 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:08:47 America/Fortaleza] PHP Fatal error:  require(): Failed opening required '/home3/acptic24/public_html/laravel/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:08:48 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:08:48 America/Fortaleza] PHP Warning:  require(/home3/acptic24/public_html/laravel/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:08:48 America/Fortaleza] PHP Fatal error:  require(): Failed opening required '/home3/acptic24/public_html/laravel/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php70/root/usr/share/pear') in /home3/acptic24/public_html/laravel/public/index.php on line 24
+[07-Sep-2020 07:47:02 America/Fortaleza] PHP Parse error:  syntax error, unexpected '?', expecting variable (T_VARIABLE) in /home3/acptic24/public_html/vendor/ramsey/uuid/src/functions.php on line 34
+[07-Sep-2020 13:08:00 America/Fortaleza] PHP Fatal error:  Uncaught Error: Class 'Barryvdh\DomPDF\ServiceProvider' not found in /home3/acptic24/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:690
+Stack trace:
+#0 /home3/acptic24/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(624): Illuminate\Foundation\Application->resolveProvider('Barryvdh\\DomPDF...')
+#1 /home3/acptic24/public_html/bootstrap/app.php(44): Illuminate\Foundation\Application->register('Barryvdh\\DomPDF...')
+#2 /home3/acptic24/public_html/public/index.php(38): require_once('/home3/acptic24...')
+#3 {main}
+  thrown in /home3/acptic24/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php on line 690
+[07-Sep-2020 13:08:05 America/Fortaleza] PHP Fatal error:  Uncaught Error: Class 'Barryvdh\DomPDF\ServiceProvider' not found in /home3/acptic24/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php:690
+Stack trace:
+#0 /home3/acptic24/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(624): Illuminate\Foundation\Application->resolveProvider('Barryvdh\\DomPDF...')
+#1 /home3/acptic24/public_html/bootstrap/app.php(44): Illuminate\Foundation\Application->register('Barryvdh\\DomPDF...')
+#2 /home3/acptic24/public_html/public/index.php(38): require_once('/home3/acptic24...')
+#3 {main}
+  thrown in /home3/acptic24/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php on line 690

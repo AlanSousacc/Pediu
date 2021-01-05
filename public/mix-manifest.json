@@ -1,0 +1,12 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/js/cliente/cliente.js": "/js/cliente/cliente.js",
+    "/js/contato/contato.js": "/js/contato/contato.js",
+    "/js/empresas/empresas.js": "/js/empresas/empresas.js",
+    "/js/enderecos/entrega.js": "/js/enderecos/entrega.js",
+    "/js/entregadores/entregadores.js": "/js/entregadores/entregadores.js",
+    "/js/pedidos/pedidos.js": "/js/pedidos/pedidos.js",
+    "/js/produtos/produtos.js": "/js/produtos/produtos.js",
+    "/js/usuarios/usuarios.js": "/js/usuarios/usuarios.js"
+}

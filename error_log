@@ -1,0 +1,4 @@
+[06-Sep-2020 13:06:30 America/Fortaleza] PHP Fatal error:  Out of memory (allocated 796925952) (tried to allocate 4096 bytes) in phar:///home3/acptic24/public_html/composer.phar/src/Composer/DependencyResolver/RuleSetGenerator.php on line 129
+[06-Sep-2020 14:08:04 America/Fortaleza] PHP Fatal error:  Out of memory (allocated 790634496) (tried to allocate 33554440 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/RuleSet.php on line 83
+[07-Sep-2020 12:57:49 America/Fortaleza] PHP Fatal error:  Out of memory (allocated 786440192) (tried to allocate 37748736 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/RuleSet.php on line 90
+[07-Sep-2020 18:31:22 America/Fortaleza] PHP Fatal error:  Out of memory (allocated 786440192) (tried to allocate 37748736 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/RuleSet.php on line 90
