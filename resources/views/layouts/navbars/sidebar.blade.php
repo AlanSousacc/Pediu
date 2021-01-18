@@ -231,6 +231,7 @@
       {{-- end usuários --}}
 
       {{-- Administrativo --}}
+      @if ((Auth::user()->isAdmin == 1) && (Auth::user()->profile == 'Administrador'))
       <li>
         <a data-toggle="collapse" href="#empresa">
           <i class="fa fa-user-shield"></i>
@@ -239,7 +240,7 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse @if ($activePage == 'editarempresa' || $activePage == 'listagemempresa' || $activePage == 'novousuario') show @endif" id="empresa">
+        <div class="collapse @if ($activePage == 'editarempresa' || $activePage == 'listagemempresa' || $activePage == 'novaempresa') show @endif" id="empresa">
           <ul class="nav">
             <li class="@if ($activePage == 'novaempresa') active @endif">
               <a href="{{ route('empresa.create') }}">
@@ -265,6 +266,7 @@
         </div>
       </li>
       {{-- end Administrativo --}}
+      @endif
     </ul>
   </div>
 </div>

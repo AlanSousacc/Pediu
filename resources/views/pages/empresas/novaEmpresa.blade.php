@@ -37,7 +37,7 @@
 
 <script>
   // Ajax para o cliente e preencher os campos do formulário
-  function carregaPrecoProduto(){
+  function carregaDadosCliente(){
     $.ajax({
       url: '{{route('busca.clienteid')}}' + '/' + $('#cliente_id').val(),
       type: "get",
@@ -68,7 +68,7 @@
   }
 
   $('#cliente_id').on('change',function(ev){
-    carregaPrecoProduto();
+    carregaDadosCliente();
   });
 
   $("#logo").change(function() {
@@ -88,6 +88,5 @@
     }
   }
 </script>
-
 @endpush
 @endsection

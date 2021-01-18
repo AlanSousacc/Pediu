@@ -1,7 +1,7 @@
 @extends('layouts.app', [
-'namePage' => 'Listagem de Produtos',
+'namePage' => 'Listagem de Empresas',
 'class' => 'sidebar-mini',
-'activePage' => 'listagemProdutos',
+'activePage' => 'listagemempresa',
 ])
 
 @section('content')
@@ -16,35 +16,61 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title"> Produtos</h4>
+          <h4 class="card-title"> Empresas Cadastradas</h4>
         </div>
         <div class="card-body">
           <div class="table-responsive" style="overflow: initial!important;">
             <table class="table">
-              <thead class=" text-primary">
-                <th class="text-center">#ID</th>
-                <th class="text-center">Descrição</th>
-                <th class="text-center">Pr. Custo</th>
-                <th class="text-center">Pr. Venda</th>
-                <th class="text-center">Tipo</th>
+              <thead class="text-primary">
+                <th class="text-center">Status</th>
+                <th class="text-center">Nome Proprietário</th>
+                <th class="text-center">Razão Social</th>
+                <th class="text-center">CNPJ</th>
+                <th class="text-center">Licença</th>
+                <th class="text-center">Validade</th>
                 <th class="text-center">Opções</th>
               </thead>
               <tbody>
                 @foreach ($consulta as $item)
-                <tr>
-                  <td class="text-center">{{$item->id}}</td>
-                  <td class="text-center">{{$item->descricao}}</td>
-                  <td class="text-center">R$ {{number_format($item->precocusto, 2, ',', '.')}}</td>
-                  <td class="text-center">R$ {{number_format($item->precovenda, 2, ',', '.')}}</td>
-                  <td class="text-center">{{$item->tipo}}</td>
+                <tr class="{{$item->active != 'S' ? 'text-danger' : ''}}">
+                  @if ($item->active == 'S')
+                  <td class="text-center">
+                    <i class="fa fa-check-circle text-success"></i>
+                  </td>
+                  @else
+                  <td class="text-center">
+                    <i class="fa fa-times-circle text-danger"></i>
+                  </td>
+                  @endif
+                  <td class="text-center">{{$item->nome}}</td>
+                  <td class="text-center">{{$item->razao}}</td>
+                  <td class="text-center">{{$item->cnpj}}</td>
+
+                  @if ((isset($item->licenca->status) && $item->licenca->status == 1))
+                  <td class="text-center">
+                    <i class="fa fa-check-circle text-success"></i>
+                  </td>
+                  @else
+                  <td class="text-center">
+                    <i class="fa fa-times-circle text-danger"></i>
+                  </td>
+                  @endif
+                  @if ($item->active == 'S')
+                  <td class="text-center">
+                    {{!isset($item->licenca['dtvalidade']) ? 'S/V' : Carbon\Carbon::parse(isset($item->licenca['dtvalidade']))->format('d/m/Y')}}
+                  </td>
+                  @else
+                  <td class="text-center">S/V</td>
+                  @endif
+                    {{-- {{$item->active == 'S' ? Carbon\Carbon::parse(isset($item->licenca['dtvalidade']))->format('d/m/Y') : 'S/V'}} --}}
                   <td class="text-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ route('produto.edit', $item->id) }}">Alterar</a>
-                        <a class="dropdown-item" href="{{$item->id}}" data-contid={{$item->id}} data-target="#delete" data-toggle="modal">Remover</a>
+                        <a class="dropdown-item" href="{{ route('empresa.edit', $item->uuid) }}"><i class="fa fa-eye"></i> Visualizar</a>
+                        <a href="{{$item->id}}" data-emprid={{$item->id}} data-target="#licenca" data-toggle="modal" class="dropdown-item"><i class="fa fa-address-card"></i> Licença</a>
                       </div>
                     </div>
                   </td>
@@ -54,19 +80,20 @@
             </table>
           </div>
           <div class="row">
-            <div class="col-md-10"><p>Mostrando {{$consulta->count()}} produtos de um total de {{$consulta->total()}}</p></div>
+            <div class="col-md-10"><p>Mostrando {{$consulta->count()}} empresa(s) de um total de {{$consulta->total()}}</p></div>
             <div class="col-md-2">{{$consulta->links()}}</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  {{-- modal Deletar--}}
-  @include('pages.produtos.modalExcluirProduto')
+  <!-- Modal licença-->
+  @include('pages.empresas.modalLicenca')
 </div>
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-{{-- <script src='https://cdnjs.com/libraries/jquery.mask'></script> --}}
-<script src='{{asset('js/produtos/produtos.js')}}'></script>
+
+<script src='{{asset('js/empresas/empresas.js')}}'></script>
+<script src='{{asset('js/licenca/licenca.js')}}'></script>
 @endpush
 @endsection

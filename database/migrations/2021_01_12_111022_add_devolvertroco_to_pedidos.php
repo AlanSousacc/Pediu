@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGruposTable extends Migration
+class AddDevolvertrocoToPedidos extends Migration
 {
   /**
   * Run the migrations.
@@ -13,13 +13,11 @@ class CreateGruposTable extends Migration
   */
   public function up()
   {
-    Schema::create('grupos', function (Blueprint $table) {
-      $table->id();
-      $table->string('descricao', 60);
-      $table->timestamps();
+    Schema::table('pedidos', function (Blueprint $table) {
+      $table->boolean('devolvertroco');
     });
   }
-  
+
   /**
   * Reverse the migrations.
   *
@@ -27,6 +25,8 @@ class CreateGruposTable extends Migration
   */
   public function down()
   {
-    Schema::dropIfExists('grupos');
+    Schema::table('pedidos', function (Blueprint $table) {
+      //
+    });
   }
 }

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
 
         DB::table('users')->truncate();
 
+        $this->call([ EmpresasTableSeeder::class]);
         $this->call([ UsersTableSeeder::class]);
         $this->call([ ProdutosTableSeeder::class]);
 

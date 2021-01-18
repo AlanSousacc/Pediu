@@ -13,6 +13,7 @@ use App\Models\{
   Contato,
   Produto,
 };
+use Auth;
 
 class PedidoController extends Controller
 {
@@ -26,9 +27,9 @@ class PedidoController extends Controller
 
   public function index()
   {
-    $consulta   = $this->repository->paginate();
-    $pedido     = $this->repository->all();
-    $entregador = Entregador::get();
+    $consulta   = $this->repository->where('empresa_id', Auth::user()->empresa_id)->paginate();
+    $pedido     = $this->repository->where('empresa_id', Auth::user()->empresa_id)->get();
+    $entregador = Entregador::where('empresa_id', Auth::user()->empresa_id)->get();
 
     return view('pages.pedidos.listagemPedidos', compact('consulta', 'entregador', 'pedido'));
   }
@@ -119,6 +120,7 @@ class PedidoController extends Controller
     try{
       // dados do pedido
       $pedido             = new Pedidos;
+      $pedido->empresa_id = Auth::user()->empresa_id;
       $pedido->observacao = $data['observacao'];
       $pedido->desconto   = $data['desconto'] != null ? $data['desconto'] : 0;
 
@@ -154,6 +156,7 @@ class PedidoController extends Controller
       // aplica o pedido na movimentação
       $mov                  = new Movimentacao;
       $mov->tipo            = 'Entrada';
+      $mov->empresa_id      = Auth::user()->empresa_id;
       $mov->forma_pagamento = $pedido->forma_pagamento;
       $mov->valortotal      = $pedido->valortroco != null ? $pedido->total + $pedido->valortroco : $pedido->total;
       $mov->valorrecebido   = 0;
@@ -274,7 +277,7 @@ class PedidoController extends Controller
             $produto_id => ['qtde' => $qtde, 'obsitem' => $obsitem, 'prvenda' => $prvenda]
           ]);
         }
-        
+
         // $pedido->produtos()->sync($produtos);
 
         if (!$saved)

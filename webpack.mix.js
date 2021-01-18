@@ -10,4 +10,5 @@ mix
     .js('resources/js/usuarios/usuarios.js', 'public/js/usuarios')
     .js('resources/js/pedidos/pedidos.js', 'public/js/pedidos')
     .js('resources/js/empresas/empresas.js', 'public/js/empresas')
+    .js('resources/js/licenca/licenca.js', 'public/js/licenca')
     .js('resources/js/entregadores/entregadores.js', 'public/js/entregadores');

@@ -109,7 +109,7 @@ $('#delete').on('show.bs.modal', function (event) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\testedelivery\resources\js\usuarios\usuarios.js */"./resources/js/usuarios/usuarios.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\usuarios\usuarios.js */"./resources/js/usuarios/usuarios.js");
 
 
 /***/ })

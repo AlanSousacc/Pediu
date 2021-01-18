@@ -62,7 +62,7 @@
                 </form>
               </div>
               {{-- tab fim novo pedido --}}
-              
+
               {{-- tab listagem pedido --}}
               <div class="tab-pane" id="pedidosRealizados">
                 <div class="card-header">
@@ -71,7 +71,7 @@
                 @include('pages.pedidos.listagemPedidosBase')
               </div>
               {{-- tab fim listagem pedido --}}
-              
+
               {{-- tab conferencia --}}
               <div class="tab-pane" id="conferencia">
                 <div class="card-header">
@@ -80,7 +80,7 @@
                 @include('pages.entregadores.listagemPedidosEntregadores')
               </div>
               {{-- fim tab conferencia --}}
-              
+
               {{-- tab resumo --}}
               <div class="tab-pane" id="resumo">
                 @include('pages.entregadores.listagemResumoEntregadores')
@@ -118,65 +118,65 @@
   })
 </script>
 
-<script>  
+<script>
   var count = 0;
   var TotalGeral = 0;
   var desconto = 0;
-  
+
   function carregaLocalEntrega(){
     $.ajax({
       url: '{{route('busca.enderecos')}}' + '/' + $('#contatoid').val(),
       type: "get",
       dataType: "json"
-      
+
     }).done(function(resposta) {
       $('#entrega_id').attr('readonly', false);
-      let str = '';    
+      let str = '';
       $(resposta.data).each(function () {
         str += '<option value=' + this.id + '>' + this.endereco + ' - ' + this.numero  + ' - ' + this.bairro  + '</option>';
-        
+
         var url = '{{ route("contato.edit", ":id") }}';
         url = url.replace(':id', resposta.data[0].contato_id);
-        
+
         $('.contato-edit').attr("href", url)
       })
-      
+
       $('#entrega_id').html(str);
-      
-      
-      
+
+
+
     }).fail(function(jqXHR, textStatus ) {
       alert("Falha ao listar os dados de entrega: " + textStatus);
     });
   }
-  
+
   // função de carregamento de local de entrega automático ao escolher o contato
   $('#contatoid').on('change',function(ev){
     carregaLocalEntrega();
   });
-  
+
   // Ajax para carregar o preço do produto
   function carregaPrecoProduto(){
     $.ajax({
       url: '{{route('busca.precoproduto')}}' + '/' + $('#produto_id').val(),
       type: "get",
       dataType: "json"
-      
+
     }).done(function(resposta) {
-      let dados = resposta.data;    
+      let dados = resposta.data;
       $('#prvenda').val(dados[0].precovenda)
-      
-      
+
+
     }).fail(function(jqXHR, textStatus ) {
       alert("Falha ao carregar preço do produto: " + textStatus);
     });
   }
-  
+
   // função de carregamento de preço do produto automático ao escolher o produto
   $('#produto_id').on('change',function(ev){
     carregaPrecoProduto();
   });
-  
+
   // calcula o desconto com o valor total
   $('#desconto').on('change',function(ev){
     var total    = Number($('#total').val())
@@ -184,7 +184,7 @@
     desconto = desconto_temp;
     $('#total').val(TotalGeral - desconto);
   });
-  
+
   // verifica se a forma de pagamento e dinheiro e habilita o campo de troco, se não for deixa desabilitado
   $('#forma_pagamento').on('change',function(ev){
     if($('#forma_pagamento').val() == 'Dinheiro'){
@@ -196,38 +196,38 @@
     }
   });
 
-  
+
   $(document).ready(function() {
     $('#prvenda').mask("#.##0.00", {reverse: true});
     $('.troco').mask("#.##0.00", {reverse: true});
     $('#desconto').mask("#.##0.00", {reverse: true});
-    
+
     $('#total').mask("#.##0.00", {reverse: true});
-    
+
     carregaLocalEntrega();
     carregaPrecoProduto();
   });
-  
+
   function limpaCampos(){
     $('#obsitem').val('');
     carregaPrecoProduto();
   }
-  
+
   // Ajax para carregar o produto na grid ao selecionar o item e clicar no botão +
   $('#inserirProduto').click(function(){
     $.ajax({
       url: '{{route('busca.produto.pedido')}}' + '/' + $('#produto_id').val(),
       type: "get",
       dataType: "json"
-      
+
     }).done(function(resposta) {
       let dados = resposta.data;
-      var str = '<tr id="'+count+'">' 
+      var str = '<tr id="'+count+'">'
         str += '<input type="hidden" name="produtos_listagem_id[]" value="'+dados.id+'" />'
         str += '<input type="hidden" name="produtos_qtde[]" value="'+$('#qtde').val()+'" />'
         str += '<input type="hidden" name="obsitem[]" value="'+$('#obsitem').val()+'" />'
         str += '<input type="hidden" name="prvenda[]" value="'+$('#prvenda').val()+'" />'
-        
+
         if($('#obsitem').val() == ''){
           str += '<td class="text-left">'+ dados.descricao + '</td>'
         } else{
@@ -238,43 +238,43 @@
         str += '<td class="text-center">'+ ($('#qtde').val() * $('#prvenda').val()).toFixed(2) +'</td>'
         str += '<td class="text-center"><button class="btn btn-outline-primary btn-sm btn-fab btn-icon btn-round" type="button" onclick="removerItem('+count+')"><i class="now-ui-icons ui-1_simple-remove"></i></button></td>'
         str += '</tr>';
-        
+
         $('#total').val();
-        
+
         TotalGeral += $('#qtde').val() * $('#prvenda').val();
         $('#total').val(TotalGeral - desconto);
-        
+
         // habilita botão de finalizar pedido
         $('#finalizarPedido').prop('disabled', false);
-        
+
         // habilita inserir desconto
         $('#desconto').removeAttr("readonly");
         $('.sifrao').removeClass('sifrao');
-        
+
         $('#qtde').val(1);
         $('#listaProd').append(str);
         count++;
-        
+
         limpaCampos();
       }).fail(function(jqXHR, textStatus ) {
         alert("Falha ao inserir produto no pedido!" + textStatus);
       });
     });
-    
+
     // remove o item da grid e atualiza o preço total
     function removerItem(id){
       var valorTotal = $('#'+ id).children('td');
       valorTotal = valorTotal[3];
       valorTotal = $(valorTotal).text();
-      
+
       valorTotal = Number(valorTotal);
       TotalGeral -= valorTotal;
       $('#total').val(TotalGeral - desconto);
       $('#'+ id).remove()
     }
-    
+
   </script>
-  
+
   {{-- inicia a configuração dos inputs de filtro por data e hora --}}
   <script>
     $(function() {
@@ -293,7 +293,7 @@
         "endDate": moment()
       });
     });
-    
+
     $(function() {
       $('#dtend').daterangepicker({
         singleDatePicker: true,

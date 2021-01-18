@@ -1,3 +1,23 @@
+<div class="row">
+  <div class="form-group col-md-4">
+    <label for="profile">Tipo de Usuário*</label>
+    <select id="profile" class="form-control" name="profile" required>
+      {{-- <option value="S" {{isset($empresa) &&  $empresa->active == 'S' ? 'selected' : ''}}>Ativo</option> --}}
+      <option value="Administrador" >Administrador</option>
+      <option value="Usuario" >Usuario</option>
+    </select>
+  </div>
+
+  @if ((Auth::user()->isAdmin == 1) && (Auth::user()->empresa_id == 1))
+  <div class="form-check form-check-inline mt-2">
+    <label class="form-check-label">
+      <input class="form-check-input" type="checkbox" id="isAdmin" name="isAdmin" value="1"> É Super Usuário
+      <span class="form-check-sign"></span>
+    </label>
+  </div>
+  @endif
+
+</div>
 <div class="input-group {{ $errors->has('name') ? ' has-danger' : '' }}">
   <div class="input-group-prepend">
     <div class="input-group-text">

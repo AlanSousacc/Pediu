@@ -16,8 +16,10 @@ class UsersTableSeeder extends Seeder
     User::create ([
       'name'        => 'Alan Wilian de Sousa',
       'email'       => 'alansousa.cc@gmail.com',
+      'empresa_id'  => '1',
+      'isAdmin'     => '1',
+      'profile'     => 'Administrador',
       'password'    => bcrypt('14789635sousa'),
       ]);
     }
   }
-  

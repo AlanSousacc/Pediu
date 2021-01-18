@@ -156,7 +156,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\testedelivery\resources\js\contato\contato.js */"./resources/js/contato/contato.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\contato\contato.js */"./resources/js/contato/contato.js");
 
 
 /***/ })

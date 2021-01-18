@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pedidos extends Model
 {
-  protected $fillable = ['observacao', 'desconto', 'total', 'local_pagamento', 'contato_id', 'entrega_id', 'forma_pagamento', 'entregador_id'];
+  protected $fillable = ['observacao', 'desconto', 'total', 'local_pagamento', 'contato_id', 'entrega_id', 'forma_pagamento', 'entregador_id', 'empresa_id', 'devolvertroco'];
 
   public function produtos(){
 		return $this->belongsToMany('App\Models\Produto', 'pedido_produto', 'pedido_id', 'produto_id')->withPivot(["qtde", "obsitem", "prvenda"]);

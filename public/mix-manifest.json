@@ -6,6 +6,7 @@
     "/js/empresas/empresas.js": "/js/empresas/empresas.js",
     "/js/enderecos/entrega.js": "/js/enderecos/entrega.js",
     "/js/entregadores/entregadores.js": "/js/entregadores/entregadores.js",
+    "/js/licenca/licenca.js": "/js/licenca/licenca.js",
     "/js/pedidos/pedidos.js": "/js/pedidos/pedidos.js",
     "/js/produtos/produtos.js": "/js/produtos/produtos.js",
     "/js/usuarios/usuarios.js": "/js/usuarios/usuarios.js"

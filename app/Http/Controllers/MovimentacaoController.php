@@ -32,7 +32,7 @@ class MovimentacaoController extends Controller
       } else {
         $mov->status  = 1;
       }
-      
+
       $saved = $mov->save();
 
     } catch (Exception $e) {
@@ -42,7 +42,7 @@ class MovimentacaoController extends Controller
 
     try{
       DB::beginTransaction();
-      
+
       if (!$saved){
 				throw new Exception('Falha ao aplicar recebimento!');
 			}
@@ -61,7 +61,7 @@ class MovimentacaoController extends Controller
   {
     try {
       $data = $request->except('_token');
-      $mov = Movimentacao::where('pedido_id', $data['pedido_id'])->first();
+      $mov = Movimentacao::where('pedido_id', $data['pedido_id'])->where('empresa_id', Auth::user()->empresa_id)->first();
 
       $mov->status = 1;
       $mov->valorrecebido = $data['valorpedido'];
@@ -87,6 +87,6 @@ class MovimentacaoController extends Controller
       DB::rollBack();
       return redirect()->back()->with('error', $e->getMessage());
     }
-    
+
   }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EntregadorRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Models\Entregador;
@@ -21,7 +20,7 @@ class EntregadorController extends Controller
 
   public function index()
   {
-    $consulta = $this->entregador->paginate();
+    $consulta = $this->entregador->where('empresa_id', Auth::user()->empresa_id)->paginate();
 
     return view('pages.entregadores.listagemEntregador', compact('consulta'));
   }
@@ -32,7 +31,10 @@ class EntregadorController extends Controller
 
   public function store(EntregadorRequest $request)
   {
-    $entregador = $this->entregador->create($request->all());
+    $data = $request->except('_token');
+    $data['empresa_id'] = Auth::user()->empresa_id;
+
+    $entregador = $this->entregador->create($data);
 
     if (!$entregador)
       throw new Exception('Falha ao salvar este Entregador!');

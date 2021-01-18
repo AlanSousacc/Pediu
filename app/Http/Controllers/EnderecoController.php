@@ -7,6 +7,7 @@ use App\Http\Requests\EnderecoRequest;
 
 use App\Models\Endereco;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class EnderecoController extends Controller
 {
@@ -18,7 +19,7 @@ class EnderecoController extends Controller
 
   public function index()
   {
-    $consulta = $this->endereco->paginate();
+    $consulta = $this->endereco->where('empresa_id', Auth::user()->empresa_id)->paginate();
     return view('pages.enderecos.listagemEndereco', compact('consulta'));
   }
 
@@ -41,7 +42,10 @@ class EnderecoController extends Controller
 
   public function store(EnderecoRequest $request)
   {
-    $endereco = $this->endereco->create($request->all());
+    $data = $request->except('_token');
+    $data['empresa_id'] = Auth::user()->empresa_id;
+
+    $endereco = $this->endereco->create($data);
 
     $saved = $endereco->save();
 

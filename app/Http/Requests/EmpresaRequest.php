@@ -31,7 +31,7 @@ class EmpresaRequest extends FormRequest
       'numero'  => ['required', 'max:5'],
       'bairro'  => ['required', 'max:15'],
       'cnpj'    => ['required', 'max:20', "unique:empresas,cnpj,{$id},id"],
-      'email'   => ['required', 'email'],
+      'email'   => ['required', 'email', "unique:empresas,email,{$id},id"],
       'logo'    => ['image']
     ];
   }

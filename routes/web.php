@@ -46,6 +46,10 @@ Route::group(['middleware' => 'auth'], function () {
   //empresa
   Route::resource('empresa', 'EmpresaController');
   Route::get('cliente-id/{id?}', 'EmpresaController@returnCliente')->name('busca.clienteid');
+  Route::any('empresa-licenca', 'EmpresaController@licencaEmpresa')->name('empresa.licenca');
+
+  	// Licença
+	Route::post('licenca/salvar', 'LicencaController@store')->name('licenca.store');
 
 	// contato
 	Route::resource('contato', 'ContatoController');

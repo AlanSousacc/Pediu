@@ -15,7 +15,12 @@ class UserController extends Controller
 {
   public function index(User $model)
   {
-    $consulta = $model::paginate(10);
+    if(Auth::user()->empresa_id == 1){
+      $consulta = $model::paginate(10);
+    } else {
+      $consulta = $model::where('empresa_id', Auth::user()->empresa_id)->paginate(10);
+    }
+
     return view('users.index', compact('consulta'));
   }
 
@@ -24,13 +29,13 @@ class UserController extends Controller
     $user = User::find($id);
 		return view('users.editar', compact('user'));
   }
-  
+
   public function update(Request $request){
     $data = $request->all();
 
     try{
       $user = User::find($data['user_id']);
-      
+
       if (!$user)
       throw new Exception("Nenhum usuário encontrado");
 
@@ -72,15 +77,15 @@ class UserController extends Controller
 
       if (!$user)
         throw new Exception("Nenhum Usuário encontrado!");
-      
+
     } catch (Exception $e) {
       return redirect()->back()->with('error', $e->getMessage());
       exit();
     }
-    
+
     try{
       DB::beginTransaction();
-      
+
       $saved = $user->delete();
 
       if (!$saved){

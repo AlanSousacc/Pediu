@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grupo extends Model
 {
-  protected $fillable = ['descricao'];
+  protected $fillable = ['descricao', 'empresa_id'];
 
   public function produtos(){
 		return $this->hasMany('App\Models\Produto');

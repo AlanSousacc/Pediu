@@ -108,7 +108,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\testedelivery\resources\js\cliente\cliente.js */"./resources/js/cliente/cliente.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\cliente\cliente.js */"./resources/js/cliente/cliente.js");
 
 
 /***/ })

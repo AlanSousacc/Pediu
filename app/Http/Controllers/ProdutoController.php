@@ -11,6 +11,7 @@ use App\Models\Pedidos;
 use App\Models\Grupo;
 use Exception;
 use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class ProdutoController extends Controller
 {
@@ -20,9 +21,10 @@ class ProdutoController extends Controller
   {
     $this->produto = $produto;
   }
+
   public function index()
   {
-    $consulta = $this->produto->paginate();
+    $consulta = $this->produto->where('empresa_id', Auth::user()->empresa_id)->paginate();
     return view('pages.produtos.listagemProduto', compact('consulta'));
   }
 
@@ -54,6 +56,7 @@ class ProdutoController extends Controller
     try{
       $produto             = new Produto;
       $produto->descricao  = $data['descricao'];
+      $produto->empresa_id = Auth::user()->empresa_id;
       $produto->composicao = $data['composicao'];
       $produto->tipo       = $data['tipo'];
       $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));

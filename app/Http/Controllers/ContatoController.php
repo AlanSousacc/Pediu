@@ -23,7 +23,7 @@ class ContatoController extends Controller
 
   public function index()
   {
-    $consulta = $this->contato->paginate();
+    $consulta = $this->contato->where('empresa_id', Auth::user()->empresa_id)->paginate();
 
     return view('pages.contatos.listagemContato', compact('consulta'));
   }
@@ -45,6 +45,7 @@ class ContatoController extends Controller
   {
     $data = $request->except('_token');
 
+    $data['empresa_id'] = Auth::user()->empresa_id;
     $contato = $this->contato->create($data);
     $saveContato = $contato->save();
 

@@ -93,6 +93,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
+      <label for="telefone">Logomarca</label>
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="logo" name="logo">
         <label class="custom-file-label" for="customFile">Escolha sua logo</label>
