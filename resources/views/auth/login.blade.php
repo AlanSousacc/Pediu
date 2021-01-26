@@ -31,7 +31,7 @@
             <div class="card card-login card-plain">
                 <div class="card-header ">
                 <div class="logo-container">
-                    <img src="{{ asset('assets/img/logo.png') }}" alt="">
+                    <img src="{{ asset('assets/img/pediu.png') }}" alt="">
                 </div>
                 </div>
                 <div class="card-body ">
@@ -72,7 +72,7 @@
                 <div class="text-center">
                     <h6>
                     <a href="{{ route('password.request') }}" class="link footer-link">{{ __('Esqueceu a Senha?') }}</a>
-                    </h6>                
+                    </h6>
                 </div>
                 </div>
             </div>

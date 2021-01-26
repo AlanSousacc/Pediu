@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Empresa extends Model
 {
-  protected $fillable = ['uuid', 'razao', 'fantasia', 'celular', 'nome', 'cidade', 'endereco', 'numero', 'bairro', 'cnpj','email', 'logo', 'active', 'cliente_id'];
+  protected $fillable = ['uuid', 'razao', 'fantasia', 'celular', 'nome', 'cidade', 'endereco', 'numero', 'bairro', 'cnpj','email', 'logo', 'active', 'cliente_id','slug'];
 
   public function cliente(){
     return $this->belongsTo('App\Models\Cliente');

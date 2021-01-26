@@ -6,6 +6,7 @@ use App\Http\Requests\EmpresaRequest;
 use App\Http\Requests\RequestUpdateEmpresa;
 use Illuminate\Support\Str;
 use App\Models\Cliente;
+use App\Models\Configuracao;
 use App\Models\Empresa;
 use App\Models\Licenca;
 use App\User;
@@ -52,6 +53,8 @@ class EmpresaController extends Controller
       $data['cliente_id'] = null ;
     }
 
+    $data['slug'] = Str::kebab($data['slug']);
+
     if(isset($request->logo)){
       $data['logo'] = $request->logo->store("img/logos");
     } else if($data['carregalogo'] != null){
@@ -66,6 +69,16 @@ class EmpresaController extends Controller
     $cnpj = preg_replace('/\D/', '', substr($data['cnpj'], 0, 6));
 
     $saved = $this->repository->create($data);
+
+    // ao cadastrar a empresa define a configuração padrão da empresa
+    $config                   = new Configuracao;
+    $config->empresa_id       = $saved->id;
+    $config->controlaentrega  = 1;
+
+    $savedconfig = $config->save();
+    if (!$savedconfig)
+      return redirect()->back()->with('error', 'Falha ao aplicar Configurações!');
+
 
     /*
     ao criar uma nova empresa sempre é criado um novo usuário
@@ -106,6 +119,8 @@ class EmpresaController extends Controller
   public function update(RequestUpdateEmpresa $request, $uuid)
   {
     $data = $request->except('_token');
+
+    $data['slug'] = Str::kebab($data['slug']);
 
     if (!$empresa = $this->repository->where('uuid', $uuid)->first())
       return redirect()->back()->with('error', 'Nenhuma Empresa encontrada');

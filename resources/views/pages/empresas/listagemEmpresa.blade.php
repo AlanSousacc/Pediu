@@ -57,12 +57,11 @@
                   @endif
                   @if ($item->active == 'S')
                   <td class="text-center">
-                    {{!isset($item->licenca['dtvalidade']) ? 'S/V' : Carbon\Carbon::parse(isset($item->licenca['dtvalidade']))->format('d/m/Y')}}
+                    {{isset($item->licenca['dtvalidade']) ? Carbon\Carbon::parse($item->licenca['dtvalidade'])->format('d/m/Y') : 'S/V'}}
                   </td>
                   @else
                   <td class="text-center">S/V</td>
                   @endif
-                    {{-- {{$item->active == 'S' ? Carbon\Carbon::parse(isset($item->licenca['dtvalidade']))->format('d/m/Y') : 'S/V'}} --}}
                   <td class="text-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

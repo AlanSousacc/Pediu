@@ -7,6 +7,7 @@ use App\Models\Movimentacao;
 use App\Models\Pedidos;
 use Exception;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class MovimentacaoController extends Controller
 {

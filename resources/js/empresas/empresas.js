@@ -11,25 +11,3 @@ $(document).ready(function () {
 
   $('#cnpj').mask('00.000.000/0001-00');
 });
-
-// $(function() {
-//   $('#expires_at').val(start.format('YYYY-MM-DD'));
-//   $('#expires_at').daterangepicker({
-//     singleDatePicker: true,
-//     "locale": {
-//       "applyLabel": "Aplicar",
-//       "cancelLabel": "Cancelar",
-//       "format": "DD/MM/YYYY"
-//     },
-//     "startDate": moment(),
-//     "endDate": moment()
-//   });
-// });
-
-// $('#active').on('change',function(ev){
-//   if($('#active').val() == 'N'){
-//     $('#expires_at').attr('readonly', true);
-//   } else {
-//     $('#expires_at').attr('readonly', false);
-//   }
-// });

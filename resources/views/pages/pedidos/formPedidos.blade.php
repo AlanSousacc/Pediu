@@ -18,10 +18,6 @@
       <a href="" class="btn btn-primary contato-edit"><i class="ionicons ion-edit"></i></a>
     </div>
 
-    {{-- <div class="form-group col-md-1 mt-2 add">
-      <a href="{{route('contato.create')}}" class="btn btn-round btn-sm mt-4 btn-outline-primary"><i class="now-ui-icons ui-1_simple-add"></i></a>
-    </div> --}}
-
     <div class="form-group col-md-6 offset-md-1">
       <label class="col-md-12 control-label ml-2" for="entrega_id">Local de Entrega*</label>
       <div class="col-md-12">

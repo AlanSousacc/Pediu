@@ -30,5 +30,5 @@ class EmpresasTableSeeder extends Seeder
       'cliente_id' => '',
       'active' => '1',
       ]);
+    }
   }
-}

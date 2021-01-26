@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([ EmpresasTableSeeder::class]);
         $this->call([ UsersTableSeeder::class]);
         $this->call([ ProdutosTableSeeder::class]);
+        $this->call([ ConfiguracaoTableSeeder::class]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }

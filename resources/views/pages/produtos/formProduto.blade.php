@@ -25,7 +25,7 @@
       </select>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col-md-5">
       <div class="form-group">
@@ -42,7 +42,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col-md-3">
       <label for="precocusto" class="col-sm-12 col-form-label">Pr. Custo</label>
@@ -54,7 +54,7 @@
         @include('alerts.feedback', ['field' => 'precocusto'])
       </div>
     </div>
-    
+
     <div class="col-md-3">
       <label for="precovenda" class="col-sm-12 col-form-label">Pr. Venda</label>
       <div class="input-group input-group-md">
@@ -66,4 +66,18 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <label for="foto">Imagem</label>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="foto" name="foto">
+        <label class="custom-file-label" for="customFile">Escolha sua Imagem</label>
+      </div>
+    </div>
+    <div class="col-md-4 offset-2">
+      <img id="imgfoto" src="{{ isset($produto) && $produto->foto != 'default.png' ? url("storage/".$produto->foto) : url("storage/img/logos/default.png")}} " alt="Imagem do produto" style="max-width: 150px"/>
+    </div>
+  </div>
+  <input type="hidden" id="carregafoto" name="carregafoto" value="">
 </div>

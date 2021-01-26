@@ -12,6 +12,7 @@ use App\Models\Grupo;
 use Exception;
 use Auth;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
@@ -24,7 +25,7 @@ class ProdutoController extends Controller
 
   public function index()
   {
-    $consulta = $this->produto->where('empresa_id', Auth::user()->empresa_id)->paginate();
+    $consulta = $this->produto->where('empresa_id', Auth::user()->empresa_id)->where('status', 1)->paginate();
     return view('pages.produtos.listagemProduto', compact('consulta'));
   }
 
@@ -53,40 +54,29 @@ class ProdutoController extends Controller
   public function store(ProdutoRequest $request) {
     $data = $request->except('_token');
 
-    try{
-      $produto             = new Produto;
-      $produto->descricao  = $data['descricao'];
-      $produto->empresa_id = Auth::user()->empresa_id;
-      $produto->composicao = $data['composicao'];
-      $produto->tipo       = $data['tipo'];
-      $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
-      $produto->precovenda = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
-      $produto->status     = $data['status'];
-      if($data['grupo_id'] != 0){
-        $produto->grupo_id   = $data['grupo_id'];
-      }
+    $produto             = new Produto;
+    $produto->descricao  = $data['descricao'];
+    $produto->empresa_id = Auth::user()->empresa_id;
+    $produto->composicao = $data['composicao'];
+    $produto->tipo       = $data['tipo'];
+    $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
+    $produto->precovenda = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
+    $produto->status     = $data['status'];
+    if($data['grupo_id'] != 0)
+      $produto->grupo_id   = $data['grupo_id'];
 
-    } catch (Exception $e) {
-      return redirect()->back()->with('error', $e->getMessage());
-      exit();
+    if(isset($request->foto)){
+      $produto->foto = $request->foto->store("img/".Auth::user()->empresa->uuid. "/fotosProdutos");
+    } else  {
+      $produto->foto = 'img/logos/default.png';
     }
 
-    try{
-			DB::beginTransaction();
+    $saved = $produto->save();
 
-      $saved = $produto->save();
+    if (!$saved)
+      return redirect()->back()->with('error', 'Falha ao salvar Produto!');
 
-      if (!$saved)
-        throw new Exception('Falha ao salvar Produto!');
-
-			DB::commit();
-			return redirect()->back()->with('success', 'Produto criado com sucesso!');
-
-    } catch (Exception $e) {
-
-      DB::rollBack();
-      return redirect()->back()->with('error', $e->getMessage());
-    }
+    return redirect()->back()->with('success', 'Produto criado com sucesso!');
   }
 
   public function edit($id)
@@ -112,70 +102,57 @@ class ProdutoController extends Controller
   {
     $data = $request->except('_token');
 
-    try{
-      $produto = $this->produto->find($id);
+    $produto = $this->produto->find($id);
 
-      if (!$produto)
-        throw new Exception("Nenhum Produto encontrado");
+    if (!$produto)
+      throw new Exception("Nenhum Produto encontrado");
 
-      $produto->descricao  = $data['descricao'];
-      $produto->composicao = $data['composicao'];
-      $produto->tipo       = $data['tipo'];
-      $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
-      $produto->precovenda = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
-      $produto->status     = $data['status'];
-      $saved = $produto->save();
+    $produto->descricao  = $data['descricao'];
+    $produto->composicao = $data['composicao'];
+    $produto->tipo       = $data['tipo'];
+    $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
+    $produto->precovenda = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
+    $produto->status     = $data['status'];
 
-    } catch (Exception $e) {
-      return redirect()->back()->with('error', $e->getMessage());
-      exit();
+    if(isset($request->foto)){
+      $produto->foto = $request->foto->store("img/".Auth::user()->empresa->uuid. "/fotosProdutos");
+    } else if($data['carregafoto'] != null){
+      $produto->foto = $data['carregafoto'];
+    } else {
+      $produto->foto = 'img/logos/default.png';
     }
 
-    try{
-      DB::beginTransaction();
+    // dd($data);
+    $saved = $produto->save();
+    if (!$saved)
+      return redirect()->back()->with('error', 'Falha ao Alterar Produto!');
 
-      if (!$saved){
-				throw new Exception('Falha ao Alterar Produto!');
-			}
-
-			DB::commit();
-			return redirect()->back()->with('success', 'Produto alterado com sucesso!');
-
-    } catch (Exception $e) {
-
-      DB::rollBack();
-      return redirect()->back()->with('error', $e->getMessage());
-    }
+    return redirect()->route('produto.index')->with('success', 'Produto alterado com sucesso!');
   }
 
   public function destroy(Request $request)
   {
-    try{
-			$produto = $this->produto->find($request->produto_id);
+    $produto = $this->produto->find($request->produto_id);
 
-      if (!$produto)
-        throw new Exception("Nenhum Produto encontrado!");
+    $pedidos = DB::table('pedido_produto')
+              ->where('pedido_produto.produto_id', $produto->id)
+              ->get();
 
-    } catch (Exception $e) {
-      return redirect()->back()->with('error', $e->getMessage());
-      exit();
-    }
+    if (count($pedidos) >= 1)
+      return redirect()->back()->with('error', 'Não é possível remover este produto, ele já foi vendido, você pode inativa-lo!');
 
-    try{
-      DB::beginTransaction();
+    if (!$produto)
+      return redirect()->back()->with('error', 'Nenhum Produto encontrado!');
 
-      $saved = $produto->delete();
+    Storage::delete($produto->foto);
 
-      if (!$saved){
-        throw new Exception('Falha ao remover este Produto!');
-      }
-      DB::commit();
-      // se chegou aqui é pq deu tudo certo
-      return redirect()->back()->with('success', 'Produto #' . $produto->id . ' removido com sucesso!');
-    } catch (Exception $e) {
-			DB::rollBack();
+    $saved = $produto->delete();
 
-      return redirect()->back()->with('error', $e->getMessage());
-    }
+    if (!$saved)
+      return redirect()->back()->with('error', 'Falha ao remover este Produto!');
+
+    // se chegou aqui é pq deu tudo certo
+    return redirect()->back()->with('success', 'Produto #' . $produto->id . ' removido com sucesso!');
+
   }
 }

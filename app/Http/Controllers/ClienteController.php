@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Image;
 use File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ClienteController extends Controller
 {
@@ -31,6 +32,7 @@ class ClienteController extends Controller
   public function store(ClienteRequest $request)
   {
     $data = $request->except('_token');
+    $data['slug'] = Str::kebab($data['slug']);
 
     if ($request->hasFile('logo') && $request->logo->isValid()) {
       $data['logo'] = $request->logo->store("img/logos");

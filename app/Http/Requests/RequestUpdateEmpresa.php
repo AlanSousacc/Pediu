@@ -25,7 +25,6 @@ class RequestUpdateEmpresa extends FormRequest
       'endereco'=> ['required', 'max:60'],
       'numero'  => ['required', 'max:5'],
       'bairro'  => ['required', 'max:15'],
-
       'logo'    => ['image']
     ];
 
@@ -36,10 +35,13 @@ class RequestUpdateEmpresa extends FormRequest
       $rules += ['email'   => 'required', 'email',
         Rule::unique('empresas')->ignore($this->id)
       ];
+      $rules += ['slug'   => 'required', 'max:30',
+        Rule::unique('empresas')->ignore($this->id)
+      ];
     }
 
     return $rules;
-}
+  }
 
 public function messages()
 {
@@ -63,6 +65,7 @@ public function messages()
     'cnpj.required'     => 'O campo CNPJ deve ser informado!',
     'cnpj.max'      => 'O campo CNPJ deve conter no máximo 20 caracteres!',
     'email.required'        => 'O campo Email é obrigatório!',
+    'slug.unique'       => 'Este nome de loja está sendo usado por outra empresa, escolha outro nome!',
   ];
-}
+  }
 }

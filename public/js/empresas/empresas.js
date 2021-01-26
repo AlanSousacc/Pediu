@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -103,30 +103,11 @@ $(document).ready(function () {
   $('.telefone').mask('(00) 0000-0000');
   $('.celular').mask('(00) 00000-0000');
   $('#cnpj').mask('00.000.000/0001-00');
-}); // $(function() {
-//   $('#expires_at').val(start.format('YYYY-MM-DD'));
-//   $('#expires_at').daterangepicker({
-//     singleDatePicker: true,
-//     "locale": {
-//       "applyLabel": "Aplicar",
-//       "cancelLabel": "Cancelar",
-//       "format": "DD/MM/YYYY"
-//     },
-//     "startDate": moment(),
-//     "endDate": moment()
-//   });
-// });
-// $('#active').on('change',function(ev){
-//   if($('#active').val() == 'N'){
-//     $('#expires_at').attr('readonly', true);
-//   } else {
-//     $('#expires_at').attr('readonly', false);
-//   }
-// });
+});
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /*!*************************************************!*\
   !*** multi ./resources/js/empresas/empresas.js ***!
   \*************************************************/

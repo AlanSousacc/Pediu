@@ -23,6 +23,7 @@
             <table class="table">
               <thead class=" text-primary">
                 <th class="text-center">#ID</th>
+                <th class="text-center">Foto</th>
                 <th class="text-center">Descrição</th>
                 <th class="text-center">Pr. Custo</th>
                 <th class="text-center">Pr. Venda</th>
@@ -33,6 +34,7 @@
                 @foreach ($consulta as $item)
                 <tr>
                   <td class="text-center">{{$item->id}}</td>
+                  <td class="text-center"><img id="imgfoto" src="{{ $item->foto != 'default.png' ? url("storage/".$item->foto) : url("storage/img/logos/default.png")}}"/></td>
                   <td class="text-center">{{$item->descricao}}</td>
                   <td class="text-center">R$ {{number_format($item->precocusto, 2, ',', '.')}}</td>
                   <td class="text-center">R$ {{number_format($item->precovenda, 2, ',', '.')}}</td>

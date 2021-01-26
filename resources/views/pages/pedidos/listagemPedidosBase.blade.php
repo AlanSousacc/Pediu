@@ -8,7 +8,9 @@
         <th class="text-center">Total</th>
         <th class="text-center">Desc.</th>
         <th class="text-center">Troco</th>
+        @if (isset($config) && $config->controlaentrega == 1)
         <th class="text-center">status</th>
+        @endif
         <th class="text-center">Opções</th>
       </thead>
       <tbody>
@@ -20,12 +22,13 @@
           <td class="text-center">R$ {{number_format($item->total, 2, ',', '.')}}</td>
           <td class="text-center">R$ {{number_format($item->desconto, 2, ',', '.')}}</td>
           <td class="text-center">R$ {{number_format($item->valortroco, 2, ',', '.')}}</td>
+          @if (isset($config) && $config->controlaentrega == 1)
           @if ($item->entregador_id != null)
           <td class="text-center text-success">Entregue / A caminho</td>
           @else
           <td class="text-center text-warning">Aguard. Entregador</td>
           @endif
-          {{-- <td class="text-center text-success">Processado</td> --}}
+          @endif
           <td class="text-center">
             <div class="btn-group">
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -33,17 +36,19 @@
               </button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ route('pedido.detalhe', $item->id)}}"><i class="now-ui-icons files_paper"></i>Detalhar Pedido</a>
+                <a class="dropdown-item" href="{{ route('pedido.edit', $item->id) }}"><i class="now-ui-icons education_paper"></i>Alterar</a>
+                <a class="dropdown-item" href="{{$item->id}}" data-contid={{$item->id}} data-target="#delete" data-toggle="modal"><i class="now-ui-icons ui-1_simple-remove"></i>Remover</a>
                 @if ($item->entregador_id == null)
-                <a class="dropdown-item" href="{{$item->id}}" 
-                  data-pedidoid={{$item->id}} 
-                  data-target="#mudarStatus" 
-                  data-statusentrega="{{$item->statusentrega}}" 
-                  data-entregador_id="{{$item->entregador_id}}" 
-                  data-valortroco="{{$item->valortroco}}" 
-                  data-troco="{{$item->troco}}" 
+                @if (isset($config) && $config->controlaentrega == 1)
+                <a class="dropdown-item" href="{{$item->id}}"
+                  data-pedidoid={{$item->id}}
+                  data-target="#mudarStatus"
+                  data-statusentrega="{{$item->statusentrega}}"
+                  data-entregador_id="{{$item->entregador_id}}"
+                  data-valortroco="{{$item->valortroco}}"
+                  data-troco="{{$item->troco}}"
                   data-toggle="modal"><i class="now-ui-icons shopping_delivery-fast"></i>Definir Entregador</a>
-                  <a class="dropdown-item" href="{{ route('pedido.edit', $item->id) }}"><i class="now-ui-icons education_paper"></i>Alterar</a>
-                  <a class="dropdown-item" href="{{$item->id}}" data-contid={{$item->id}} data-target="#delete" data-toggle="modal"><i class="now-ui-icons ui-1_simple-remove"></i>Remover</a>
+                  @endif
                   @endif
                 </div>
               </div>

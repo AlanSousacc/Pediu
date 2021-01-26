@@ -76,13 +76,20 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
+        <label for="cnpj">Nome da Loja*</label>
+        <input type="text" class="form-control slug" id="slug" name="slug" value="{{ isset($empresa) ? $empresa->slug : old('slug')}}" placeholder="minha-loja" required>
+        @include('alerts.feedback', ['field' => 'slug'])
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
         <label for="cnpj">CNPJ*</label>
         <input type="text" class="form-control cnpj" id="cnpj" name="cnpj" value="{{ old('cnpj')}}" placeholder="Ex. 99.999.999/0001-99" required>
         @include('alerts.feedback', ['field' => 'cnpj'])
       </div>
     </div>
-  </div>
-  <div class="row">
     <div class="col-md-4">
       <div class="form-group">
         <label for="telefone">Telefone</label>

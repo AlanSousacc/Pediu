@@ -7,9 +7,10 @@
       </a>
     </div>
   </div>
-  
+
   <div class="row">
-    <div class="card col-md-6 pt-3" style="width: 20rem;">
+
+    <div class="card {{isset($config) && $config->controlaentrega == 1 ? 'col-md-6' : 'col-md-12'}} pt-3" style="width: 20rem;">
       <h5 class="card-title"> Caixa <i class="ion-icons ion-ios-information-outline" id="tooltip" data-toggle="tooltip" data-placement="top" title="Movimentações Diárias"></i></h5></h5>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
@@ -34,8 +35,9 @@
         </li>
       </ul>
     </div>
-    
-    <div class="card col-md-6 pt-3" style="width: 20rem;">
+
+    @if (isset($config) && $config->controlaentrega == 1)
+    <div class="card {{isset($config) && $config->controlaentrega == 1 ? 'col-md-6' : 'col-md-12'}} pt-3" style="width: 20rem;">
       <h5 class="card-title"> Entregadores <i class="ion-icons ion-ios-information-outline" id="tooltip" data-toggle="tooltip" data-placement="top" title="Somente movimentações entregues na qual o pedido não seja 'Conta do Cliente'"></i></h5>
       @if (count($resumoEntre) != 0)
       @foreach ($resumoEntre as $item)
@@ -54,5 +56,6 @@
       <p><em>Não foi atribuido nenhum pedido a entregadores!</p></em>
       @endif
     </div>
+    @endif
   </div>
 </div>

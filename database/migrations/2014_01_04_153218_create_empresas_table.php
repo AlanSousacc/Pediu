@@ -26,7 +26,7 @@ class CreateEmpresasTable extends Migration
       $table->string('bairro', 15);
       $table->string('cnpj')->unique();
       $table->string('email')->unique();
-      $table->string('logo')->default('default.jpg')->nullable();
+      $table->string('logo')->default('default.png')->nullable();
       $table->unsignedBigInteger('cliente_id')->nullable();
       $table->enum('active', ['S', 'N'])->default('S');
 

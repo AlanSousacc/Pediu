@@ -55,6 +55,7 @@
       $('#endereco').val(dados[0].endereco)
       $('#fantasia').val(dados[0].fantasia)
       $('#numero').val(dados[0].numero)
+      $('#slug').val(dados[0].slug)
       $('#razao').val(dados[0].razao)
       $('#telefone').val(dados[0].telefone)
       $('#imglogo').attr('src', '{{url("storage")}}' + '/' + dados[0].logo)

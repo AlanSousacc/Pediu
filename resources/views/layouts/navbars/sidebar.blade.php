@@ -3,11 +3,9 @@
     Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
   -->
   <div class="logo">
-    <a href="{{ route('home') }}" class="simple-text logo-mini">
-      {{ __('SF') }}
-    </a>
-    <a href="{{ route('home') }}" class="simple-text logo-normal">
-      {{ __('Suzi Fiacadori') }}
+    <img src="{{ Auth::user()->empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .Auth::user()->empresa->logo) }}" alt="" style="max-width: 100px; margin: 0 auto; display: inherit; border-radius: 100px">
+      <a href="{{ route('home') }}" class="simple-text logo-normal text-lg-center">
+      {{ Auth::user()->empresa->fantasia }}
     </a>
   </div>
   <div class="sidebar-wrapper" id="sidebar-wrapper">
@@ -167,7 +165,7 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse @if ($activePage == 'editarproduto' || $activePage == 'listagemProdutos' || $activePage == 'novoproduto') show @endif" id="produtos">
+        <div class="collapse @if ($activePage == 'listagemGrupos' || $activePage == 'editarproduto' || $activePage == 'listagemProdutos' || $activePage == 'novoproduto') show @endif" id="produtos">
           <ul class="nav">
             <li class="@if ($activePage == 'novoproduto') active @endif">
               <a href="{{ route('produto.create') }}">
@@ -179,6 +177,12 @@
               <a href="{{ route('produto.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
                 <p> {{ __("Listagem") }} </p>
+              </a>
+            </li>
+            <li class="@if ($activePage == 'listagemGrupos') active @endif">
+              <a href="{{ route('grupo.index') }}">
+                <i class="fa fa-tag"></i>
+                <p> {{ __("Grupos") }} </p>
               </a>
             </li>
             @if ($activePage == 'editarproduto')
@@ -267,6 +271,30 @@
       </li>
       {{-- end Administrativo --}}
       @endif
+
+      {{-- configuração --}}
+      @if (Auth::user()->profile == 'Administrador')
+      <li>
+        <a data-toggle="collapse" href="#configuracoes">
+          <i class="fa fa-cog"></i>
+          <p>
+            {{ __("Configurações") }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse @if ($activePage == 'configuracoesgerais') show @endif" id="configuracoes">
+          <ul class="nav">
+            <li class="@if ($activePage == 'configuracoesgerais') active @endif">
+              <a href="{{route('configuracao.create')}}">
+                <i class="fa fa-users-cog"></i>
+                <p> {{ __("Configurações Gerais") }} </p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      @endif
+      {{-- end configuração --}}
     </ul>
   </div>
 </div>

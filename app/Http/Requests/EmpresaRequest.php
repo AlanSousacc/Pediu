@@ -32,6 +32,7 @@ class EmpresaRequest extends FormRequest
       'bairro'  => ['required', 'max:15'],
       'cnpj'    => ['required', 'max:20', "unique:empresas,cnpj,{$id},id"],
       'email'   => ['required', 'email', "unique:empresas,email,{$id},id"],
+      'slug'    => ['required', 'max:30', "unique:empresas,slug,{$id},id"],
       'logo'    => ['image']
     ];
   }
@@ -39,25 +40,27 @@ class EmpresaRequest extends FormRequest
   public function messages()
   {
     return [
-      'razao.required'     => 'O campo Razão Social é obrigatório!',
-      'razao.min'          => 'O campo Razão Social deve conter no máximo 30 caracteres!',
-      'fantasia.required'     => 'O campo Fantasia deve ser informado!',
+      'razao.required'    => 'O campo Razão Social é obrigatório!',
+      'razao.min'         => 'O campo Razão Social deve conter no máximo 30 caracteres!',
+      'fantasia.required' => 'O campo Fantasia deve ser informado!',
       'fantasia.max'      => 'O campo Fantasia deve conter no máximo 30 caracteres!',
-      'celular.required'     => 'O campo Celular de contato deve ser informado!',
-      'celular.max'      => 'O campo Celular deve conter no máximo 15 caracteres!',
+      'celular.required'  => 'O campo Celular de contato deve ser informado!',
+      'celular.max'       => 'O campo Celular deve conter no máximo 15 caracteres!',
       'nome.required'     => 'O campo Nome é obrigatório!',
       'nome.max'          => 'O campo Nome deve conter no máximo 80 caracteres!',
-      'cidade.required'     => 'O campo Cidade é obrigatório!',
-      'cidade.max'     => 'O campo Cidade deve conter no máximo 30 caracteres!',
+      'cidade.required'   => 'O campo Cidade é obrigatório!',
+      'cidade.max'        => 'O campo Cidade deve conter no máximo 30 caracteres!',
       'endereco.required' => 'O campo Endereço é obrigatório!',
       'endereco.max'      => 'O campo Endereço deve conter no máximo 60 caracteres!',
-      'numero.required'     => 'O campo Número deve ser informado!',
-      'numero.max'     => 'O campo Endereço deve conter no máximo 5 caracteres!',
-      'bairro.required'      => 'O campo Bairro deve ser informado!',
-      'bairro.max'      => 'O campo Bairro deve conter no máximo 15 caracteres!',
+      'numero.required'   => 'O campo Número deve ser informado!',
+      'numero.max'        => 'O campo Endereço deve conter no máximo 5 caracteres!',
+      'bairro.required'   => 'O campo Bairro deve ser informado!',
+      'bairro.max'        => 'O campo Bairro deve conter no máximo 15 caracteres!',
       'cnpj.required'     => 'O campo CNPJ deve ser informado!',
-      'cnpj.max'      => 'O campo CNPJ deve conter no máximo 20 caracteres!',
-      'email.required'        => 'O campo Email é obrigatório!',
+      'cnpj.max'          => 'O campo CNPJ deve conter no máximo 20 caracteres!',
+      'email.required'    => 'O campo Email é obrigatório!',
+      'slug.required'     => 'O campo Nome da loja deve ser informado!',
+      'slug.max'          => 'O campo Nome da loja deve conter no máximo 30 caracteres!',
     ];
   }
 }
