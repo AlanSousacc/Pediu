@@ -3,38 +3,44 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+  use AuthenticatesUsers;
 
-    use AuthenticatesUsers;
+  public function __construct()
+  {
+    $this->middleware('guest')->except('logout');
+  }
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+  protected function authenticated()
+  {
+    if ( auth()->user()->profile == 'Administrador') {
+      return redirect()->route('home');
+    } else if( auth()->user()->profile == 'Usuario'){
+      return redirect()->route('home');
+    } else {
+      return redirect('catalogo/'. auth()->user()->empresa->slug);
     }
+
+    return redirect('/');
+  }
+
+  public function logout() {
+    $slug = auth()->user()->empresa->slug;
+
+    if ( auth()->user()->profile == 'Administrador') {
+      Auth::logout();
+      return redirect('/login');
+    } else if( auth()->user()->profile == 'Usuario'){
+      Auth::logout();
+      return redirect('/login');
+    } else {
+      Auth::logout();
+      return redirect('catalogo/'. $slug);
+    }
+  }
 }

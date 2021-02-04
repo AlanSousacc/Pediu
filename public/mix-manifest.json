@@ -3,6 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/js/catalogo/bootstrap.bundle.min.js": "/js/catalogo/bootstrap.bundle.min.js",
     "/js/catalogo/bs-custom-file-input.min.js": "/js/catalogo/bs-custom-file-input.min.js",
+    "/js/catalogo/grid-produtos/modal-produtos.js": "/js/catalogo/grid-produtos/modal-produtos.js",
     "/js/catalogo/jquery.slim.min.js": "/js/catalogo/jquery.slim.min.js",
     "/js/catalogo/simplebar.min.js": "/js/catalogo/simplebar.min.js",
     "/js/catalogo/smooth-scroll.polyfills.min.js": "/js/catalogo/smooth-scroll.polyfills.min.js",

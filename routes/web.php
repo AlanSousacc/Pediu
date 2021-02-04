@@ -14,18 +14,18 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
   // entregador
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::resource('entregador', 'EntregadorController');
   });
 
   // movimentacao
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::get('movimentacao/baixar/{id}', 'MovimentacaoController@baixarMovimentacao')->name('movimentacao.baixar');
     Route::get('movimentacao/receber/{id}', 'MovimentacaoController@receber')->name('movimentacao.receber');
   });
 
   // pedido
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::resource('pedido', 'PedidoController');
     Route::post('finalizar-pedido', 'PedidoController@store')->name('store.pedido');
     Route::get('pedido/detalhe/{id}', 'PedidoController@detalhePedido')->name('pedido.detalhe');
@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
   });
 
   // produto
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::resource('produto', 'ProdutoController');
     Route::get('preco-produto/{id?}', 'ProdutoController@returnPreco')->name('busca.precoproduto');
     Route::get('produto-pedido-json/{id?}', 'ProdutoController@returnProdutoPedido')->name('busca.produtopedido');
@@ -44,52 +44,65 @@ Route::group(['middleware' => 'auth'], function () {
   });
 
   // endereco
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::resource('endereco', 'EnderecoController');
     Route::get('enderecos/{id?}', 'EnderecoController@returnEndereco')->name('busca.enderecos');
     Route::get('entrega/create/{id}', 'EnderecoController@createEndereco')->name('novo.endereco');
   });
 
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::get('/', 'ChartController@getWeekSales')->name('home');
   });
 
   //empresa
-  Route::middleware(['auth', 'checkLicense', 'checkProfile'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile', 'checkProfile'])->group(function () {
     Route::resource('empresa', 'EmpresaController');
     Route::get('cliente-id/{id?}', 'EmpresaController@returnCliente')->name('busca.clienteid');
     Route::any('empresa-licenca', 'EmpresaController@licencaEmpresa')->name('empresa.licenca');
   });
 
   // Licença
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::post('licenca/salvar', 'LicencaController@store')->name('licenca.store');
   });
 
   // contato
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::resource('contato', 'ContatoController');
     Route::get('contato/endereco/{id}', 'EnderecoController@listaEnderecoContato')->name('contato.endereco');
     Route::get('financeiro/contato/{id}', 'ContatoController@listaFinanceiroContato')->name('contato.financeiro');
   });
 
   // grupos
-  Route::middleware(['auth', 'checkLicense'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::resource('grupo', 'GrupoController');
   });
 
   // configurações
-  Route::middleware(['auth', 'checkLicense', 'checkProfile'])->group(function () {
+  Route::middleware(['auth', 'checkLicense', 'roleProfile', 'checkProfile'])->group(function () {
     Route::resource('configuracao', 'ConfiguracaoController');
   });
 
   // acessos ao sistema
-  Route::get('unauthorized', 'AccessController@index')->name('unauthorized');
-  Route::get('unauthorized-license', 'AccessController@verificaLicenca')->name('unauthorized-license');
+  Route::middleware(['roleProfile'])->group(function () {
+    Route::get('unauthorized', 'AccessController@index')->name('unauthorized');
+    Route::get('unauthorized-license', 'AccessController@verificaLicenca')->name('unauthorized-license');
+  });
 });
 
 //Catalogo
+Route::get('catalogo/{slug}/cart', 'CatalogoController@cart')->name('cart');
+Route::get('catalogo/{slug}/checkout', 'CatalogoController@checkout')->name('checkout');
 Route::get('catalogo/{slug}', 'CatalogoController@index')->name('catalogo');
+Route::get('catalogo/{slug}/{grupo}', 'CatalogoController@grupo')->name('catalogoporgrupo');
+Route::get('catalogo/{slug}/detalhe-produto/{id}', 'CatalogoController@detalheProduto')->name('catalogo-detalhe-produto');
+Route::any('catalogo/{slug}/search', 'CatalogoController@search')->name('catalogoporpesquisa');
+Route::get('catalogo/{empresa}', 'CatalogoController@getValorEntrega')->name('getValorEntrega');
+
+// cart
+Route::get('adicionar-ao-carrinho/{id}', 'CartController@addToCart')->name('add-to-cart');
+Route::patch('atualizarCarrinho', 'CartController@update')->name('updateToCart');
+Route::delete('removerDoCarrinho', 'CartController@remove')->name('removeToCart');
 
 // Cliente
 Route::resource('cliente', 'ClienteController');

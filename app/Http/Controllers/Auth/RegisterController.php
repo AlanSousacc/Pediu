@@ -18,12 +18,12 @@ class RegisterController extends Controller
 
   use RegistersUsers;
 
-  protected $redirectTo = RouteServiceProvider::HOME;
+  protected $redirectTo = 'RouteServiceProvider::HOME';
   // protected $redirectTo = RouteServiceProvider::HOME;
 
   public function __construct()
   {
-    $this->middleware('auth');
+    // $this->middleware('auth');
   }
 
   public function register(Request $request)
@@ -51,15 +51,33 @@ class RegisterController extends Controller
       ]);
     }
 
-    protected function create(array $data)
-    {
-      return User::create([
-        'name' => $data['name'],
-        'email' => $data['email'],
-        'profile' => $data['profile'],
-        'isAdmin' => isset($data['isAdmin']) ? $data['isAdmin'] : 0,
-        'empresa_id' => Auth::user()->empresa_id,
-        'password' => Hash::make($data['password']),
-        ]);
-      }
+  protected function create(array $data)
+  {
+    return User::create([
+      'name'      => $data['name'],
+      'email'     => $data['email'],
+      'profile'   => $data['profile'],
+      'isAdmin'   => isset($data['isAdmin']) ? $data['isAdmin'] : 0,
+      'cidade'    => isset($data['cidade']) ? $data['cidade'] : '',
+      'endereco'  => isset($data['endereco']) ? $data['endereco'] : '',
+      'numero'    => isset($data['numero']) ? $data['numero'] : '',
+      'bairro'    => isset($data['bairro']) ? $data['bairro'] : '',
+      'telefone'  => isset($data['telefone']) ? $data['telefone'] : '',
+      'empresa_id'=> Auth::user() ? Auth::user()->empresa_id : $data['empresa_id'],
+      'password'  => Hash::make($data['password']),
+    ]);
+  }
+
+  protected function registered(Request $request, $user)
+  {
+    if ( $user->profile == 'Administrador') {
+      return redirect()->route('home');
+    } else if( $user->profile == 'Usuario'){
+      return redirect()->route('home');
+    } else {
+      return redirect('catalogo/'. $user->empresa->slug);
     }
+
+    return redirect()->intended();
+  }
+}

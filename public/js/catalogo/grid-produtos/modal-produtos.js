@@ -81,35 +81,30 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/js/entregadores/entregadores.js":
-/*!***************************************************!*\
-  !*** ./resources/js/entregadores/entregadores.js ***!
-  \***************************************************/
+/***/ "./resources/js/catalogo/grid-produtos/modal-produtos.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/catalogo/grid-produtos/modal-produtos.js ***!
+  \***************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$('#delete').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget);
-  var contid = button.data('contid');
-  var modal = $(this);
-  modal.find('.modal-body #contid').val(contid);
-});
+
 
 /***/ }),
 
-/***/ 18:
-/*!*********************************************************!*\
-  !*** multi ./resources/js/entregadores/entregadores.js ***!
-  \*********************************************************/
+/***/ 17:
+/*!*********************************************************************!*\
+  !*** multi ./resources/js/catalogo/grid-produtos/modal-produtos.js ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\entregadores\entregadores.js */"./resources/js/entregadores/entregadores.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\catalogo\grid-produtos\modal-produtos.js */"./resources/js/catalogo/grid-produtos/modal-produtos.js");
 
 
 /***/ })

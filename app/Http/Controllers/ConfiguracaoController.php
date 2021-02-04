@@ -23,14 +23,15 @@ class ConfiguracaoController extends Controller
   {
     $data = $request->except('_token');
     $user = Auth::user()->empresa_id;
-
     $config = $this->repository::where('empresa_id', $user)->first();
 
     if(!$config){
       isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
       $data['empresa_id'] = $user;
+      $data['valorentrega'] = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
     } else {
       $config->controlaentrega = isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
+      $config->valorentrega = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
       $config->empresa_id = $user;
     }
 

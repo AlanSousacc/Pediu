@@ -143,8 +143,6 @@
 
       $('#entrega_id').html(str);
 
-
-
     }).fail(function(jqXHR, textStatus ) {
       alert("Falha ao listar os dados de entrega: " + textStatus);
     });

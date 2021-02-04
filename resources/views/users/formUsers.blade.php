@@ -8,7 +8,7 @@
     </select>
   </div>
 
-  @if ((Auth::user()->isAdmin == 1) && (Auth::user()->empresa_id == 1))
+  @if ((Auth::user()) && (Auth::user()->isAdmin == 1) && (Auth::user()->empresa_id == 1))
   <div class="form-check form-check-inline mt-2">
     <label class="form-check-label">
       <input class="form-check-input" type="checkbox" id="isAdmin" name="isAdmin" value="1"> É Super Usuário
@@ -26,9 +26,9 @@
   </div>
   <input class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Nome Completo') }}" type="text" name="name" value="{{isset($user) ? $user->name : old('name')}}" required autofocus>
   @if ($errors->has('name'))
-    <span class="invalid-feedback" style="display: block;" role="alert">
-      <strong>{{ $errors->first('name') }}</strong>
-    </span>
+  <span class="invalid-feedback" style="display: block;" role="alert">
+    <strong>{{ $errors->first('name') }}</strong>
+  </span>
   @endif
 </div>
 <!--Begin input email -->
@@ -39,11 +39,11 @@
     </div>
   </div>
   <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" type="email" name="email" value="{{isset($user) ? $user->email : old('email')}}" required>
- </div>
- @if ($errors->has('email'))
-    <span class="invalid-feedback" style="display: block;" role="alert">
-        <strong>{{ $errors->first('email') }}</strong>
-    </span>
+</div>
+@if ($errors->has('email'))
+<span class="invalid-feedback" style="display: block;" role="alert">
+  <strong>{{ $errors->first('email') }}</strong>
+</span>
 @endif
 <!--Begin input user type-->
 
@@ -56,12 +56,13 @@
   </div>
   <input class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Senha') }}" type="password" name="password" required>
   @if ($errors->has('password'))
-    <span class="invalid-feedback" style="display: block;" role="alert">
-      <strong>{{ $errors->first('password') }}</strong>
-    </span>
+  <span class="invalid-feedback" style="display: block;" role="alert">
+    <strong>{{ $errors->first('password') }}</strong>
+  </span>
   @endif
 </div>
 <!--Begin input confirm password -->
+
 <div class="input-group">
   <div class="input-group-prepend">
     <div class="input-group-text">

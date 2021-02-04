@@ -9,5 +9,14 @@
         </div>
       </div>
     </div>
+    <div class="col-md-4">
+      <div class="d-flex align-items-center">
+        <label class="text-nowrap mr-3 mb-0" for="fd-change">Valor padrão de entrega:</label>
+        <div class="input-group" style="width: 8rem;">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-dollar-sign"></i></span></div>
+          <input class="form-control bg-0 pr-3" type="text" id="fd-change" name="valorentrega" value="{{number_format($config->valorentrega, 2, ',', '.')}}">
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
       $table->string('email')->unique();
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password');
-      $table->enum('profile', ['Administrador', 'Usuario'])->nullable();
+      $table->enum('profile', ['Administrador', 'Usuario', 'User Loja'])->nullable();
       $table->boolean('isAdmin')->default(0);
       $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->rememberToken();

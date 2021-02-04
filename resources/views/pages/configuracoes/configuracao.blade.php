@@ -34,6 +34,24 @@
   </div>
 </div>
 @push('scripts')
-<script src='{{asset('js/grupos/grupos.js')}}'></script>
+<script>
+
+  function verificaCobraEntrega(){
+    if($('#cobraentrega').prop("checked", "true")){
+      $("#valorentrega").css("display", "inherit")
+    } else {
+      $("#valorentrega").css("display", "none")
+    }
+  }
+
+  $('input[name=cobraentrega]').on('change',function(ev){
+    verificaCobraEntrega();
+  });
+
+  $(document).ready(function() {
+    verificaCobraEntrega();
+  });
+
+</script>
 @endpush
 @endsection

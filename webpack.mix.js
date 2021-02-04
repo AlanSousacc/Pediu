@@ -19,4 +19,5 @@ mix
     .js('resources/js/catalogo/smooth-scroll.polyfills.min.js', 'public/js/catalogo')
     .js('resources/js/catalogo/theme.min.js', 'public/js/catalogo')
     .js('resources/js/catalogo/tiny-slider.js', 'public/js/catalogo')
+    .js('resources/js/catalogo/grid-produtos/modal-produtos.js', 'public/js/catalogo/grid-produtos')
     .js('resources/js/entregadores/entregadores.js', 'public/js/entregadores');
