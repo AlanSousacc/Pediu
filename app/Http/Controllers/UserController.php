@@ -31,7 +31,7 @@ class UserController extends Controller
   }
 
   public function update(Request $request){
-    $data = $request->all();
+    $data = $request->except('_token');
 
     try{
       $user = User::find($data['user_id']);
@@ -42,6 +42,7 @@ class UserController extends Controller
       // aqui então faz todo o tratamento e seta o que foi alterado;
       $user->name     = $data['name'];
       $user->email    = $data['email'];
+      $user->telefone = $data['telefone'];
       $user->password = bcrypt($data['password']);
 
     } catch (Exception $e) {

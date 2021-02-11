@@ -10,32 +10,15 @@
     <img src="{{ $produto->foto != 'default.png' ? url("storage/".$produto->foto) : url("storage/img/logos/default.png")}}" alt="{{$produto->descricao}}" alt="{{$produto->descricao }}"/>
   </div>
   <!-- Product details-->
-  <div class="col-lg-5 col-md-6 pt-4 pt-lg-0">
+  <div class="col-lg-5 col-md-6 pt-4 pt-lg-0 product_data">
     <div class="product-details ml-auto pb-3">
       <h4 class="modal-title" id="descricao">{{$produto->descricao}}</h4>
-      <div class="mb-3"><small>R$</small><span class="h3 font-weight-normal text-accent mr-1" id="precovenda"> {{number_format($produto->precocusto, 2, ',', '.')}}</span></div>
+      <div class="mb-3"><small>R$</small><span class="h3 font-weight-normal text-accent mr-1" id="precovenda"> {{number_format($produto->precovenda, 2, ',', '.')}}</span></div>
       <form class="mb-grid-gutter">
         <div class="row mx-n2">
-          {{-- <div class="col-6 px-2">
-            <div class="form-group">
-              <label class="font-weight-medium pb-1" for="pizza-size">Size:</label>
-              <select class="custom-select" id="pizza-size">
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-6 px-2">
-            <div class="form-group">
-              <label class="font-weight-medium pb-1" for="pizza-base">Base:</label>
-              <select class="custom-select" id="pizza-base">
-                <option value="standard">Standard</option>
-                <option value="thin">Thin</option>
-              </select>
-            </div>
-          </div> --}}
         </div>
+        <input type="hidden" class="product_id" value="{{$produto->id}}">
+        <input type="hidden" class="qty-input" value="1">
         <div class="form-group d-flex align-items-center">
           <select class="custom-select mr-3" style="width: 5rem;">
             <option value="1">1</option>
@@ -44,11 +27,13 @@
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
-          <button class="btn btn-primary btn-shadow btn-block" type="submit"><i class="fas fa-cart-plus font-size-lg mr-2"></i>Adicionar ao Carrinho</button>
+          <button class="btn btn-primary btn-shadow btn-block add-to-cart-btn" type="submit">
+            <i class="fas fa-cart-plus font-size-lg mr-2"></i> Adicionar ao Carrinho
+          </button>
         </div>
       </form>
       <h5 class="h6 mb-3 pb-3 border-bottom"><i class="fa fa-info-circle text-muted font-size-lg align-middle mt-n1 mr-2"></i>Detalhes do Produto</h5>
-      <h6 class="font-size-sm mb-2">Ingredients:</h6>
+      <h6 class="font-size-sm mb-2">Ingredientes:</h6>
       <p class="font-size-sm" id="composicao">{{$produto->composicao}}</p>
     </div>
   </div>
@@ -56,7 +41,6 @@
 </section>
 
 @push('scripts')
-    <script src='{{asset('js/catalogo/grid-produtos/modal-produtos.js')}}'></script>
-  @endpush
-  @endsection
+@endpush
+@endsection
 

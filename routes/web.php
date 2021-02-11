@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
@@ -88,6 +89,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('unauthorized', 'AccessController@index')->name('unauthorized');
     Route::get('unauthorized-license', 'AccessController@verificaLicenca')->name('unauthorized-license');
   });
+
+  Route::resource('address-user', 'EnderecoUsersController');
 });
 
 //Catalogo
@@ -98,11 +101,18 @@ Route::get('catalogo/{slug}/{grupo}', 'CatalogoController@grupo')->name('catalog
 Route::get('catalogo/{slug}/detalhe-produto/{id}', 'CatalogoController@detalheProduto')->name('catalogo-detalhe-produto');
 Route::any('catalogo/{slug}/search', 'CatalogoController@search')->name('catalogoporpesquisa');
 Route::get('catalogo/{empresa}', 'CatalogoController@getValorEntrega')->name('getValorEntrega');
+Route::get('catalogo/perfil/{slug}/{id}', 'CatalogoController@profile')->name('profile');
+Route::get('catalogo/endereco-perfil/{slug}/{id}', 'CatalogoController@profileAddress')->name('profile-address');
+Route::get('catalogo/pedidos/{slug}/{id}', 'CatalogoController@profilePedidos')->name('profile-pedidos');
+Route::get('catalogo/detalhe-pedidos/{slug}/{id}/{pedido}', 'CatalogoController@PedidoDetail')->name('profile-pedidos-detail');
 
 // cart
-Route::get('adicionar-ao-carrinho/{id}', 'CartController@addToCart')->name('add-to-cart');
-Route::patch('atualizarCarrinho', 'CartController@update')->name('updateToCart');
-Route::delete('removerDoCarrinho', 'CartController@remove')->name('removeToCart');
+Route::post('add-to-cart','CartController@addToCart');
+Route::get('/load-cart-data','CartController@cartloadbyajax');
+Route::post('update-to-cart','CartController@updatetocart');
+Route::delete('delete-from-cart','CartController@deletefromcart');
+Route::get('clear-cart','CartController@clearcart');
+Route::post('processa-pedido', 'CheckoutController@processaPedido')->name('processa.pedido');
 
 // Cliente
 Route::resource('cliente', 'ClienteController');

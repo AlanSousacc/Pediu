@@ -5,78 +5,133 @@ namespace App\Http\Controllers;
 use App\Models\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
-  public function addToCart($id)
+  public function addtocart(Request $request)
   {
-    $produto = Produto::find($id);
-    $user = Auth::user();
+    $prod_id = $request->input('product_id');
+    $quantity = $request->input('quantity');
 
-    if(!$produto) {
-      abort(404);
+    if(Cookie::get('shopping_cart')) {
+      $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+      $cart_data = json_decode($cookie_data, true);
+    } else {
+      $cart_data = array();
     }
 
-    $cart = session()->get('cart');
+    $item_id_list = array_column($cart_data, 'item_id');
+    $prod_id_is_there = $prod_id;
 
-    // se o carrinho estiver vazio, este é o primeiro produto
-    if(!$cart) {
-      $cart = [
-        $id => [
-          "item_id" => $produto->id,
-          "descricao" => $produto->descricao,
-          "composicao" => $produto->composicao,
-          "quantity" => 1,
-          "precovenda" => $produto->precovenda,
-          "foto" => $produto->foto,
-          "user" => $user->id
-        ]
-      ];
-      session()->put('cart', $cart);
-      return redirect()->back()->with('success', 'Produto adicionado ao carrinho com sucesso!');
-    }
-
-    // se o carrinho não estiver vazio, verifique se este produto existe e aumente a quantidade
-    if(isset($cart[$id])) {
-      $cart[$id]['quantity']++;
-      session()->put('cart', $cart);
-      return redirect()->back()->with('success', 'Produto adicionado ao carrinho com sucesso');
-    }
-
-    // se o item não existe no carrinho, então adicione ao carrinho com a quantidade = 1
-    $cart[$id] = [
-      "item_id" => $produto->id,
-      "descricao" => $produto->descricao,
-      "composicao" => $produto->composicao,
-      "quantity" => 1,
-      "precovenda" => $produto->precovenda,
-      "foto" => $produto->foto,
-      "user" => $user->id
-    ];
-    session()->put('cart', $cart);
-    return redirect()->back()->with('success', 'Produto adicionado ao carrinho com sucesso!');
-  }
-
-  public function update(Request $request)
-  {
-    if($request->id and $request->quantity){
-      $cart = session()->get('cart');
-      $cart[$request->id]["quantity"] = $request->quantity;
-      session()->put('cart', $cart);
-      session()->flash('success', 'Carrinho atualizado com sucesso');
-    }
-  }
-
-
-  public function remove(Request $request)
-  {
-    if($request->id) {
-      $cart = session()->get('cart');
-      if(isset($cart[$request->id])) {
-        unset($cart[$request->id]);
-        session()->put('cart', $cart);
+    if(in_array($prod_id_is_there, $item_id_list)){
+      foreach($cart_data as $keys => $values){
+        if($cart_data[$keys]["item_id"] == $prod_id){
+          $cart_data[$keys]["item_quantity"] = $request->input('quantity');
+          $item_data = json_encode($cart_data);
+          $minutes = 60;
+          Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+          return response()->json(['status'=>''.$cart_data[$keys]["item_name"].' Foi adicionado ao seu carrinho!','status2'=>'2']);
+        }
       }
-      session()->flash('success', 'Produto removido com sucesso!');
+    } else {
+      $produto    = Produto::find($prod_id);
+      $prod_name  = $produto->descricao;
+      $prod_comp  = $produto->composicao;
+      $prod_image = $produto->foto;
+      $priceval   = $produto->precovenda;
+
+      if($produto){
+        $item_array = array(
+          'item_id'       => $prod_id,
+          'item_name'     => $prod_name,
+          'prod_comp'     => $prod_comp,
+          'item_quantity' => $quantity,
+          'item_price'    => $priceval,
+          'item_image'    => $prod_image,
+          'user_id'       => Auth::user()->id,
+          'empresa_id'    => Auth::user()->empresa->id,
+        );
+        $cart_data[] = $item_array;
+
+        $item_data = json_encode($cart_data);
+        $minutes = 60;
+        Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+        return response()->json(['status'=>''.$prod_name.' Foi adicionado ao Carrinho!']);
+      }
     }
   }
+
+  public function cartloadbyajax()
+  {
+    if(Cookie::get('shopping_cart')){
+      $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+      $cart_data = json_decode($cookie_data, true);
+      $totalcart = count($cart_data);
+
+      echo json_encode(array('totalcart' => $totalcart)); die;
+      return;
+    } else {
+      $totalcart = "0";
+      echo json_encode(array('totalcart' => $totalcart)); die;
+      return;
+    }
+  }
+
+  public function updatetocart(Request $request)
+  {
+    $prod_id  = $request->input('product_id');
+    $quantity = $request->input('quantity');
+
+    if(Cookie::get('shopping_cart')){
+      $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+      $cart_data = json_decode($cookie_data, true);
+
+      $item_id_list = array_column($cart_data, 'item_id');
+      $prod_id_is_there = $prod_id;
+
+      if(in_array($prod_id_is_there, $item_id_list)){
+        foreach($cart_data as $keys => $values){
+          if($cart_data[$keys]["item_id"] == $prod_id){
+            $cart_data[$keys]["item_quantity"] =  $quantity;
+            $item_data = json_encode($cart_data);
+            $minutes = 60;
+            Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+            return response()->json(['status'=>'Item atualizado com Sucesso!']);
+          }
+        }
+      }
+    }
+  }
+
+  public function deletefromcart(Request $request)
+  {
+    $prod_id = $request->input('product_id');
+
+    $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+    $cart_data = json_decode($cookie_data, true);
+
+    $item_id_list = array_column($cart_data, 'item_id');
+    $prod_id_is_there = $prod_id;
+
+    if(in_array($prod_id_is_there, $item_id_list)){
+      foreach($cart_data as $keys => $values){
+        if($cart_data[$keys]["item_id"] == $prod_id){
+          unset($cart_data[$keys]);
+          $item_data = json_encode($cart_data);
+          $minutes = 60;
+          Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+          return response()->json(['status'=>'Produto foi removido do carrinho!']);
+        }
+      }
+    }
+  }
+
+  public function clearcart()
+  {
+    Cookie::queue(Cookie::forget('shopping_cart'));
+    return response()->json(['status'=>'Seu carrinho foi limpo!']);
+  }
+
+
 }

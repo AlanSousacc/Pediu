@@ -45,6 +45,7 @@
         </form>
         <form class="needs-validation tab-pane fade" action="{{ route('register') }}" method="POST" autocomplete="off" novalidate id="signup-tab">
           @csrf
+          <input type="hidden" name="principal" value="1">
           <div class="form-group">
             <label for="su-name">Nome Completo</label>
             <input class="form-control" type="text" id="su-name" name="name" placeholder="John Doe" required>

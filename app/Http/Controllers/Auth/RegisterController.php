@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Models\EnderecoUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -53,7 +54,7 @@ class RegisterController extends Controller
 
   protected function create(array $data)
   {
-    return User::create([
+    $user =  User::create([
       'name'      => $data['name'],
       'email'     => $data['email'],
       'profile'   => $data['profile'],
@@ -66,6 +67,19 @@ class RegisterController extends Controller
       'empresa_id'=> Auth::user() ? Auth::user()->empresa_id : $data['empresa_id'],
       'password'  => Hash::make($data['password']),
     ]);
+
+    $enderecoUser  = EnderecoUsers::create([
+      'cidade'     => isset($data['cidade']) ? $data['cidade'] : '',
+      'endereco'   => isset($data['endereco']) ? $data['endereco'] : '',
+      'numero'     => isset($data['numero']) ? $data['numero'] : '',
+      'bairro'     => isset($data['bairro']) ? $data['bairro'] : '',
+      'telefone'   => isset($data['telefone']) ? $data['telefone'] : '',
+      'principal'  => $data['principal'],
+      'user_id'    => $user->id,
+      'empresa_id' => $user->empresa->id,
+    ]);
+
+    return $user;
   }
 
   protected function registered(Request $request, $user)

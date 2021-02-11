@@ -3,46 +3,14 @@
 <!-- Sign in / sign up modal-->
 @extends('pages.catalogo.layouts.modal-login-register')
 <section class="container tab-content py-4 py-sm-5">
-  <div class="col-md-8 offset-md-2 fixed-bottom mt-3 text-center" style="z-index: 9999;">
-    @if($errors->any())
-    <div class="alert alert-danger" data-notify="container">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <span data-notify="icon" class="now-ui-icons travel_info"></span>
-      <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{$error}}</li>
-        @endforeach
-      </ul>
-    </div>
-    @endif
-
-    @if(\Session::has('success'))
-    <div class="alert alert-success" data-notify="container">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <span data-notify="icon" class="now-ui-icons ui-1_check"></span>
-      <span data-notify="message">{{\Session::get('success')}}</span>
-    </div>
-    @elseif(\Session::has('error'))
-    <div class="alert alert-danger" data-notify="container">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <span data-notify="icon" class="now-ui-icons travel_info"></span>
-      <span data-notify="message">{{\Session::get('error')}}</span>
-    </div>
-    @endif
-  </div>
-
   <h2 class="text-center pt-2 pt-sm-0 mb-sm-5">{{!isset($grupo) ? 'Catalogo de produtos' : $grupo->descricao}}</h2>
   <div class="row pt-3 pt-sm-0">
     @foreach ($produtos as $item)
-    <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter">
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter product_data">
       <div class="card product-card border pb-2">
         <a class="d-block" href="{{route('catalogo-detalhe-produto',array($empresa->slug, $item->id))}}">
+          <input type="hidden" class="product_id" value="{{$item->id}}">
+          <input type="hidden" class="qty-input" value="1">
           <img class="card-img-top" src="{{ $item->foto != 'default.png' ? url("storage/".$item->foto) : url("storage/img/logos/default.png")}}" alt="{{$item->descricao}}"/>
         </a>
         <div class="card-body pt-1 pb-2">
@@ -83,9 +51,7 @@
                 <i class="far fa-user mr-2"></i> Entrar
               </a>
             @else
-              <a class="btn btn-primary btn-sm" href="{{route('add-to-cart', $item->id)}}">
-                + <i class="fas fa-cart-plus"></i>
-              </a>
+              <button type="button" class="add-to-cart-btn btn btn-primary btn-sm">+ <i class="fas fa-cart-plus"></i></button>
             @endif
             </div>
           </div>
@@ -95,7 +61,8 @@
     </div>
   </section>
 
-  @push('scripts')
-  <script src='{{asset('js/catalogo/grid-produtos/modal-produtos.js')}}'></script>
-  @endpush
-  @endsection
+</section>
+
+@push('scripts')
+@endpush
+@endsection

@@ -58,12 +58,12 @@
                       <div class="form-group">
                         <label class="col ml-2">Status do Pedido</label>
                         @if ($pedido->statusentrega == 0)
-                        <input type="text" class="form-control text-warning" value="Pedido Processado"> 
+                        <input type="text" class="form-control text-warning" value="Pedido Processado">
                         @endif
                       </div>
                     </div>
                   </div>
-                  
+
                   {{-- detalhes do contato --}}
                   <div class="row">
                     <div class="col-md-9">
@@ -80,7 +80,7 @@
                     </div>
                   </div>
                   {{-- end detalhes contato --}}
-                  
+
                   {{-- detalhes entrega --}}
                   <div class="row">
                     <div class="col-md-4">
@@ -108,7 +108,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
@@ -119,7 +119,7 @@
                   </div>
                 </div>
                 {{-- end detalhes entrega --}}
-                
+
                 {{-- Itens do Pedido --}}
                 <div class="tab-pane" id="itensPedido">
                   <div class="row">
@@ -153,7 +153,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 {{-- Detalhes do Pagamento --}}
                 <div class="tab-pane" id="detalhesPagamento">
                   <div class="row">
@@ -164,7 +164,7 @@
                       </div>
                     </div>
                   </div>
-                    
+
                   <div class="row">
                     <div class="col-md-3">
                       <label class="col ml-2">Desconto</label>
@@ -175,7 +175,7 @@
                         <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? $pedido->desconto : '', 2, ',', '.')}}">
                       </div>
                     </div>
-                    
+
                     <div class="col-md-3">
                       <label class="col ml-2">Sub Total</label>
                       <div class="input-group col">
@@ -207,11 +207,11 @@
                     </div>
                   </div>
                 </div>
-                
+
               </div>
             </div>
           </div>
-          
+
         </div>
         <div class="card-footer text-right">
           <a href="{{route('imprimir.pedido', $pedido->id)}}" target="_blank" class="btn btn-success btn-round"><i class="ionicons ion-printer"></i> Imprimir Pedido</a>
