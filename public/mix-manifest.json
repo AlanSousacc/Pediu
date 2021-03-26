@@ -10,6 +10,7 @@
     "/js/catalogo/theme.min.js": "/js/catalogo/theme.min.js",
     "/js/catalogo/tiny-slider.js": "/js/catalogo/tiny-slider.js",
     "/js/cliente/cliente.js": "/js/cliente/cliente.js",
+    "/js/complementos/complementos.js": "/js/complementos/complementos.js",
     "/js/contato/contato.js": "/js/contato/contato.js",
     "/js/empresas/empresas.js": "/js/empresas/empresas.js",
     "/js/enderecos/entrega.js": "/js/enderecos/entrega.js",

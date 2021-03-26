@@ -14,9 +14,10 @@
     {{Auth::user()->empresa->fantasia}}
     @endauth
     @guest
-      Pediu
+    PediuApp
     @endguest
   </title>
+  {{-- livewire import --}}
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
@@ -34,15 +35,12 @@
 </head>
 
 <body class="{{ $class ?? '' }}">
-  <noscript>
-    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=111649226022273&ev=PageView&noscript=1" />
-  </noscript>
   <div class="wrapper">
     @auth
-      @include('layouts.page_template.auth')
+    @include('layouts.page_template.auth')
     @endauth
     @guest
-      @include('layouts.page_template.guest')
+    @include('layouts.page_template.guest')
     @endguest
   </div>
   <!--   Core JS Files   -->
@@ -62,6 +60,7 @@
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
   @stack('scripts')
 </body>
 

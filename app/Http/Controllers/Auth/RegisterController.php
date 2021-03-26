@@ -89,7 +89,7 @@ class RegisterController extends Controller
     } else if( $user->profile == 'Usuario'){
       return redirect()->route('home');
     } else {
-      return redirect('catalogo/'. $user->empresa->slug);
+      return redirect('/'. $user->empresa->slug);
     }
 
     return redirect()->intended();

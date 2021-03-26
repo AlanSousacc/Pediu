@@ -8,7 +8,7 @@
         <h4 class="modal-title text-center">Cadastro de Endereço</h4>
       </div>
       <form action="{{route('address-user.store')}}" method="post">
-        {{ csrf_field() }}.
+        {{ csrf_field() }}
         <input type="hidden" name="user_id" id="user_id" value="{{auth()->user()->id}}">
         <div class="modal-body">
           <div class="content">

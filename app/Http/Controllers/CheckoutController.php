@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\models\CartItems;
+use App\Models\ComplementoItemCart;
 use App\Models\Configuracao;
 use App\Models\EnderecoUsers;
 use App\Models\Produto;
@@ -18,12 +19,14 @@ class CheckoutController extends Controller
   {
     $data = $request->except('_token');
 
-    if(isset($_POST['place-order-btn'])){
-      $user_id = Auth::id();
-      $user = User::find($user_id);
 
-      $cookie_data = stripslashes(Cookie::get('shopping_cart'));
-      $cart_data = json_decode($cookie_data, true);
+    if(isset($_POST['place-order-btn'])){
+      $user_id      = Auth::id();
+      $user         = User::find($user_id);
+      $cookie_data  = stripslashes(Cookie::get('shopping_cart'));
+      $cart_data    = json_decode($cookie_data, true);
+
+      // dd($cart_data);
 
       if(count($cart_data) <= 0)
         return redirect()->back()->with('error', 'O Pedido deve haver 1 ou mais itens!');
@@ -62,7 +65,10 @@ class CheckoutController extends Controller
         statuspedido =
           0 pendente
           1 aprovado
-          2 entregue
+          2 em andamento
+          3 saiu p entrega
+          4 entregue
+          5 cancelado
       */
       $numberorder                = rand(1111,9999);
       $cart                       = new Cart;
@@ -70,7 +76,7 @@ class CheckoutController extends Controller
       $cart->empresa_id           = $user->empresa_id;
       $cart->formapagamento       = $data['formapagamento'];
       $cart->numberorder          = 'pediu'.$numberorder;
-      $cart->statuspedido         = 1;
+      $cart->statuspedido         = 0;
       $cart->observacaopedido     = $data['observacaopedido'];
       $cart->valortroco           = isset($data['trocopara']) ? $data['trocopara'] : '0.00';
       $cart->valorentrega         = Configuracao::where('empresa_id', $user->empresa_id)->first()->valorentrega;
@@ -84,15 +90,29 @@ class CheckoutController extends Controller
 
       foreach($items_in_cart as $itemdata){
         $produto = Produto::find($itemdata['item_id']);
-        $preco = $produto->precovenda;
+        $preco   = $produto->precovenda;
+
+        // aqui vai ser registrado cada complemento do item
+        if($itemdata['complem_produ'] != null){
+          foreach($itemdata['complem_produ'] as $compleitem){
+            ComplementoItemCart::create([
+              'cart_id'         => $last_cart_id,
+              'produto_id'      => $itemdata['item_id'],
+              'complemento_id'  => $compleitem,
+              'empresa_id'      => $user->empresa_id,
+              'complitemcartid' => $itemdata['compl_item_id']
+            ]);
+          }
+        }
 
         CartItems::create([
-          'cart_id'     => $last_cart_id,
-          'produto_id'  => $itemdata['item_id'],
-          'user_id'     => $user_id,
-          'empresa_id'  => $user->empresa_id,
-          'preco'       => $preco,
-          'qtde'        => $itemdata['item_quantity'],
+          'cart_id'       => $last_cart_id,
+          'produto_id'    => $itemdata['item_id'],
+          'user_id'       => $user_id,
+          'empresa_id'    => $user->empresa_id,
+          'preco'         => $preco,
+          'qtde'          => $itemdata['item_quantity'],
+          'complitemid'   => $itemdata['compl_item_id'],
         ]);
       }
 

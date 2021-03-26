@@ -11,10 +11,10 @@
 
   <div class="row">
     <div class="col-md-6">
-      <label for="image">Logomarca</label>
+      <label for="image">Imagem</label>
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="image" name="image">
-        <label class="custom-file-label" for="customFile">Escolha sua logo</label>
+        <label class="custom-file-label" for="customFile">Imagem do grupo</label>
       </div>
     </div>
     <div class="col-md-4 offset-2">
@@ -22,5 +22,4 @@
     </div>
   </div>
   <input type="hidden" id="carregaimage" name="carregaimage" value="">
-
 </div>

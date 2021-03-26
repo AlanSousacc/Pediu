@@ -16,4 +16,12 @@ class Produto extends Model
   public function grupo(){
 		return $this->belongsTo('App\Models\Grupo');
   }
+
+  public function empresa(){
+		return $this->belongsTo('App\Models\Empresas');
+  }
+
+  public function complementos(){
+		return $this->belongsToMany('App\Models\Complemento', 'complemento_produto', 'produto_id', 'complemento_id')->withPivot(["preco"]);
+  }
 }

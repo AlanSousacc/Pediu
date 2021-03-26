@@ -20,4 +20,12 @@ class Empresa extends Model
   public function users(){
     return $this->hasMany('App\User');
 	}
+
+  public function produtos(){
+    return $this->hasMany('App\Models\Produto');
+	}
+
+  public function grupos(){
+    return $this->hasMany('App\Models\Grupo');
+	}
 }

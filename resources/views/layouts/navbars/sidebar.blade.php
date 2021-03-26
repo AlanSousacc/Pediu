@@ -4,9 +4,15 @@
   -->
   <div class="logo">
     <img src="{{ Auth::user()->empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .Auth::user()->empresa->logo) }}" alt="" style="max-width: 100px; margin: 0 auto; display: inherit; border-radius: 100px">
-      <a href="{{ route('home') }}" class="simple-text logo-normal text-lg-center">
+    <a href="{{ route('home') }}" class="simple-text logo-normal text-lg-center">
       {{ Auth::user()->empresa->fantasia }}
     </a>
+    <div class="row w-100">
+      <div class="col-md-12 text-center" style="background: #28a745; padding: 5px; margin-left: 15px; border-radius: 20px;">
+        <a href="{{route('catalogo', Auth::user()->empresa->slug)}}" target="_blank" class="text-white">Loja <i class="fa fa-store"></i></a>
+        <span class="text-white"> | </span> <a href="#" class="text-white">Link <i class="fa fa-link"></i></a>
+      </div>
+    </div>
   </div>
   <div class="sidebar-wrapper" id="sidebar-wrapper">
     <ul class="nav">
@@ -21,6 +27,13 @@
         </a>
         <div class="collapse @if ($activePage == 'editarpedido' || $activePage == 'detalhepedido' || $activePage == 'novopedido' || $activePage == 'listagemPedidos') show @endif" id="pedidos">
           <ul class="nav">
+            <li class="active">
+              <a href="{{ route('pedidosloja.index') }}" style="background: #2ca8ff; color: #fff">
+                <i class="fa fa-store-alt text-white"></i>
+                <p> {{ __("Pedidos da Loja") }} </p>
+              </a>
+            </li>
+            @if (\App\Models\Configuracao::where('empresa_id', Auth::user()->empresa->id)->first()->controlepedidosbalcao == 1)
             <li class="@if ($activePage == 'novopedido') active @endif">
               <a href="{{ route('pedido.create') }}">
                 <i class="now-ui-icons shopping_bag-16"></i>
@@ -30,7 +43,7 @@
             <li class="@if ($activePage == 'listagemPedidos') active @endif">
               <a href="{{ route('pedido.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem") }} </p>
+                <p> {{ __("Listagem Pedidos") }} </p>
               </a>
             </li>
             @if ($activePage == 'detalhepedido')
@@ -48,6 +61,7 @@
                 <p> {{ __("Editar Pedido") }} </p>
               </a>
             </li>
+            @endif
             @endif
           </ul>
         </div>
@@ -74,7 +88,7 @@
             <li class="@if ($activePage == 'listagemContato') active @endif">
               <a href="{{ route('contato.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem") }} </p>
+                <p> {{ __("Listagem Contatos") }} </p>
               </a>
             </li>
             @if ($activePage == 'editarcontato')
@@ -110,7 +124,7 @@
             <li class="@if ($activePage == 'listagemEntregador') active @endif">
               <a href="{{ route('entregador.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem") }} </p>
+                <p> {{ __("Listagem Entregador") }} </p>
               </a>
             </li>
             @if ($activePage == 'editarentregador')
@@ -140,7 +154,7 @@
             <li class="@if ($activePage == 'localendereco') active @endif">
               <a href="{{ route('endereco.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem") }} </p>
+                <p> {{ __("Listagem Endereços") }} </p>
               </a>
             </li>
             @if ($activePage == 'editarendereco')
@@ -165,7 +179,7 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse @if ($activePage == 'listagemGrupos' || $activePage == 'editarproduto' || $activePage == 'listagemProdutos' || $activePage == 'novoproduto') show @endif" id="produtos">
+        <div class="collapse @if ($activePage == 'novoComplemento' || $activePage == 'editarComplementos' || $activePage == 'listagemComplementos' || $activePage == 'listagemGrupos' || $activePage == 'editarproduto' || $activePage == 'listagemProdutos' || $activePage == 'novoproduto') show @endif" id="produtos">
           <ul class="nav">
             <li class="@if ($activePage == 'novoproduto') active @endif">
               <a href="{{ route('produto.create') }}">
@@ -173,10 +187,18 @@
                 <p> {{ __("Novo") }} </p>
               </a>
             </li>
+            @if ($activePage == 'editarproduto')
+            <li class="@if ($activePage == 'editarproduto') active @endif">
+              <a href="{{ route('complemento.index') }}">
+                <i class="ionicons ion-ios-compose-outline"></i>
+                <p> {{ __("Editar Produto") }} </p>
+              </a>
+            </li>
+            @endif
             <li class="@if ($activePage == 'listagemProdutos') active @endif">
               <a href="{{ route('produto.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem") }} </p>
+                <p> {{ __("Listagem Produtos") }} </p>
               </a>
             </li>
             <li class="@if ($activePage == 'listagemGrupos') active @endif">
@@ -185,11 +207,25 @@
                 <p> {{ __("Grupos") }} </p>
               </a>
             </li>
-            @if ($activePage == 'editarproduto')
-            <li class="@if ($activePage == 'editarproduto') active @endif">
-              <a href="{{ route('produto.index') }}">
+            <li class="@if ($activePage == 'listagemComplementos') active @endif">
+              <a href="{{ route('complemento.index') }}">
+                <i class="fa fa-object-group"></i>
+                <p> {{ __("Complementos") }} </p>
+              </a>
+            </li>
+            @if ($activePage == 'novoComplemento')
+            <li class="@if ($activePage == 'novoComplemento') active @endif">
+              <a href="{{ route('complemento.create') }}">
                 <i class="ionicons ion-ios-compose-outline"></i>
-                <p> {{ __("Editar Produto") }} </p>
+                <p> {{ __("Novo Complemento") }} </p>
+              </a>
+            </li>
+            @endif
+            @if ($activePage == 'editarComplementos')
+            <li class="@if ($activePage == 'editarComplementos') active @endif">
+              <a href="#">
+                <i class="ionicons ion-ios-compose-outline"></i>
+                <p> {{ __("Editar Complemento") }} </p>
               </a>
             </li>
             @endif
@@ -218,7 +254,7 @@
             <li class="@if ($activePage == 'listagemusuario') active @endif">
               <a href="{{ route('user.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem") }} </p>
+                <p> {{ __("Listagem Usuários") }} </p>
               </a>
             </li>
             @if ($activePage == 'editarusuario')

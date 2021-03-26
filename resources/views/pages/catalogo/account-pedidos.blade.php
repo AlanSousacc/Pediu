@@ -3,11 +3,11 @@
 <!-- Sign in / sign up modal-->
 @extends('pages.catalogo.layouts.modal-login-register')
 {{-- header --}}
-@extends('layouts.messages.message-loja');
+@extends('layouts.messages.message-loja')
 <div class="page-title-overlap bg-dark pt-4">
   <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
     <div class="order-lg-1 pr-lg-4 text-center text-lg-left">
-      <h1 class="h3 text-light mb-0">Endereços</h1>
+      <h1 class="h3 text-light mb-0">Listagem de Pedidos</h1>
     </div>
   </div>
 </div>
@@ -18,7 +18,7 @@
     <div class="container pb-5 mb-2 mb-md-3">
       <div class="row">
         <!-- Sidebar-->
-        <aside class="col-lg-4 pt-4 pt-lg-0">
+        <aside class="col-lg-3 pt-4 pt-lg-0">
           <div class="cz-sidebar-static rounded-lg box-shadow-lg px-0 pb-0 mb-5 mb-lg-0">
             <div class="px-4 mb-4">
               <div class="media align-items-center">
@@ -61,7 +61,7 @@
               </div>
             </aside>
             <!-- Content  -->
-            <section class="col-lg-8">
+            <section class="col-lg-9">
               <!-- Toolbar-->
               <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
               </div>
@@ -82,10 +82,18 @@
                       <td class="py-3"><a class="nav-link-style fw-medium fs-sm" href="{{route('profile-pedidos-detail', array($empresa->slug, auth()->user()->id, $item->id))}}" data-bs-toggle="modal">{{$item->numberorder}}</a></td>
                       <td class="py-3">{{$item->created_at->format('d/m/Y H:i')}}</td>
                       <td class="py-3">
-                        @if ($item->statuspedido == 1)
-                        <span class="badge bg-success m-0">Aprovado</span>
-                        @else
-                        <span class="badge bg-info m-0">Entregue</span>
+                        @if ($item->statuspedido == 0)
+                        <span class="text-light bg-warning p-1 rounded">Pendente</span>
+                        @elseif($item->statuspedido == 1)
+                        <span class="text-light bg-info p-1 rounded">Aprovado</span>
+                        @elseif($item->statuspedido == 2)
+                        <span class="text-light bg-dark p-1 rounded">Preparando</span>
+                        @elseif($item->statuspedido == 3)
+                        <span class="text-light bg-primary p-1 rounded">Saiu para Entrega</span>
+                        @elseif($item->statuspedido == 4)
+                        <span class="text-light bg-success p-1 rounded">Entregue</span>
+                        @elseif($item->statuspedido == 5)
+                        <span class="text-light bg-danger p-1 rounded">Cancelado</span>
                         @endif
                       </td>
                       <td class="py-3"><small>R$</small> {{number_format($item->totalpedido, 2, ',', '.')}}</td>

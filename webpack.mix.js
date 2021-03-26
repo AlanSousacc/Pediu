@@ -8,6 +8,7 @@ mix
     .js('resources/js/enderecos/entrega.js', 'public/js/enderecos')
     .js('resources/js/produtos/produtos.js', 'public/js/produtos')
     .js('resources/js/grupos/grupos.js', 'public/js/grupos')
+    .js('resources/js/complementos/complementos.js', 'public/js/complementos')
     .js('resources/js/usuarios/usuarios.js', 'public/js/usuarios')
     .js('resources/js/pedidos/pedidos.js', 'public/js/pedidos')
     .js('resources/js/empresas/empresas.js', 'public/js/empresas')

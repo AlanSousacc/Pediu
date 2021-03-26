@@ -11,4 +11,8 @@ class Grupo extends Model
   public function produtos(){
 		return $this->hasMany('App\Models\Produto');
 	}
+
+  public function empresa(){
+		return $this->belongsTo('App\Models\Empresas');
+  }
 }

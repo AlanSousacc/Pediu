@@ -2,7 +2,7 @@
 <html lang="PT-br">
 <head>
   <meta charset="utf-8">
-  <title>Cartzilla | Food Delivery - Category
+  <title>{{strtoupper($empresa->slug)}} | Food Delivery
   </title>
   <!-- SEO Meta Tags-->
   <meta name="description" content="Cartzilla - Bootstrap E-commerce Template">
@@ -20,19 +20,22 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
   <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link href='{{asset('assets/css/style.css')}}' rel='stylesheet' />
 </head>
 <!-- Body-->
 <body class="toolbar-enabled">
-  {{-- <!-- Google Tag Manager (noscript)-->
-    <noscript>
-      <iframe src="//www.googletagmanager.com/ns.html?id=GTM-WKV3GT5" height="0" width="0" style="display: none; visibility: hidden;"></iframe>
-    </noscript> --}}
     <header class="navbar d-block navbar-sticky navbar-expand-lg navbar-light bg-light">
       <div class="container">
+        <div class="d-block d-md-none">
+          <a href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', auth()->user()->empresa->slug)}}">
+            <img width="60px" src="{{$empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .$empresa->logo)}}" alt="{{ $empresa->razao}}"/>
+          </a>
+        </div>
         <div class="navbar-toolbar d-flex align-items-center order-lg-3 mt-3 pt-2">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
+            <i class="fa fa-bars"></i>
           </button>
+
           <a class="navbar-tool d-none d-lg-flex" href="#searchBox" type="submit" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="searchBox">
             <span class="navbar-tool-tooltip">Search</span>
             <div class="navbar-tool-icon-box">
@@ -43,13 +46,13 @@
         @if (!auth()->check())
         <a class="navbar-tool ml-2" href="#signin-modal" data-toggle="modal">
           <span class="navbar-tool-tooltip">Account</span>
-          <div class="navbar-tool-icon-box">
+          <div class="navbar-tool-icon-box d-none d-md-block">
             <i class="far fa-user"></i>
           </div>
         </a>
         @else
         <a class="navbar-tool ml-2" href="{{ route('profile', array($empresa->slug, auth()->user()->id)) }}">
-          <div class="navbar-tool-icon-box">
+          <div class="navbar-tool-icon-box d-none d-md-block">
             <i class="fa fa-user-circle"></i>
           </div>
           <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -59,12 +62,14 @@
         @endif
 
         <div class="navbar-tool dropdown ml-3 ">
-          <a class="navbar-tool-icon-box dropdown-toggle" href="{{route('cart', $empresa->slug)}}">
+          <a class="navbar-tool-icon-box dropdown-toggle d-none d-md-block" href="{{route('cart', $empresa->slug)}}">
             @if(isset($cart_data) && auth()->check())<!-- só vai aparecer a quantidade de itens caso a sessão existir e se o usuário estiver logado -->
+            @php $total = 0 @endphp
             @foreach($cart_data as $data)
+            @php $total += $data["item_quantity"] @endphp
             @if ($data['user_id'] == auth()->user()->id)<!-- só vai listar os produtos da sessão se o id da sessao user id for igual o id do usuário logado-->
             <span class="navbar-tool-label pt-1">
-              <span class="badge badge-pill red"> 0 </span>
+              <span class="badge badge-pill red"> {{$total}} </span>
             </span>
             @endif
             @endforeach
@@ -95,12 +100,12 @@
                               <span aria-hidden="true">×</span>
                             </button>
                             <div class="media align-items-center">
-                              <a class="d-block mr-2" href="#">
+                              <a class="d-block mr-2" href="{{route('catalogo-detalhe-produto',array($empresa->slug, $data['item_id']))}}">
                                 <img width="64" src="{{ url("storage/".$data['item_image'])}}" alt="Pizza">
                               </a>
                               <div class="media-body">
                                 <h6 class="widget-product-title">
-                                  <a href="#">{{$data['item_name']}}</a>
+                                  <a href="{{route('catalogo-detalhe-produto',array($empresa->slug, $data['item_id']))}}">{{$data['item_name']}}</a>
                                 </h6>
                                 <div class="widget-product-meta">
                                   <span class="text-accent mr-2">R$ {{number_format($data['item_quantity'] * $data['item_price'], 2, ',', '.')}}</small>
@@ -155,7 +160,7 @@
                   <div class="col-sx-12 mr-3 ml-4">
                     <input class="form-control prepended-form-control" name="searchfield" type="text" placeholder="O que está buscando?">
                   </div>
-                  <div class="col-xs-4">
+                  <div class="col-xs-4 mt-1">
                     <button class="btn btn-primary"><i class="fa fa-search"></i></button>
                   </div>
                 </div>
@@ -164,6 +169,7 @@
           </form>
         </div>
       </div>
+    </header>
       <!-- Search collapse-->
       <form action="{{route('catalogoporpesquisa', $empresa->slug)}}" autocomplete="off" method="post" style="margin: 0 auto">
         @csrf
@@ -189,34 +195,31 @@
       </form>
     </header>
     <section class="bg-darker bg-size-cover bg-position-center py-5" style="background-image: url({{asset('assets/img/pt-bg.jpg')}});">
-      <div class="container py-md-4">
-        <h1 class="text-light text-center text-lg-left py-3">{{$empresa->fantasia}}</h1>
+      <div class="container py-md-4 text-center">
+        <a href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', auth()->user()->empresa->slug)}}" class="d-none d-md-block">
+          <img width="142" src="{{$empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .$empresa->logo)}}" alt="{{ $empresa->razao}}"/>
+        </a>
+        <h4 href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', auth()->user()->empresa->slug)}}" class="d-block d-md-none pb-5 pt-2 text-white" >
+          {{Str::upper($empresa->slug)}}
+        </h4>
       </div>
     </section>
     <!-- Page navigation-->
     <nav class="container mt-n5">
-      <div class="media align-items-center bg-white rounded-lg box-shadow-lg py-2 pl-sm-2 pr-4 pr-lg-2">
-        <a href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', auth()->user()->empresa->slug)}}">
-          <img width="142" src="{{$empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .$empresa->logo)}}" alt="{{ $empresa->razao}}"/>
-        </a>
-        <div class="media-body text-right">
+      <div class="media align-items-center bg-white rounded-lg box-shadow-lg py-2 pl-sm-2 pr-lg-2">
+
+        <div class="media-body text-right" style="display: contents">
           <!-- For desktop-->
-          <ul class="nav nav-tabs d-none d-lg-flex border-0 mb-0">
-            @foreach ($grupos as $item)
-            <li class="nav-item">
-              <a class="nav-link active" href="{{ route('catalogoporgrupo', array($empresa->slug, $item->id)) }}">{{$item->descricao}}</a>
+          <ul class="nav" style="display: inline-block; overflow: auto; overflow-y: hidden; max-width: 100%; margin: 0 0 1em; white-space: nowrap;">
+            @foreach ($empresa->grupos as $item)
+            <li class="nav-item text-center" style="display: inline-block; vertical-align: top;">
+              <a class="nav-link active" href="{{ route('catalogoporgrupo', array($empresa->slug, $item->descricao)) }}">
+              <img src="{{url("storage/" .$item->image)}}" alt="{{ $empresa->razao}}" style="height: 150px; width: 150px; border-radius: 100px; padding: 5px;"/> <br>
+              {{$item->descricao}}
+              </a>
             </li>
             @endforeach
           </ul>
-          <!-- For mobile-->
-          <div class="btn-group dropdown d-lg-none ml-auto">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-bars"></i> Categorias</button>
-            <div class="dropdown-menu dropdown-menu-right">
-              @foreach ($grupos as $item)
-              <a class="dropdown-item font-size-base active" href="#">{{$item->descricao}}</a>
-              @endforeach
-            </div>
-          </div>
         </div>
       </div>
     </nav>
@@ -250,50 +253,47 @@
               <span class="cz-handheld-toolbar-icon carrinho">
                 <i class="fa fa-shopping-cart"></i>
               </span>
-
-              {{-- @if(isset($cart_data) && auth()->check())<!-- só vai aparecer a quantidade de itens caso a sessão existir e se o usuário estiver logado -->
-                @foreach($cart_data as $data)
-                @if ($data['user_id'] == auth()->user()->id)<!-- só vai listar os produtos da sessão se o id da sessao user id for igual o id do usuário logado-->
-                @endif
-                @endforeach
-                @endif --}}
-
-                @if(isset($cart_data) && auth()->check())
-                @if(Cookie::get('shopping_cart'))
-                @php $total = "0" @endphp
-                @foreach($cart_data as $data)
-                @if ($data['user_id'] == auth()->user()->id)
-                @php $total += ($data["item_quantity"] * $data["item_price"]) @endphp
-                @endif
-                @endforeach
-                <span class="cz-handheld-toolbar-label">R$ {{isset($total) ? number_format($total, 2, ',', '.') : '0,00'}}</span>
-                @endif
-                @else
-                <span class="cz-handheld-toolbar-label">R$ 0,00</span>
-                @endif
-              </a>
-            </div>
+              @if(isset($cart_data) && auth()->check())
+              @if(Cookie::get('shopping_cart'))
+              @php $total = "0" @endphp
+              @foreach($cart_data as $data)
+              @if ($data['user_id'] == auth()->user()->id)
+              @php $total += ($data["item_quantity"] * $data["item_price"]) @endphp
+              @endif
+              @endforeach
+              <span class="cz-handheld-toolbar-label">R$ {{isset($total) ? number_format($total, 2, ',', '.') : '0,00'}}</span>
+              @endif
+              @else
+              <span class="cz-handheld-toolbar-label">R$ 0,00</span>
+              @endif
+            </a>
           </div>
-          <script src="{{ asset('js/jquery.js')}}"></script>
-          <script src="{{ asset('assets') }}/js/core/jquery.min.js"></script>
-          <script src='{{asset('js/catalogo/jquery.slim.min.js')}}'></script>
-          <script src='{{asset('js/catalogo/bootstrap.bundle.min.js')}}'></script>
-          <script src='{{asset('js/catalogo/bs-custom-file-input.min.js')}}'></script>
-          <script src='{{asset('js/catalogo/simplebar.min.js')}}'></script>
-          <script src='{{asset('js/catalogo/tiny-slider.js')}}'></script>
-          <script src='{{asset('js/catalogo/smooth-scroll.polyfills.min.js')}}'></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-          <script src='{{asset('js/catalogo/theme.min.js')}}'></script>
-          <script src='{{asset('js/catalogo/scripts-custom.js')}}'></script>
-          <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        </div>
+        <script src="{{ asset('js/jquery.js')}}"></script>
+        <script src="{{ asset('assets') }}/js/core/jquery.min.js"></script>
+        <script src='{{asset('js/catalogo/jquery.slim.min.js')}}'></script>
+        {{-- <script src='{{asset('js/catalogo/bootstrap.bundle.min.js')}}'></script> --}}
+        <script src='{{asset('js/catalogo/bs-custom-file-input.min.js')}}'></script>
+        <script src='{{asset('js/catalogo/simplebar.min.js')}}'></script>
+        <script src='{{asset('js/catalogo/tiny-slider.js')}}'></script>
+        <script src='{{asset('js/catalogo/smooth-scroll.polyfills.min.js')}}'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+        <script src='{{asset('js/catalogo/theme.min.js')}}'></script>
+        <script src='{{asset('js/catalogo/scripts-custom.js')}}'></script>
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
 
-          <script type="text/javascript">
-            $(document).ready(function () {
-              $('#su-telefone').mask('(00) 00000-0000');
-            });
-          </script>
+        <script type="text/javascript">
+          $(document).ready(function () {
+            $('#su-telefone').mask('(00) 00000-0000');
+          });
 
-          @stack('scripts')
-        </body>
+          @error ('email')
+            $('#signin-modal').modal('show');
+          @enderror
+        </script>
 
-        </html>
+        @stack('scripts')
+      </body>
+
+      </html>

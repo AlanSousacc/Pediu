@@ -113,7 +113,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label class="col ml-2">Observação</label>
-                        <input type="text" disabled class="form-control" value="{{isset($pedido) ? $pedido->endereco->observacao : ''}}" >
+                        <input type="text" disabled class="form-control" value="{{isset($pedido) ? $pedido->observacao : ''}}" >
                       </div>
                     </div>
                   </div>

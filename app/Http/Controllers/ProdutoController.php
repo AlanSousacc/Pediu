@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProdutoRequest;
+use App\Models\Complemento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -25,12 +26,12 @@ class ProdutoController extends Controller
 
   public function index()
   {
-    $consulta = $this->produto->where('empresa_id', Auth::user()->empresa_id)->where('status', 1)->paginate();
+    $consulta = $this->produto->where('empresa_id', Auth::user()->empresa_id)->where('status', 1)->with('grupo')->paginate(10);
     return view('pages.produtos.listagemProduto', compact('consulta'));
   }
 
   public function buscaProdutoPedido($id){
-    $produto = $this->produto->findOrFail($id);
+    $produto = $this->produto->where('empresa_id', Auth::user()->empresa_id)->findOrFail($id);
 
     return response()->json([
       'data' => $produto
@@ -38,13 +39,14 @@ class ProdutoController extends Controller
   }
 
   public function create(){
-    $grupos = Grupo::all();
-    return view('pages.produtos.novoProduto', compact('grupos'));
+    $grupos       = Grupo::where('empresa_id', Auth::user()->empresa_id)->orderBy('created_at', 'desc')->get();
+    $complementos = Complemento::where('empresa_id', Auth::user()->empresa_id)->orderBy('created_at', 'desc')->get();
+    return view('pages.produtos.novoProduto', compact('grupos', 'complementos'));
   }
 
   public function returnPreco($id)
   {
-    $produto = $this->produto->where('id', $id)->get();
+    $produto = $this->produto->where('empresa_id', Auth::user()->empresa_id)->where('id', $id)->get();
 
     return response()->json([
       "data" => $produto
@@ -58,10 +60,22 @@ class ProdutoController extends Controller
     $produto->descricao  = $data['descricao'];
     $produto->empresa_id = Auth::user()->empresa_id;
     $produto->composicao = $data['composicao'];
-    $produto->tipo       = $data['tipo'];
+    if($data['controlatamanho'] == 1){
+      $produto->precopequeno  = str_replace (',', '.', str_replace ('.', '', $data['precopequeno']));
+      $produto->precomedio    = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
+      $produto->precogrande   = str_replace (',', '.', str_replace ('.', '', $data['precogrande']));
+      $produto->precovenda    = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
+      $produto->controlatamanho   = 1;
+    } else {
+      $produto->precopequeno    = null;
+      $produto->precomedio      = null;
+      $produto->precogrande     = null;
+      $produto->controlatamanho = 0;
+      $produto->precovenda      = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
+    }
     $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
-    $produto->precovenda = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
     $produto->status     = $data['status'];
+
     if($data['grupo_id'] != 0)
       $produto->grupo_id   = $data['grupo_id'];
 
@@ -73,6 +87,15 @@ class ProdutoController extends Controller
 
     $saved = $produto->save();
 
+    if(isset($data['complemento_listagem_id'])){
+    foreach($data['complemento_listagem_id'] as $i => $produto_id ){
+      $preco = $data['preco'][$i];
+
+      $produto->complementos()->attach([
+        $produto_id => ['preco' => $preco]
+        ]);
+      }
+    }
     if (!$saved)
       return redirect()->back()->with('error', 'Falha ao salvar Produto!');
 
@@ -81,14 +104,15 @@ class ProdutoController extends Controller
 
   public function edit($id)
 	{
-    $produto = $this->produto->find($id);
-    $grupos  = Grupo::all();
-		return view('pages.produtos.editar', compact('produto', 'grupos'));
+    $produto      = $this->produto->where('empresa_id', Auth::user()->empresa_id)->find($id);
+    $grupos       = Grupo::where('empresa_id', Auth::user()->empresa_id)->get();
+    $complementos = Complemento::where('empresa_id', Auth::user()->empresa_id)->orderBy('created_at', 'desc')->get();
+		return view('pages.produtos.editar', compact('produto', 'grupos', 'complementos'));
   }
 
   public function returnProdutoPedido($id)
 	{
-    $pedido = Pedidos::findOrFail($id);
+    $pedido = Pedidos::where('empresa_id', Auth::user()->empresa_id)->findOrFail($id);
 
 		return response()->json([
       'data' => [
@@ -98,10 +122,21 @@ class ProdutoController extends Controller
     ]);
 	}
 
+  public function returnProdutoComplementos($id)
+	{
+    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->findOrFail($id);
+
+		return response()->json([
+      'data' => [
+        'produto' => $produto,
+        'produtos'    => $produto->complementos,
+      ]
+    ]);
+	}
+
   public function update(ProdutoRequest $request, $id)
   {
     $data = $request->except('_token');
-
     $produto = $this->produto->find($id);
 
     if (!$produto)
@@ -109,9 +144,22 @@ class ProdutoController extends Controller
 
     $produto->descricao  = $data['descricao'];
     $produto->composicao = $data['composicao'];
-    $produto->tipo       = $data['tipo'];
+    $produto->grupo_id   = $data['grupo_id'];
+    if($data['controlatamanho'] == 1){
+      $produto->precopequeno    = str_replace (',', '.', str_replace ('.', '', $data['precopequeno']));
+      $produto->precomedio      = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
+      $produto->precogrande     = str_replace (',', '.', str_replace ('.', '', $data['precogrande']));
+      $produto->precovenda      = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
+      $produto->controlatamanho = 1;
+
+    } else {
+      $produto->precopequeno    = null;
+      $produto->precomedio      = null;
+      $produto->precogrande     = null;
+      $produto->controlatamanho = 0;
+      $produto->precovenda      = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
+    }
     $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
-    $produto->precovenda = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
     $produto->status     = $data['status'];
 
     if(isset($request->foto)){
@@ -122,10 +170,21 @@ class ProdutoController extends Controller
       $produto->foto = 'img/logos/default.png';
     }
 
-    // dd($data);
     $saved = $produto->save();
     if (!$saved)
       return redirect()->back()->with('error', 'Falha ao Alterar Produto!');
+
+    if(isset($data['complemento_listagem_id'])){
+      $produtos = [];
+      $produto->complementos()->detach();
+      foreach($data['complemento_listagem_id'] as $i => $produto_id ){
+        $preco = $data['preco'][$i];
+
+        $produto->complementos()->attach([
+          $produto_id => ['preco' => $preco]
+        ]);
+      }
+    }
 
     return redirect()->route('produto.index')->with('success', 'Produto alterado com sucesso!');
   }
@@ -145,6 +204,8 @@ class ProdutoController extends Controller
       return redirect()->back()->with('error', 'Nenhum Produto encontrado!');
 
     Storage::delete($produto->foto);
+
+    $produto->complementos()->detach();
 
     $saved = $produto->delete();
 

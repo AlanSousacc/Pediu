@@ -15,10 +15,19 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
-          <h4 class="card-title"> Produtos</h4>
+        <div class="card-header row">
+          <div class="col-md-6">
+            <h4 class="card-title">Produtos</h4>
+          </div>
+          <div class="col-md-6">
+            <a href="{{route('produto.create')}}" class="d-block float-right btn btn-success"><i class="fa fa-plus"></i> Novo Produto</a>
+          </div>
         </div>
         <div class="card-body">
+          <div class="row">
+            <div class="col-md-10"><p>Mostrando {{$consulta->count()}} produtos de um total de {{$consulta->total()}}</p></div>
+            <div class="col-md-2">{{$consulta->links()}}</div>
+          </div>
           <div class="table-responsive" style="overflow: initial!important;">
             <table class="table">
               <thead class=" text-primary">
@@ -27,7 +36,7 @@
                 <th class="text-center">Descrição</th>
                 <th class="text-center">Pr. Custo</th>
                 <th class="text-center">Pr. Venda</th>
-                <th class="text-center">Tipo</th>
+                <th class="text-center">Grupo</th>
                 <th class="text-center">Opções</th>
               </thead>
               <tbody>
@@ -38,11 +47,11 @@
                   <td class="text-center">{{$item->descricao}}</td>
                   <td class="text-center">R$ {{number_format($item->precocusto, 2, ',', '.')}}</td>
                   <td class="text-center">R$ {{number_format($item->precovenda, 2, ',', '.')}}</td>
-                  <td class="text-center">{{$item->tipo}}</td>
+                  <td class="text-center">{{isset($item->grupo->descricao) ? $item->grupo->descricao : 'Nenhum'}}</td>
                   <td class="text-center">
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
+                        Opção
                       </button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ route('produto.edit', $item->id) }}">Alterar</a>

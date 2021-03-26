@@ -23,7 +23,7 @@ class LoginController extends Controller
     } else if( auth()->user()->profile == 'Usuario'){
       return redirect()->route('home');
     } else {
-      return redirect('catalogo/'. auth()->user()->empresa->slug);
+      return redirect('/'. auth()->user()->empresa->slug);
     }
 
     return redirect('/');
@@ -40,7 +40,7 @@ class LoginController extends Controller
       return redirect('/login');
     } else {
       Auth::logout();
-      return redirect('catalogo/'. $slug);
+      return redirect('/'. $slug);
     }
   }
 }

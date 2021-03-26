@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -103,45 +103,51 @@ $(document).ready(function () {
     });
     var product_id = $(this).closest('.product_data').find('.product_id').val();
     var quantity = $(this).closest('.product_data').find('.qty-input').val();
+    var complementos = new Array();
+    $("input[name='complemento_id[]']:checked").each(function () {
+      complementos.push($(this).val());
+    });
     $.ajax({
       url: "/add-to-cart",
       method: "POST",
       data: {
         'quantity': quantity,
-        'product_id': product_id
+        'product_id': product_id,
+        'complementos': complementos
       },
       success: function success(response) {
         alertify.set('notifier', 'position', 'bottom-center');
-        alertify.success(response.status);
-        window.location.reload();
+        alertify.success(response.status); // window.location.reload();
+      },
+      error: function error(response) {
+        alertify.set('notifier', 'position', 'bottom-center');
+        alertify.error(response.responseJSON.message);
       }
     });
   });
-});
-$(document).ready(function () {
-  cartload();
-});
-
-function cartload() {
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-  $.ajax({
-    url: '/load-cart-data',
-    method: "GET",
-    success: function success(response) {
-      $('.navbar-tool-label').html('');
-      $('.cz-handheld-toolbar-icon .carrinho').html('');
-      var parsed = jQuery.parseJSON(response);
-      var value = parsed; //Single Data Viewing
-
-      $('.navbar-tool-label').append($('<span class="badge badge-pill red">' + value['totalcart'] + '</span>'));
-      $('.cz-handheld-toolbar-icon .carrinho').append($('<span class="badge badge-pill red ml-1">' + value['totalcart'] + '</span>'));
-    }
-  });
-}
+}); // $(document).ready(function () {
+//   cartload();
+// });
+// function cartload(){
+//   $.ajaxSetup({
+//     headers: {
+//       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//     }
+//   });
+//   $.ajax({
+//     url: '/load-cart-data',
+//     method: "GET",
+//     success: function (response) {
+//       console.log(response)
+//       $('.navbar-tool-label').html('');
+//       $('.cz-handheld-toolbar-icon .carrinho').html('');
+//       var parsed = jQuery.parseJSON(response)
+//       var value = parsed; //Single Data Viewing
+//       $('.navbar-tool-label').append($('<span class="badge badge-pill red">'+ value['totalcart'] +'</span>'));
+//       $('.cz-handheld-toolbar-icon .carrinho').append($('<span class="badge badge-pill red ml-1">'+ value['totalcart'] +'</span>'));
+//     }
+//   });
+// }
 
 $(document).ready(function () {
   $('.increment-btn').click(function (e) {
@@ -183,9 +189,12 @@ $(document).ready(function () {
       type: 'POST',
       data: data,
       success: function success(response) {
-        window.location.reload();
         alertify.set('notifier', 'position', 'bottom-center');
-        alertify.success(response.status);
+        alertify.success(response.status); // window.location.reload();
+      },
+      error: function error(response) {
+        alertify.set('notifier', 'position', 'bottom-center');
+        alertify.error(response.responseJSON.message);
       }
     });
   });
@@ -206,25 +215,31 @@ $(document).ready(function () {
       data: data,
       success: function success(response) {
         window.location.reload();
+      },
+      error: function error(response) {
+        alertify.set('notifier', 'position', 'bottom-center');
+        alertify.error(response.responseJSON.message);
       }
     });
   });
 }); // Clear Cart Data
-
-$(document).ready(function () {
-  $('.clear_cart').click(function (e) {
-    e.preventDefault();
-    $.ajax({
-      url: '/clear-cart',
-      type: 'GET',
-      success: function success(response) {
-        window.location.reload();
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.success(response.status);
-      }
-    });
-  });
-}); // funções para habilitar campos de endereços de entrega
+// $('.clearcart').click(function (e) {
+//   e.preventDefault();
+//   $.ajax({
+//     url: '/clear-cart',
+//     type: 'GET',
+//     success: function (response) {
+//       alertify.set('notifier','position','bottom-center');
+//       alertify.success(response.status);
+//       window.location.reload();
+//     },
+//     error: function(response){
+//       alertify.set('notifier','position','bottom-center');
+//       alertify.error(response.responseJSON.message);
+//     }
+//   });
+// });
+// funções para habilitar campos de endereços de entrega
 
 function verificaentrega() {
   if ($('#enderecocadastro').prop("checked")) {
@@ -301,7 +316,7 @@ $(document).ready(function () {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /*!*******************************************************!*\
   !*** multi ./resources/js/catalogo/scripts-custom.js ***!
   \*******************************************************/

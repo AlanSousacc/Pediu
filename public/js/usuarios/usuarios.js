@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -122,7 +122,7 @@ $('#delete').on('show.bs.modal', function (event) {
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /*!*************************************************!*\
   !*** multi ./resources/js/usuarios/usuarios.js ***!
   \*************************************************/

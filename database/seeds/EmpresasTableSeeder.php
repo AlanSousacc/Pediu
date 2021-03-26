@@ -17,7 +17,7 @@ class EmpresasTableSeeder extends Seeder
     Empresa::create([
       'uuid' => Str::uuid()->toString(),
       'razao' => 'ACPTI',
-      'fantasia' => 'Produto Final',
+      'fantasia' => 'ACPTI',
       'celular' => '(16) 99179-3351',
       'nome' => 'Alan Wilian de Sousa',
       'cidade' => 'Sales Oliveira',
@@ -27,6 +27,7 @@ class EmpresasTableSeeder extends Seeder
       'cnpj' => '85.758.178/0001-59',
       'email' => 'alansousa.cc@gmail.com',
       'logo' => 'default.png',
+      'slug' => 'acpti',
       'cliente_id' => '',
       'active' => '1',
       ]);

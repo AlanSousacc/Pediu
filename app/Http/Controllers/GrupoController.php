@@ -44,7 +44,7 @@ class GrupoController extends Controller
     if (!$grupo)
       return redirect()->back()->with('error', 'Falha ao salvar este Grupo!');
 
-    return redirect()->route('grupo.index')->with('success', 'Grupo criado com sucesso!');
+    return redirect()->back()->with('success', 'Grupo criado com sucesso!');
   }
 
   public function edit($id)

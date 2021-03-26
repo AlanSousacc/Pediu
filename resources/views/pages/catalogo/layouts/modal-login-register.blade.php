@@ -17,12 +17,16 @@
         <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body tab-content py-4">
-        <form class="needs-validation tab-pane fade show active" action="{{ route('login') }}" method="POST" autocomplete="off" novalidate id="signin-tab">
+        <form class="needs-validation tab-pane fade show active" action="{{ route('login') }}" method="POST" autocomplete="off" id="signin-tab">
           @csrf
           <div class="form-group">
             <label for="si-email">Endereço de Email</label>
-            <input class="form-control" type="email" id="si-email" name="email" placeholder="johndoe@example.com" required>
-            <div class="invalid-feedback">Por favor, forneça um endereço de e-mail válido.</div>
+            <input class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" type="email" id="si-email" name="email" placeholder="maria@example.com" value="{{ old('email') }}" required>
+            @if ($errors->has('email'))
+            <span class="invalid-feedback" style="display: block;" role="alert">
+              <strong>{{ $errors->first('email') }}</strong>
+            </span>
+            @endif
           </div>
           <div class="form-group">
             <label for="si-password">Senha</label>

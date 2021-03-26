@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddValorentregaToConfiguracaoes extends Migration
+class AddComplitemidToCartItemsTable extends Migration
 {
   /**
   * Run the migrations.
@@ -13,8 +13,8 @@ class AddValorentregaToConfiguracaoes extends Migration
   */
   public function up()
   {
-    Schema::table('configuracaoes', function (Blueprint $table) {
-      $table->double('valorentrega', 5,2)->default(0.00);
+    Schema::table('cart_items', function (Blueprint $table) {
+      $table->integer('complitemid');
     });
   }
 
@@ -25,7 +25,7 @@ class AddValorentregaToConfiguracaoes extends Migration
   */
   public function down()
   {
-    Schema::table('configuracaoes', function (Blueprint $table) {
+    Schema::table('cart_items', function (Blueprint $table) {
       //
     });
   }

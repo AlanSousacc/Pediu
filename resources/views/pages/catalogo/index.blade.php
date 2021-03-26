@@ -3,7 +3,7 @@
 <!-- Sign in / sign up modal-->
 @extends('pages.catalogo.layouts.modal-login-register')
 <section class="container tab-content py-4 py-sm-5">
-  <h2 class="text-center pt-2 pt-sm-0 mb-sm-5">{{!isset($grupo) ? 'Catalogo de produtos' : $grupo->descricao}}</h2>
+  <h2 class="text-center pt-2 pt-sm-0 mb-sm-5 font-weight-light">{{!isset($grupo) ? 'Confira nosso catalogo' : $grupo->descricao}}</h2>
   <div class="row pt-3 pt-sm-0">
     @foreach ($produtos as $item)
     <div class="col-lg-3 col-md-4 col-sm-6 mb-grid-gutter product_data">
@@ -47,19 +47,19 @@
               <span class="text-accent">R$ {{number_format($item->precovenda, 2, ',', '.')}}</span>
             </div>
             @if (!auth()->check())
-              <a class="navbar-tool ml-2" href="#signin-modal" data-toggle="modal">
-                <i class="far fa-user mr-2"></i> Entrar
-              </a>
+            <a class="navbar-tool ml-2" href="#signin-modal" data-toggle="modal">
+              <i class="far fa-user mr-2"></i> Entrar
+            </a>
             @else
-              <button type="button" class="add-to-cart-btn btn btn-primary btn-sm">+ <i class="fas fa-cart-plus"></i></button>
+            <a href="{{route('catalogo-detalhe-produto',array($empresa->slug, $item->id))}}">Detalhe <i class="fas fa-cart-plus"></i></a>
             @endif
-            </div>
           </div>
         </div>
       </div>
-      @endforeach
     </div>
-  </section>
+    @endforeach
+  </div>
+</section>
 
 </section>
 

@@ -3,7 +3,7 @@
 <!-- Sign in / sign up modal-->
 @extends('pages.catalogo.layouts.modal-login-register')
 {{-- header --}}
-@extends('layouts.messages.message-loja');
+@extends('layouts.messages.message-loja')
 <div class="page-title-overlap bg-dark pt-4">
   <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
     <div class="order-lg-1 pr-lg-4 text-center text-lg-left">
@@ -18,7 +18,7 @@
     <div class="container pb-5 mb-2 mb-md-3">
       <div class="row">
         <!-- Sidebar-->
-        <aside class="col-lg-4 pt-4 pt-lg-0">
+        <aside class="col-lg-3 pt-4 pt-lg-0">
           <div class="cz-sidebar-static rounded-lg box-shadow-lg px-0 pb-0 mb-5 mb-lg-0">
             <div class="px-4 mb-4">
               <div class="media align-items-center">
@@ -61,7 +61,7 @@
               </div>
             </aside>
             <!-- Content  -->
-            <section class="col-lg-8">
+            <section class="col-lg-9">
               <!-- Toolbar-->
               <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
               </div>

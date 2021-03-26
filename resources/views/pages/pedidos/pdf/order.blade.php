@@ -50,11 +50,11 @@
     width: 100%;
     max-width: 100px;
     text-align: center;
-    margin: 0 0 0 70px 
+    margin: 0 0 0 70px
   }
   .cabecalho{
     text-align: center;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
   }
   .cabecalho p{
     margin: 0 auto;
@@ -118,6 +118,7 @@
       Nome: {{$pedido->contato->nome}}<br>
       Endereço: {{$pedido->endereco->endereco}}; Nº {{$pedido->endereco->numero}}<br>
       Bairro: {{$pedido->endereco->bairro}}; Tel: {{$pedido->contato->telefone}}
+      Observação: {{$pedido->observacao}}
     </div>
     <div class="itens">
       <p class="titulo-sessao">Detalhes dos Itens</p>
@@ -125,10 +126,10 @@
       <ul>
         @foreach ($pedido->produtos as $item)
         <li class="lista-itens">
-          {{$item->pivot->qtde}} | 
-          {{$item->descricao}} | 
-          {{$item->pivot->obsitem != null ? $item->pivot->obsitem : 'Sem Obs'}} | 
-          R$ {{number_format($item->pivot->prvenda, 2, ',', '.')}} | 
+          {{$item->pivot->qtde}} |
+          {{$item->descricao}} |
+          {{$item->pivot->obsitem != null ? $item->pivot->obsitem : 'Sem Obs'}} |
+          R$ {{number_format($item->pivot->prvenda, 2, ',', '.')}} |
           R$ {{number_format($item->pivot->prvenda * $item->pivot->qtde, 2, ',', '.')}}
         </li>
         @endforeach

@@ -17,6 +17,8 @@ class ConfiguracaoTableSeeder extends Seeder
     Configuracao::create([
       'empresa_id' => 1,
       'controlaentrega' => 1,
+      'controlepedidosbalcao' => 1,
+      'tempominimoentrega' => '25 á 40 minutos',
       ]);
   }
 }

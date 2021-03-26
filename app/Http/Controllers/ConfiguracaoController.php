@@ -27,13 +27,22 @@ class ConfiguracaoController extends Controller
 
     if(!$config){
       isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
+      isset($data['controlepedidosbalcao']) && $data['controlepedidosbalcao'] == 'on' ? 1 : 0;
       $data['empresa_id'] = $user;
       $data['valorentrega'] = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
     } else {
       $config->controlaentrega = isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
+      $config->controlepedidosbalcao = isset($data['controlepedidosbalcao']) && $data['controlepedidosbalcao'] == 'on' ? 1 : 0;
       $config->valorentrega = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
       $config->empresa_id = $user;
     }
+
+    $config->tempominimoentrega = $data['tempominimoentrega'];
+    $config->statusrecebido     = $data['statusrecebido'];
+    $config->statuspreparando   = $data['statuspreparando'];
+    $config->statusentregando   = $data['statusentregando'];
+    $config->statusentregue     = $data['statusentregue'];
+    $config->statuscancelado    = $data['statuscancelado'];
 
     $save = $config != null ? $config->save() : $save = $this->repository->create($data);
 

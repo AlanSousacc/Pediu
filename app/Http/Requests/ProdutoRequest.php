@@ -10,14 +10,14 @@ class ProdutoRequest extends FormRequest
   {
     return auth()->check();
   }
-  
+
   public function rules()
   {
     return [
       'descricao'   => 'required|max:50',
       'composicao'  => 'required',
-      'tipo'        => 'required',
-      'precovenda'  => 'required',
+      'precovenda'  => 'required_if:controlatamanho,==,0',
+      'precomedio'  => 'required_if:controlatamanho,==,1',
       'status'      => 'required',
     ];
   }
@@ -28,7 +28,6 @@ class ProdutoRequest extends FormRequest
       'descricao.required'  => 'O campo Descrição do Produto é obrigatório!',
       'descricao.max'       => 'O campo Descrição deve conter no máximo 50 caracteres!',
       'composicao.required' => 'O campo Composição é obrigatório!',
-      'tipo.required'       => 'O campo Tipo do produto é obrigatório!',
       'precovenda.required' => 'O campo Preço de Venda é obrigatório!',
       'status.required'     => 'O campo Status obrigatório!',
     ];

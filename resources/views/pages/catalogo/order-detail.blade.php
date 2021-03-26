@@ -3,11 +3,11 @@
 <!-- Sign in / sign up modal-->
 @extends('pages.catalogo.layouts.modal-login-register')
 {{-- header --}}
-@extends('layouts.messages.message-loja');
+@extends('layouts.messages.message-loja')
 <div class="page-title-overlap bg-dark pt-4">
   <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
     <div class="order-lg-1 pr-lg-4 text-center text-lg-left">
-      <h1 class="h3 text-light mb-0">Endereços</h1>
+      <h1 class="h3 text-light mb-0">Pedidos - Detalhes do pedido: <span class="font-weight-light">{{($order->numberorder)}}</span></h1>
     </div>
   </div>
 </div>
@@ -18,7 +18,7 @@
     <div class="container pb-5 mb-2 mb-md-3">
       <div class="row">
         <!-- Sidebar-->
-        <aside class="col-lg-4 pt-4 pt-lg-0">
+        <aside class="col-lg-3 pt-4 pt-lg-0">
           <div class="cz-sidebar-static rounded-lg box-shadow-lg px-0 pb-0 mb-5 mb-lg-0">
             <div class="px-4 mb-4">
               <div class="media align-items-center">
@@ -61,7 +61,7 @@
               </div>
             </aside>
             <!-- Content  -->
-            <section class="col-lg-8">
+            <section class="col-lg-9">
               <!-- Toolbar-->
               <div class="d-none d-lg-flex justify-content-between align-items-center pt-lg-3 pb-4 pb-lg-5 mb-lg-3">
               </div>
@@ -69,34 +69,44 @@
                 <h5 class="modal-title"><small>#</small> {{$order->numberorder}}</h5>
                 <div class="fs-lg text-accent pt-2">{{$order->created_at->format('d/m/Y H:i')}}</div>
               </div>
+              {{-- @dd($order->complementositemcart) --}}
               @foreach ($order->orderitems as $item)
-                <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
-                  <div class="d-sm-flex text-center text-sm-start">
-                    <a class="d-inline-block flex-shrink-0 mx-auto" href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}" style="width: 10rem;">
-                      <img src="{{ $item->produtos->foto != 'default.png' ? url("storage/".$item->produtos->foto) : url("storage/img/logos/default.png")}}" alt="{{$item->produtos->descricao}}">
-                    </a>
-                    <div class="ps-sm-4 pt-2 text-left">
-                      <h3 class="product-title fs-base mb-2">
-                        <a href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}">{{$item->produtos->descricao}}</a>
-                      </h3>
-                      <div class="fs-sm"><span class="text-muted me-2 text-left">Composição: </span>{{$item->produtos->composicao}}</div>
-                      <div class="fs-lg text-accent pt-2 text-left">
-                        <small>R$ </small>{{number_format($item->preco, 2, ',', '.')}}
-                      </div>
+              <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
+                <div class="d-sm-flex text-center text-sm-start">
+                  <a class="d-inline-block flex-shrink-0 mr-3" href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}" style="width: 10rem;">
+                    <img src="{{ $item->produtos->foto != 'default.png' ? url("storage/".$item->produtos->foto) : url("storage/img/logos/default.png")}}" alt="{{$item->produtos->descricao}}">
+                  </a>
+                  <div class="ps-sm-4 pt-2 text-left">
+                    <h3 class="product-title fs-base mb-2">
+                      <a href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}">{{$item->produtos->descricao}}</a>
+                    </h3>
+                    {{-- <div class="fs-sm"><span class="text-muted me-2 text-left">Composição: </span>{{$item->produtos->composicao}}</div> --}}
+                    <div class="font-size-sm">
+                      @php $totaladicional = 0 @endphp
+                      @if (count($order->complementositemcart) > 0)
+                      <span class="text-muted me-2">Adicionais:</span> <br>
+                      @foreach ($order->complementositemcart as $adicionais)
+                        @if($adicionais->complitemcartid == $item->complitemid)
+                        @php $totaladicional += $adicionais->complemento->preco @endphp
+                        <span class="bg-dark text-white p-1 rounded"> {{$adicionais->complemento->descricao}}</span>
+                        @endif
+                        @endforeach
+                      @endif
                     </div>
                   </div>
-                  <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                    <div class="text-muted mb-2">Quantidade: </div>{{$item->qtde}}
-                  </div>
-                  <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                    <div class="text-muted mb-2">Subtotal: </div><small>R$</small> {{number_format($item->qtde * $item->preco, 2, ',', '.')}}
-                  </div>
                 </div>
+                <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+                  <div class="text-muted mb-2">Quantidade: </div>{{$item->qtde}}
+                </div>
+                <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+                  <div class="text-muted mb-2">Subtotal: </div><small>R$</small> {{number_format(($item->qtde * $item->preco) + $totaladicional, 2, ',', '.')}}
+                </div>
+              </div>
               @endforeach
               <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
-                <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><small>R$ </small><span>{{number_format($order->subtotalpedido, 2, ',', '.')}}</span></div>
+                <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><small>R$ </small><span>{{number_format(($item->qtde * $item->preco) + $totaladicional, 2, ',', '.')}}</span></div>
                 <div class="px-2 py-1"><span class="text-muted">Entrega:&nbsp;</span><small>R$ </small><span>{{number_format($order->valorentrega, 2, ',', '.')}}</span></div>
-                <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><small>R$ </small><span>{{number_format($order->totalpedido, 2, ',', '.')}}</span></div>
+                <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><small>R$ </small><span>{{number_format(($item->qtde * $item->preco) + $totaladicional + $order->valorentrega, 2, ',', '.')}}</span></div>
                 <div class="px-2 py-1"><span class="text-muted">Forma de Pagamento:&nbsp;</span><small></small><span>{{$order->formapagamento}}</span></div>
               </div>
             </section>

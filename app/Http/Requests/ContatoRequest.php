@@ -10,7 +10,7 @@ class ContatoRequest extends FormRequest
   {
     return auth()->check();
   }
-  
+
   public function rules()
   {
     return [

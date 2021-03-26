@@ -124,7 +124,7 @@
           <div class="d-flex align-items-center divtrocopara">
             <label class="text-nowrap mr-3 mb-0" for="fd-change">Eu preciso de troca para:</label>
             <div class="input-group" style="width: 8rem;">
-              <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-dollar-sign"></i></span></div>
+              <div class="input-group-prepend"><span class="input-group-text" style="padding: 7px 15px 7px 15px!important;"><i class="fa fa-dollar-sign"></i></span></div>
               <input class="form-control bg-0 pr-3" name="trocopara" id="trocopara" type="text" id="fd-change">
             </div>
           </div>
@@ -136,16 +136,6 @@
           <button class="btn btn-primary btn-block mt-3" name="place-order-btn" type="submit">Finalizar Pedido</button>
         </div>
         <div class="col-sm-6">
-          @php $total = 0 @endphp
-          @if(isset($cart_data) && auth()->check())
-          @if (Cookie::get('shopping_cart'))
-          @foreach ($cart_data as $data)
-          @if ($data['user_id'] == auth()->user()->id)<!-- só vai listar os produtos da sessão se o id da sessao user id for igual o id do usuário logado-->
-          @php $total += $data['item_price'] * $data['item_quantity'] @endphp
-          @endif
-          @endforeach
-          @endif
-          @endif
           <div class="d-fle flex-column h-100 rounded-lg bg-secondary px-3 px-sm-4 py-4">
             <div class="row">
               <div class="col-12 mb-4">
@@ -154,11 +144,11 @@
               </div>
             </div>
             <h2 class="h5 pb-3">Total</h2>
-            <input type="hidden" name="totalpedido" id="totalpedido" value="{{$total + $config->valorentrega}}">
-            <input type="hidden" name="subtotalpedido" id="subtotalpedido" value="{{$total}}">
-            <div class="d-flex justify-content-between font-size-md border-bottom pb-3 mb-3"><span>Subtotal:</span><span class="text-heading"><small>R$</small> {{number_format($total, 2, ',', '.')}}</span></div>
+            <input type="hidden" name="totalpedido" id="totalpedido" value="{{$totalprodutos + $config->valorentrega}}">
+            <input type="hidden" name="subtotalpedido" id="subtotalpedido" value="{{$totalprodutos}}">
+            <div class="d-flex justify-content-between font-size-md border-bottom pb-3 mb-3"><span>Subtotal:</span><span class="text-heading"><small>R$</small> {{number_format($totalprodutos + $totaladicional, 2, ',', '.')}}</span></div>
             <div class="d-flex justify-content-between font-size-md border-bottom pb-3 mb-3"><span>Entrega:</span><span class="text-heading"><small>R$</small> {{isset($config) ? number_format($config->valorentrega, 2, ',', '.') : '0,00'}}</span></div>
-            <div class="d-flex justify-content-between font-size-md mb-2"><span>Total:</span><span class="text-heading font-weight-medium"><small>R$</small> {{number_format($total + $config->valorentrega, 2, ',', '.')}}</span></div>
+            <div class="d-flex justify-content-between font-size-md mb-2"><span>Total:</span><span class="text-heading font-weight-medium"><small>R$</small> {{number_format($totalprodutos + $totaladicional + $config->valorentrega, 2, ',', '.')}}</span></div>
           </div>
         </div>
       </div>

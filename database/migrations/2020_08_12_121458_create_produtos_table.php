@@ -17,7 +17,6 @@ class CreateProdutosTable extends Migration
       $table->id();
       $table->string('descricao', 50);
       $table->text('composicao');
-      $table->enum('tipo', ['Produto Final', 'Adicional', 'Outros']);
       $table->double('precocusto', 5,2)->nullable();
       $table->double('precovenda', 5,2);
       $table->boolean('status')->default(1);
@@ -27,7 +26,7 @@ class CreateProdutosTable extends Migration
       $table->foreign('grupo_id')->references('id')->on('grupos')->onDelete('cascade');
     });
   }
-  
+
   /**
   * Reverse the migrations.
   *
