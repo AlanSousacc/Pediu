@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\models\CartItems;
 use App\Models\Complemento;
+use App\Models\ComplementoItemCart;
 use App\Models\Configuracao;
 use App\Models\Empresa;
 use App\Models\EnderecoUsers;
 use App\Models\Grupo;
+use App\Models\MeioameioItemCart;
 use App\Models\Produto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+
+use function GuzzleHttp\json_encode;
 
 class CatalogoController extends Controller
 {
@@ -27,9 +31,19 @@ class CatalogoController extends Controller
     $this->config   = $configuracao;
   }
 
+  public function precoitem($slug, $produtoid, $tamanho)
+  {
+    $empresa  = $this->empresa->where('slug', $slug)->first();
+    $produto  = $this->produtos::where('empresa_id', $empresa->id)->where('id', $produtoid)->first()->$tamanho;
+    // dd($produtoid);
+
+    return response()->json([
+      "data" => $produto
+    ]);
+  }
+
   public function index($slug)
   {
-    // dd('aqui');
     $empresa      = $this->empresa->where('slug', $slug)->first();
     $produtos     = $this->produtos->where('empresa_id', $empresa->id)->where('status', 1)->get();
     $grupos       = $this->grupos->where('empresa_id', $empresa->id)->get();
@@ -42,6 +56,7 @@ class CatalogoController extends Controller
   public function grupo($slug, $descricao)
   {
     $empresa  = $this->empresa->where('slug', $slug)->first();
+    // dd($empresa);
     $grupos   = $this->grupos->where('empresa_id', $empresa->id)->get();
     $grupo    = $this->grupos->where('empresa_id', $empresa->id)->where('descricao', $descricao)->first();
     $produtos = $this->produtos::where('empresa_id', $empresa->id)->where('status', 1)->where('grupo_id', $grupo->id)->get();
@@ -66,13 +81,14 @@ class CatalogoController extends Controller
 
   public function detalheProduto($slug, $id)
   {
-    $empresa  = $this->empresa->where('slug', $slug)->first();
-    $grupos   = $this->grupos->where('empresa_id', $empresa->id)->get();
-    $produto  = $this->produtos->where('empresa_id', $empresa->id)->where('id', $id)->first();
-    $cookie_data = stripslashes(Cookie::get('shopping_cart'));
-    $cart_data   = json_decode($cookie_data, true);
+    $empresa      = $this->empresa->where('slug', $slug)->first();
+    $grupos       = $this->grupos->where('empresa_id', $empresa->id)->get();
+    $produto      = $this->produtos->where('empresa_id', $empresa->id)->with('grupo')->where('id', $id)->first();
+    $produtos     = $this->produtos->where('empresa_id', $empresa->id)->where('saboresdiversos', 1)->where('id', '!=', $id)->get();
+    $cookie_data  = stripslashes(Cookie::get('shopping_cart'));
+    $cart_data    = json_decode($cookie_data, true);
 
-    return view('pages.catalogo.detalhe-produto', compact('produto', 'empresa', 'grupos', 'cookie_data', 'cart_data'));
+    return view('pages.catalogo.detalhe-produto', compact('produto', 'empresa', 'grupos', 'cookie_data', 'cart_data', 'produtos'));
   }
 
   // função para calcular total de preços dos produtos no carrinho
@@ -81,7 +97,7 @@ class CatalogoController extends Controller
     $totalprodutos  = 0;
     $cookie_data    = stripslashes(Cookie::get('shopping_cart'));
     $cart_data      = json_decode($cookie_data, true);
-    $teste = 0;
+
     if($cart_data != null){
       foreach ($cart_data as $data){
         if($data['item_quantity'] != 1){
@@ -105,10 +121,11 @@ class CatalogoController extends Controller
 
     if($cart_data){
       foreach ($cart_data as $data){
+        // dd($data);
         if ($data['complem_produ'] != null){
           foreach ($data['complem_produ'] as $item){
             foreach ($complementos->where('id', $item) as $complemento){
-              $totaladicional = $this->totaladicional += $complemento->preco;
+              $totaladicional = $this->totaladicional += $complemento->preco * $data['item_quantity'];
             }
           }
         }
@@ -181,18 +198,33 @@ class CatalogoController extends Controller
     $address     = EnderecoUsers::where('user_id', Auth::user()->id)->get();
     $orders      = Cart::where('user_id', Auth::user()->id)->where('empresa_id', $empresa->id)->orderBy('created_at', 'desc')->get();
 
+
     return view('pages.catalogo.account-pedidos', compact('produtos', 'empresa', 'grupos', 'address', 'orders'));
   }
 
   public function PedidoDetail($slug, $id, $pedido)
   {
-    $empresa     = $this->empresa->where('slug', $slug)->first();
-    $grupos      = $this->grupos->where('empresa_id', $empresa->id)->get();
-    $produtos    = $this->produtos->where('empresa_id', $empresa->id)->get();
-    $address     = EnderecoUsers::where('user_id', Auth::user()->id)->get();
-    $orders      = Cart::where('user_id', Auth::user()->id)->where('empresa_id', $empresa->id)->get();
-    $order       = Cart::where('user_id', Auth::user()->id)->where('empresa_id', $empresa->id)->where('id', $pedido)->first();
+    $totaladicional = 0; $totalprodutos = 0;
 
-    return view('pages.catalogo.order-detail', compact('produtos', 'empresa', 'grupos', 'address', 'orders', 'order'));
+    $empresa         = $this->empresa->where('slug', $slug)->first();
+    $grupos          = $this->grupos->where('empresa_id', $empresa->id)->get();
+    $produtos        = $this->produtos->where('empresa_id', $empresa->id)->get();
+    $address         = EnderecoUsers::where('user_id', Auth::user()->id)->get();
+    $orders          = Cart::where('user_id', Auth::user()->id)->where('empresa_id', $empresa->id)->get();
+    $order           = Cart::where('user_id', Auth::user()->id)->where('empresa_id', $empresa->id)->where('id', $pedido)->first();
+    $itenscarrinho   = CartItems::where('cart_id', $order->id)->where('empresa_id', $empresa->id)->get();
+    $complementoitem = ComplementoItemCart::where('cart_id', $order->id)->where('empresa_id', $empresa->id)->get();
+    $sabores         = MeioameioItemCart::where('cart_id', $order->id)->where('empresa_id', $empresa->id)->get();
+
+    // calcula os preços de todos os produtos e os adicionais
+    foreach ($complementoitem as $item){
+      $totaladicional += $item->complemento->preco;
+    }
+    foreach ($itenscarrinho as $data){
+      $totalprodutos += $data->preco;
+    }
+    $subtotal = $totaladicional + $totalprodutos;
+
+    return view('pages.catalogo.order-detail', compact('produtos', 'empresa', 'grupos', 'address', 'orders', 'order', 'subtotal', 'sabores'));
   }
 }

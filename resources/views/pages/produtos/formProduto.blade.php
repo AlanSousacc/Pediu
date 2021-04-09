@@ -14,6 +14,13 @@
         <option {{isset($produto) && $produto->controlatamanho == 1 ? 'selected' : ''}} value="1" >Sim</option>
       </select>
     </div>
+    <div class="form-group col-md-2">
+      <label for="saboresdiversos">Permite meio a meio*</label>
+      <select id="saboresdiversos" class="form-control" name="saboresdiversos" required>
+        <option {{isset($produto) && $produto->saboresdiversos == 0 ? 'selected' : ''}} value="0" >Não</option>
+        <option {{isset($produto) && $produto->saboresdiversos == 1 ? 'selected' : ''}} value="1" >Sim</option>
+      </select>
+    </div>
     <div class="form-group col-md-3">
       <label for="grupo_id">Grupo</label>
       <select id="grupo_id" class="form-control" name="grupo_id" required>
@@ -44,7 +51,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="row">
     <div class="col-md-8">
       <div class="row">

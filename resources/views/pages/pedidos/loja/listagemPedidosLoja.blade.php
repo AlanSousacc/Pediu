@@ -59,7 +59,7 @@
                     @elseif($item->statuspedido == 2)
                     <span class="text-light bg-secondary p-1 rounded">Preparando</span>
                     @elseif($item->statuspedido == 3)
-                    <span class="text-light bg-default p-1 rounded">Saiu para Entrega</span>
+                    <span class="text-light bg-dark p-1 rounded">Saiu para Entrega</span>
                     @elseif($item->statuspedido == 4)
                     <span class="text-light bg-success p-1 rounded">Entregue</span>
                     @elseif($item->statuspedido == 5)
@@ -72,12 +72,13 @@
                         Opções
                       </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ route('pedido.detalhe', $item->id)}}"><i class="now-ui-icons files_paper"></i>Detalhar Pedido</a>
+                        <a class="dropdown-item" href="{{ route('detalhe.pedido.loja', $item->id)}}"><i class="now-ui-icons files_paper"></i>Detalhar Pedido</a>
+                        @if ($item->statuspedido != 4)
                         <a class="dropdown-item" href="{{$item->id}}"
                           data-pedidoid={{$item->id}}
                           data-target="#mudarStatus"
                           data-toggle="modal"><i class="now-ui-icons ion-shuffle"></i>Atualizar Status</a>
-                          <a class="dropdown-item" href="{{$item->id}}" data-contid={{$item->id}} data-target="#delete" data-toggle="modal"><i class="now-ui-icons ui-1_simple-remove"></i>Remover</a>
+                        @endif
                         </div>
                       </div>
                     </td>
@@ -106,6 +107,107 @@
   </div>
   @push('scripts')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      // envia pelo whatsapp caso clique em enviar
+      $('.define-envia').click(function (e) {
+        Swal.fire({
+        title: 'Mudar Status e Enviar',
+        text: "Você enviará o novo status selecionado a seu cliente!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            e.preventDefault();
+
+            $.ajax({
+              url: '{{route('pedidoloja.status')}}' + '/' + $('#pedidoid').val(),
+              method: "get",
+              dataType: 'json',
+              data : $('#formstatus').serialize(),
+              dataType: 'json',
+              success: function (response) {
+                Swal.fire({
+                  title: 'Status modificado com Sucesso!',
+                  text: 'O novo status será enviado ao cliente após clicar em OK!',
+                  icon: 'success',
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Ok',
+                  allowOutsideClick: false
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.open(response.url, '_blank')
+                    window.location.reload()
+                  }
+                });
+              },
+              error: function(response){
+                Swal.fire(
+                  'Ops, algo deu errado!',
+                  'Infelizmente houve um problema e não conseguimos modificar o status e assim não enviamos o novo status a seu cliente!',
+                  'error'
+                )
+                window.location.reload()
+              }
+            });
+          }
+        })
+      })
+
+      // somente modifica o status
+      $('.define-somente').click(function (e) {
+        Swal.fire({
+          title: 'Mudar Status Pedido',
+          text: "Você deseja somente modificar o status do pedido?",
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sim',
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            e.preventDefault();
+            $.ajax({
+              url: '{{route('pedidoloja.status')}}' + '/' + $('#pedidoid').val(),
+              method: "get",
+              dataType: 'json',
+              data : $('#formstatus').serialize(),
+              dataType: 'json',
+              success: function (response) {
+                Swal.fire({
+                  title: 'Status modificado com Sucesso!',
+                  text: 'O novo status foi aplicado, clique em OK para fechar!',
+                  icon: 'success',
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Ok',
+                  allowOutsideClick: false
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.reload()
+                  }
+                });
+              },
+              error: function(response){
+                Swal.fire(
+                  'Ops, algo deu errado!',
+                  'Infelizmente houve um problema e não conseguimos modificar o status do pedido!',
+                  'error'
+                )
+                window.location.reload()
+              }
+            });
+          }
+        })
+      })
+    });
+  </script>
 
   {{-- configura modal edita status --}}
   <script>

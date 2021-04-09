@@ -10,7 +10,6 @@
     <div class="row w-100">
       <div class="col-md-12 text-center" style="background: #28a745; padding: 5px; margin-left: 15px; border-radius: 20px;">
         <a href="{{route('catalogo', Auth::user()->empresa->slug)}}" target="_blank" class="text-white">Loja <i class="fa fa-store"></i></a>
-        <span class="text-white"> | </span> <a href="#" class="text-white">Link <i class="fa fa-link"></i></a>
       </div>
     </div>
   </div>
@@ -48,7 +47,7 @@
             </li>
             @if ($activePage == 'detalhepedido')
             <li class="@if ($activePage == 'detalhepedido') active @endif">
-              <a href="{{ route('pedido.detalhe', $item->id) }}">
+              <a href="#">
                 <i class="now-ui-icons files_paper"></i>
                 <p> {{ __("Detalhe do Pedido") }} </p>
               </a>

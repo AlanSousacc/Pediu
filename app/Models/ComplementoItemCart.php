@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\models\CartItems;
 use Illuminate\Database\Eloquent\Model;
 
 class ComplementoItemCart extends Model
 {
   protected $table    = 'complemento_item_cart';
-  protected $fillable = ['cart_id', 'produto_id', 'complemento_id', 'empresa_id', 'complitemcartid'];
+  protected $fillable = ['cart_id', 'produto_id', 'complemento_id', 'empresa_id', 'cartitems_id'];
   public $timestamps  = false;
 
   public function produtos()
@@ -20,5 +21,9 @@ class ComplementoItemCart extends Model
     return $this->belongsTo(Complemento::class, 'complemento_id', 'id');
   }
 
+  public function cartitem()
+  {
+    return $this->belongsTo(CartItems::class, 'cartitems_id', 'id');
+  }
 
 }

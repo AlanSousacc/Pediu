@@ -101,8 +101,12 @@ $(document).ready(function () {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-    var product_id = $(this).closest('.product_data').find('.product_id').val();
+    var product_id = $(this).closest('.product_data').find('.item_id').val();
     var quantity = $(this).closest('.product_data').find('.qty-input').val();
+    var precoitem = $(this).closest('.product_data').find('#precovenda').text();
+    var produtosize = $(this).closest('.product_data').find('.produtosize').val();
+    var observacaoitem = $(this).closest('.product_data').find('#observacaoitem').val();
+    var saboresdiversos = $(".saboresdiversos").select2("val");
     var complementos = new Array();
     $("input[name='complemento_id[]']:checked").each(function () {
       complementos.push($(this).val());
@@ -113,15 +117,17 @@ $(document).ready(function () {
       data: {
         'quantity': quantity,
         'product_id': product_id,
-        'complementos': complementos
+        'precoitem': precoitem,
+        'complementos': complementos,
+        'produtosize': produtosize,
+        'observacaoitem': observacaoitem,
+        'saboresdiversos': saboresdiversos
       },
       success: function success(response) {
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.success(response.status); // window.location.reload();
+        Swal.fire('Muito Bem!', 'Este produto foi adicionado ao carrinho!', 'success'); // window.location.reload();
       },
       error: function error(response) {
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.error(response.responseJSON.message);
+        Swal.fire('Ops, algo deu errado!', 'Infelizmente houve um problema interno, e não conseguimos adicionar este item a seu carrinho. Código: ' + response.status, 'error'); // window.location.reload();
       }
     });
   });
@@ -189,12 +195,12 @@ $(document).ready(function () {
       type: 'POST',
       data: data,
       success: function success(response) {
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.success(response.status); // window.location.reload();
+        Swal.fire('Eba!', 'Produto atualizado com sucesso!', 'success');
+        window.location.reload();
       },
       error: function error(response) {
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.error(response.responseJSON.message);
+        Swal.fire('Ops, algo deu errado!', 'Infelizmente houve um problema interno, e não conseguimos atualizar este item no seu carrinho. Código: ' + response.status, 'error');
+        window.location.reload();
       }
     });
   });
@@ -202,44 +208,69 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.delete_cart_data').click(function (e) {
-    e.preventDefault();
-    var product_id = $(this).closest(".cartpage").find('.product_id').val();
-    var data = {
-      '_token': $('input[name=_token]').val(),
-      "product_id": product_id
-    }; // $(this).closest(".cartpage").remove();
+    var _this = this;
 
-    $.ajax({
-      url: '/delete-from-cart',
-      type: 'DELETE',
-      data: data,
-      success: function success(response) {
-        window.location.reload();
-      },
-      error: function error(response) {
-        alertify.set('notifier', 'position', 'bottom-center');
-        alertify.error(response.responseJSON.message);
+    Swal.fire({
+      title: 'Remover item do carrinho?',
+      text: "Confirme para remover!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, quero remover'
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        e.preventDefault();
+        var product_id = $(_this).closest(".cartpage").find('.product_id').val();
+        var data = {
+          '_token': $('input[name=_token]').val(),
+          "product_id": product_id
+        };
+        $.ajax({
+          url: '/delete-from-cart',
+          type: 'DELETE',
+          data: data,
+          success: function success(response) {
+            Swal.fire('Item Removido!', 'Produto removido do carrinho com sucesso!', 'success');
+            window.location.reload();
+          },
+          error: function error(response) {
+            Swal.fire('Ops, algo deu errado!', 'Infelizmente houve um problema e não conseguimos remover este item do carrinho', 'error');
+            window.location.reload();
+          }
+        });
       }
     });
   });
 }); // Clear Cart Data
-// $('.clearcart').click(function (e) {
-//   e.preventDefault();
-//   $.ajax({
-//     url: '/clear-cart',
-//     type: 'GET',
-//     success: function (response) {
-//       alertify.set('notifier','position','bottom-center');
-//       alertify.success(response.status);
-//       window.location.reload();
-//     },
-//     error: function(response){
-//       alertify.set('notifier','position','bottom-center');
-//       alertify.error(response.responseJSON.message);
-//     }
-//   });
-// });
-// funções para habilitar campos de endereços de entrega
+
+$('.clearcart').click(function (e) {
+  Swal.fire({
+    title: 'Remover itens do carrinho?',
+    text: "Você irá remover todos os itens do seu carrinho!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, quero remover'
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      e.preventDefault();
+      $.ajax({
+        url: '/clear-cart',
+        type: 'GET',
+        success: function success(response) {
+          Swal.fire('Itens Removido!', 'Itens removido do carrinho com sucesso!', 'success');
+          window.location.reload();
+        },
+        error: function error(response) {
+          Swal.fire('Ops, algo deu errado!', 'Infelizmente houve um problema e não conseguimos remover os itens do carrinho', 'error');
+          window.location.reload();
+        }
+      });
+    }
+  });
+}); // funções para habilitar campos de endereços de entrega
 
 function verificaentrega() {
   if ($('#enderecocadastro').prop("checked")) {
@@ -310,8 +341,7 @@ $(document).ready(function () {
   $('#novo-telefone').mask('(00) 00000-0000');
   $('#trocopara').mask("#.##0.00", {
     reverse: true
-  });
-  $("#trocopara").val("0,00");
+  }); // $("#trocopara").val("0,00");
 });
 
 /***/ }),

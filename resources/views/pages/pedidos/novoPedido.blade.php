@@ -164,7 +164,6 @@
       let dados = resposta.data;
       $('#prvenda').val(dados[0].precovenda)
 
-
     }).fail(function(jqXHR, textStatus ) {
       alert("Falha ao carregar preço do produto: " + textStatus);
     });

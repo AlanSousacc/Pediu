@@ -97,6 +97,5 @@ class GrupoController extends Controller
       return redirect()->back()->with('error', 'Falha ao remover este grupo!');
 
     return redirect()->back()->with('success', 'grupo #' . $grupo->id . ' removido com sucesso!');
-
   }
 }

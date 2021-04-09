@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produto extends Model
 {
-  protected $fillable = ['descricao', 'tipo', 'precocusto', 'precovenda', 'status', 'composicao', 'grupo_id', 'empresa_id', 'foto'];
+  protected $fillable = [
+    'descricao', 'tipo', 'precocusto', 'precovenda', 'status', 'composicao', 'grupo_id', 'empresa_id', 'foto', 'precopequeno',
+    'precomedio', 'precogrande', 'controlatamanho', 'saboresdiversos'
+  ];
 
   public function Temp_prod_pedido(){
 		return $this->belongsTo('App\Models\Temp_prod_pedido');

@@ -56,16 +56,17 @@ class ProdutoController extends Controller
   public function store(ProdutoRequest $request) {
     $data = $request->except('_token');
 
-    $produto             = new Produto;
-    $produto->descricao  = $data['descricao'];
-    $produto->empresa_id = Auth::user()->empresa_id;
-    $produto->composicao = $data['composicao'];
+    $produto                    = new Produto;
+    $produto->descricao         = $data['descricao'];
+    $produto->empresa_id        = Auth::user()->empresa_id;
+    $produto->composicao        = $data['composicao'];
+    $produto->saboresdiversos   = $data['saboresdiversos'];
     if($data['controlatamanho'] == 1){
-      $produto->precopequeno  = str_replace (',', '.', str_replace ('.', '', $data['precopequeno']));
-      $produto->precomedio    = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
-      $produto->precogrande   = str_replace (',', '.', str_replace ('.', '', $data['precogrande']));
-      $produto->precovenda    = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
-      $produto->controlatamanho   = 1;
+      $produto->precopequeno    = str_replace (',', '.', str_replace ('.', '', $data['precopequeno']));
+      $produto->precomedio      = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
+      $produto->precogrande     = str_replace (',', '.', str_replace ('.', '', $data['precogrande']));
+      $produto->precovenda      = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
+      $produto->controlatamanho = 1;
     } else {
       $produto->precopequeno    = null;
       $produto->precomedio      = null;
@@ -73,8 +74,8 @@ class ProdutoController extends Controller
       $produto->controlatamanho = 0;
       $produto->precovenda      = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
     }
-    $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
-    $produto->status     = $data['status'];
+    $produto->precocusto        = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
+    $produto->status            = $data['status'];
 
     if($data['grupo_id'] != 0)
       $produto->grupo_id   = $data['grupo_id'];
@@ -140,11 +141,12 @@ class ProdutoController extends Controller
     $produto = $this->produto->find($id);
 
     if (!$produto)
-      throw new Exception("Nenhum Produto encontrado");
+      return redirect()->route('produto.index')->with('error', 'Nenhum Produto encontrado');
 
-    $produto->descricao  = $data['descricao'];
-    $produto->composicao = $data['composicao'];
-    $produto->grupo_id   = $data['grupo_id'];
+    $produto->descricao         = $data['descricao'];
+    $produto->composicao        = $data['composicao'];
+    $produto->grupo_id          = $data['grupo_id'];
+    $produto->saboresdiversos   = $data['saboresdiversos'];
     if($data['controlatamanho'] == 1){
       $produto->precopequeno    = str_replace (',', '.', str_replace ('.', '', $data['precopequeno']));
       $produto->precomedio      = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));

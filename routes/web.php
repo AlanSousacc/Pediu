@@ -88,7 +88,9 @@ Route::group(['middleware' => 'auth'], function () {
   // pedidos loja
   Route::get('pedidos-loja', 'PedidosLojaController@index')->name('pedidosloja.index');
   Route::get('pedidos-loja/status/{status}', 'PedidosLojaController@filterstatus')->name('pedidosloja.filterstatus');
-  Route::get('pedido/status/{id}', 'PedidosLojaController@aplicarStatus')->name('pedidoloja.status');
+  Route::get('processa-status/{id?}', 'PedidosLojaController@aplicarStatus')->name('pedidoloja.status');
+  Route::get('detalhe-pedido-loja/{id}', 'PedidosLojaController@detalhePedidoLoja')->name('detalhe.pedido.loja');
+  Route::any('imprimir/pedidoloja/{id}', 'PedidosLojaController@printloja')->name('imprimir.pedidoloja');
 });
 
 // Cliente
@@ -96,6 +98,10 @@ Route::resource('cliente', 'ClienteController');
 Route::get('formulario-cadastro', 'ClienteController@novoCliente')->name('novo.cliente');
 
 //Catalogo
+Route::post('add-to-cart','CartController@addToCart');
+
+Route::get('precoitem/{slug?}/{produtoid?}/{tamanho?}', 'CatalogoController@precoitem')->name('busca.precoitem');
+Route::get('clear-cart','CartController@clearcart');
 Route::get('{slug}', 'CatalogoController@index')->name('catalogo');
 Route::get('{slug}/cart', 'CatalogoController@cart')->name('cart');
 Route::get('{slug}/checkout', 'CatalogoController@checkout')->name('checkout');
@@ -105,16 +111,14 @@ Route::any('{slug}/search', 'CatalogoController@search')->name('catalogoporpesqu
 Route::get('{empresa}', 'CatalogoController@getValorEntrega')->name('getValorEntrega');
 Route::get('perfil/{slug}/{id}', 'CatalogoController@profile')->name('profile');
 Route::get('endereco-perfil/{slug}/{id}', 'CatalogoController@profileAddress')->name('profile-address');
-Route::get('pedidos/{slug}/{id}', 'CatalogoController@profilePedidos')->name('profile-pedidos');
+Route::get('pedidos/{slug?}/{id?}', 'CatalogoController@profilePedidos')->name('profile.pedidos');
 Route::get('detalhe-pedidos/{slug}/{id}/{pedido}', 'CatalogoController@PedidoDetail')->name('profile-pedidos-detail');
 
 // cart
-Route::post('add-to-cart','CartController@addToCart');
+Route::post('processa-pedido', 'CheckoutController@processaPedido')->name('processa.pedido');
 // Route::get('load-cart-data','CartController@cartloadbyajax');
 // Route::get('soma-carrinho','CartController@somacarrinho');
 Route::post('update-to-cart','CartController@updatetocart');
 Route::delete('delete-from-cart','CartController@deletefromcart');
-// Route::get('clear-cart','CartController@clearcart');
-Route::post('processa-pedido', 'CheckoutController@processaPedido')->name('processa.pedido');
 
 Route::get('{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);

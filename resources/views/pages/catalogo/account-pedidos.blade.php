@@ -32,7 +32,7 @@
             </div>
             <ul class="list-unstyled mb-0">
               <li class="border-bottom mb-0">
-                <a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{{route('profile-pedidos', array($empresa->slug, auth()->user()->id))}}">
+                <a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{{route('profile.pedidos', array($empresa->slug, auth()->user()->id))}}">
                   <i class="fas fa-shopping-bag opacity-60 mr-2"></i>  Pedidos<span class="font-size-sm text-muted ml-auto">{{isset($pedidos) ? count($pedidos) : 0}}</span>
                 </a>
               </li>
@@ -72,7 +72,7 @@
                       <th>Pedido #</th>
                       <th>Data Realizada</th>
                       <th>Status</th>
-                      <th>Total</th>
+                      {{-- <th>Total</th> --}}
                     </tr>
                   </thead>
                   <tbody>
@@ -87,16 +87,16 @@
                         @elseif($item->statuspedido == 1)
                         <span class="text-light bg-info p-1 rounded">Aprovado</span>
                         @elseif($item->statuspedido == 2)
-                        <span class="text-light bg-dark p-1 rounded">Preparando</span>
+                        <span class="text-light bg-primary p-1 rounded">Preparando</span>
                         @elseif($item->statuspedido == 3)
-                        <span class="text-light bg-primary p-1 rounded">Saiu para Entrega</span>
+                        <span class="text-light bg-dark p-1 rounded">Saiu para Entrega</span>
                         @elseif($item->statuspedido == 4)
                         <span class="text-light bg-success p-1 rounded">Entregue</span>
                         @elseif($item->statuspedido == 5)
                         <span class="text-light bg-danger p-1 rounded">Cancelado</span>
                         @endif
                       </td>
-                      <td class="py-3"><small>R$</small> {{number_format($item->totalpedido, 2, ',', '.')}}</td>
+                      {{-- <td class="py-3"><small>R$</small> {{number_format($item->totalpedido, 2, ',', '.')}}</td> --}}
                     </tr>
                     @endforeach
                     @endif

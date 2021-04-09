@@ -9,7 +9,7 @@
       <li class="nav-item"><a class="nav-link font-size-lg font-weight-medium py-4" href="cart">1. Seu Pedido</a></li>
       <li class="nav-item"><a class="nav-link font-size-lg font-weight-medium py-4 active" href="checkout">2. Entrega / Pagamento</a></li>
     </ul>
-    <form action="{{route('processa.pedido')}}" class="needs-validation px-3 px-sm-4 px-xl-5 pt-sm-1 pb-4 pb-sm-5" method="POST">
+    <form action="{{ route('processa.pedido') }}" method="POST" class="needs-validation px-3 px-sm-4 px-xl-5 pt-sm-1 pb-4 pb-sm-5 checkoutpage" id="processpedido">
       @csrf
       <h2 class="h5 pb-3">Endereço de Entrega</h2>
       <div class="row">
@@ -108,12 +108,6 @@
         </div>
       </div>
       <hr class="my-3">
-      {{-- <div class="row">
-        <div class="col-12 mb-4">
-          <label class="mb-3" for="observacaopedido"><span class="badge badge-info font-size-xs mr-2">Nota</span><span class="font-weight-medium">Comentário do pagamento, pedido e/ou Entrega</span></label>
-          <textarea class="form-control" name="observacaopedido" rows="5" id="observacaopedido"></textarea>
-        </div>
-      </div> --}}
       <div class="row">
         <div class="col-sm-6 mb-4 mb-sm-0">
           <h2 class="h5 pb-2">Pagamento na Entrega</h2>
@@ -125,7 +119,7 @@
             <label class="text-nowrap mr-3 mb-0" for="fd-change">Eu preciso de troca para:</label>
             <div class="input-group" style="width: 8rem;">
               <div class="input-group-prepend"><span class="input-group-text" style="padding: 7px 15px 7px 15px!important;"><i class="fa fa-dollar-sign"></i></span></div>
-              <input class="form-control bg-0 pr-3" name="trocopara" id="trocopara" type="text" id="fd-change">
+              <input class="form-control bg-0 pr-3" name="trocopara" id="trocopara" placeholder="0,00" type="text" id="fd-change">
             </div>
           </div>
           <hr class="my-4">
@@ -133,14 +127,14 @@
             <input class="custom-control-input" type="radio" name="formapagamento" value="cartao" id="cartao">
             <label class="custom-control-label" for="cartao">Pagar com Cartão:&nbsp;&nbsp;&nbsp;<img class="d-inline-block align-middle" src="{{asset('assets/img/cards.png')}}" style="width: 187px;" alt="Cerdit Cards"></label>
           </div>
-          <button class="btn btn-primary btn-block mt-3" name="place-order-btn" type="submit">Finalizar Pedido</button>
+          <button class="btn btn-primary btn-block mt-3 finalizar-pedido" type="button">Finalizar Pedido</button>
         </div>
         <div class="col-sm-6">
           <div class="d-fle flex-column h-100 rounded-lg bg-secondary px-3 px-sm-4 py-4">
             <div class="row">
               <div class="col-12 mb-4">
                 <label class="mb-3" for="observacaopedido"><span class="badge badge-info font-size-xs mr-2">Nota</span><span class="font-weight-medium">Comentário do pagamento, pedido e/ou Entrega</span></label>
-                <textarea class="form-control" name="observacaopedido" placeholder="Descreva aqui uma observação do pedido, caso queira remover um ingrediente, detalhe do pagamento ou informação de ponto de referência, para agilizar o processo de entrega." rows="5" id="observacaopedido"></textarea>
+                <textarea class="form-control" name="observacaopedido" placeholder="Descreva aqui uma observação do pedido, detalhe do pagamento ou informação de ponto de referência, para agilizar o processo de entrega." rows="5" id="observacaopedido"></textarea>
               </div>
             </div>
             <h2 class="h5 pb-3">Total</h2>
@@ -149,6 +143,7 @@
             <div class="d-flex justify-content-between font-size-md border-bottom pb-3 mb-3"><span>Subtotal:</span><span class="text-heading"><small>R$</small> {{number_format($totalprodutos + $totaladicional, 2, ',', '.')}}</span></div>
             <div class="d-flex justify-content-between font-size-md border-bottom pb-3 mb-3"><span>Entrega:</span><span class="text-heading"><small>R$</small> {{isset($config) ? number_format($config->valorentrega, 2, ',', '.') : '0,00'}}</span></div>
             <div class="d-flex justify-content-between font-size-md mb-2"><span>Total:</span><span class="text-heading font-weight-medium"><small>R$</small> {{number_format($totalprodutos + $totaladicional + $config->valorentrega, 2, ',', '.')}}</span></div>
+            <div class="d-flex justify-content font-size-md py-3 px-2 border-top bg-info text-white"><span>OBS:. O tempo médio de entrega é de: &nbsp</span> <span class="font-weight-medium"> {{$config->tempominimoentrega}}</span></div>
           </div>
         </div>
       </div>
@@ -159,5 +154,61 @@
 
 @push('scripts')
 <script src='{{asset('js/catalogo/scripts-custom.js')}}'></script>
+<script>
+  $(document).ready(function () {
+    $('.finalizar-pedido').click(function (e) {
+      Swal.fire({
+        title: 'Finalizar Pedido?',
+        text: "Você deseja enviar e finalizar seu pedido?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          e.preventDefault();
+
+          $.ajaxSetup({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          });
+
+          $.ajax({
+            url: "/processa-pedido",
+            method: "POST",
+            data: $('#processpedido').serialize(),
+            dataType: 'json',
+            success: function (response) {
+              let redirect = '{{route('profile.pedidos')}}' + '/' + response.slug + '/' + response.user
+              Swal.fire({
+                title: 'Pedido realizado com sucesso!',
+                text: 'Recebemos seu pedido agora é só acompanhar seu pedido pelo painel de pedidos.',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok',
+                allowOutsideClick: false
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = redirect;
+                }
+              });
+            },
+
+            error: function(response){
+              Swal.fire(
+                'Ops, algo deu errado!',
+                'Infelizmente houve um problema interno, e não conseguimos processar seu pedido. Código: ' + response.status,
+                'error'
+              )
+            }
+          });
+        }
+      })
+    });
+  });
+</script>
 @endpush
 @endsection

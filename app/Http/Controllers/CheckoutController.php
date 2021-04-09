@@ -7,6 +7,7 @@ use App\models\CartItems;
 use App\Models\ComplementoItemCart;
 use App\Models\Configuracao;
 use App\Models\EnderecoUsers;
+use App\Models\MeioameioItemCart;
 use App\Models\Produto;
 use App\User;
 use Illuminate\Http\Request;
@@ -19,17 +20,15 @@ class CheckoutController extends Controller
   {
     $data = $request->except('_token');
 
-
-    if(isset($_POST['place-order-btn'])){
+    // if(isset($_POST['place-order-btn'])){
       $user_id      = Auth::id();
       $user         = User::find($user_id);
       $cookie_data  = stripslashes(Cookie::get('shopping_cart'));
       $cart_data    = json_decode($cookie_data, true);
 
-      // dd($cart_data);
-
       if(count($cart_data) <= 0)
         return redirect()->back()->with('error', 'O Pedido deve haver 1 ou mais itens!');
+
 
       // ############ ENDEREÇO DE ENTREGA DO PEDIDO ############
       // caso o endereco de entrega seja o endereço padrão no cadastro pega o id do endereço.
@@ -92,6 +91,16 @@ class CheckoutController extends Controller
         $produto = Produto::find($itemdata['item_id']);
         $preco   = $produto->precovenda;
 
+        $cartitem = CartItems::create([
+          'cart_id'       => $last_cart_id,
+          'produto_id'    => $itemdata['item_id'],
+          'user_id'       => $user_id,
+          'empresa_id'    => $user->empresa_id,
+          'preco'         => $preco,
+          'observacaoitem'=> $itemdata['item_observacao'],
+          'qtde'          => $itemdata['item_quantity'],
+        ]);
+
         // aqui vai ser registrado cada complemento do item
         if($itemdata['complem_produ'] != null){
           foreach($itemdata['complem_produ'] as $compleitem){
@@ -100,24 +109,30 @@ class CheckoutController extends Controller
               'produto_id'      => $itemdata['item_id'],
               'complemento_id'  => $compleitem,
               'empresa_id'      => $user->empresa_id,
-              'complitemcartid' => $itemdata['compl_item_id']
+              'cartitems_id'    => $cartitem->id,
             ]);
           }
         }
 
-        CartItems::create([
-          'cart_id'       => $last_cart_id,
-          'produto_id'    => $itemdata['item_id'],
-          'user_id'       => $user_id,
-          'empresa_id'    => $user->empresa_id,
-          'preco'         => $preco,
-          'qtde'          => $itemdata['item_quantity'],
-          'complitemid'   => $itemdata['compl_item_id'],
-        ]);
+        // aqui vai ser registrado as pizzas meio a meio
+        if($itemdata['meio_a_meio'] != null){
+          foreach($itemdata['meio_a_meio'] as $meioameio){
+            MeioameioItemCart::create([
+              'cart_id'         => $last_cart_id,
+              'produto_id'      => $meioameio,
+              'empresa_id'      => $user->empresa_id,
+              'cartitems_id'    => $cartitem->id,
+            ]);
+          }
+        }
+
       }
 
       Cookie::queue(Cookie::forget('shopping_cart'));
-      return redirect()->route('profile-pedidos', [$user->empresa->slug, $user_id])->with('success', 'Pedido Realizado com Sucesso!');
-    }
+
+      if($cart){
+        $data = ['slug' => $user->empresa->slug, 'user' => $user_id];
+        return response()->json($data, 200);
+      }
   }
 }

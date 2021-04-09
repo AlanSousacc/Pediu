@@ -32,7 +32,7 @@
             </div>
             <ul class="list-unstyled mb-0">
               <li class="border-bottom mb-0">
-                <a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{{route('profile-pedidos', array($empresa->slug, auth()->user()->id))}}">
+                <a class="nav-link-style d-flex align-items-center px-4 py-3 active" href="{{route('profile.pedidos', array($empresa->slug, auth()->user()->id))}}">
                   <i class="fas fa-shopping-bag opacity-60 mr-2"></i>  Pedidos<span class="font-size-sm text-muted ml-auto">{{isset($orders) ? count($orders) : 0}}</span>
                 </a>
               </li>
@@ -69,9 +69,57 @@
                 <h5 class="modal-title"><small>#</small> {{$order->numberorder}}</h5>
                 <div class="fs-lg text-accent pt-2">{{$order->created_at->format('d/m/Y H:i')}}</div>
               </div>
-              {{-- @dd($order->complementositemcart) --}}
               @foreach ($order->orderitems as $item)
-              <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
+
+              <div class="row mb-4 py-3 pb-sm-2 border-bottom">
+                <div class="col-md-3 text-left">{{-- IMAGEM DO PRODUTO --}}
+                  <a class="d-inline-block flex-shrink-0 mr-3" href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}" style="width: 10rem;">
+                    <img src="{{ $item->produtos->foto != 'default.png' ? url("storage/".$item->produtos->foto) : url("storage/img/logos/default.png")}}" alt="{{$item->produtos->descricao}}">
+                  </a>
+                 </div> {{-- IMAGEM DO PRODUTO --}}
+
+                <div class="col-md-6 text-left">{{-- DESCRIÇÃO DO PRODUTO --}}
+                  <h3 class="product-title fs-base mb-2">
+                    <a href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}">{{$item->produtos->descricao}}</a>
+                  </h3>
+                  <div class="font-size-sm">
+                    @if (count($order->meioameioitemcart) > 0)
+                    <span class="text-muted me-2">Sabores:
+                      @foreach ($order->meioameioitemcart as $meioameio)
+                        @if($meioameio->cartitems_id == $item->id)
+                          <span class="badge badge-accent">{{$meioameio->produtos->descricao}}</span>
+                        @endif
+                      @endforeach
+                    </span>
+                    @endif
+                  </div>
+                  <div class="font-size-sm">
+                    @php $totaladicional = 0 @endphp
+                    @if (count($order->complementositemcart) > 0)
+                    <span class="text-muted me-2">Adicionais:
+                    @foreach ($order->complementositemcart as $adicionais)
+                      @if($adicionais->cartitems_id == $item->id)
+                      @php $totaladicional += $adicionais->complemento->preco @endphp
+                      <span class="badge badge-dark">{{$adicionais->complemento->descricao}}</span>
+                      @endif
+                      @endforeach
+                    </span>
+                    @endif
+                  </div>
+                  @if ($item->observacaoitem != null)
+                    <div class="font-size-sm"><span class="text-muted me-2">Observação: </span><span class="font-italic">{{$item->observacaoitem}}</span></div>
+                  @endif
+                </div> {{-- DESCRIÇÃO DO PRODUTO --}}
+
+                <div class="col-sm col-sm-6 col-md-1 text-left">{{-- QTDE DO PRODUTO --}}
+                  <div class="text-muted mb-2">Qtde. </div>{{$item->qtde}}
+                </div> {{-- QTDE DO PRODUTO --}}
+
+                <div class="col-sm col-sm-6 col-md-2 text-left">{{-- SUBTOTAL DO PRODUTO --}}
+                  <div class="text-muted mb-2">Subtotal: </div><small>R$</small> {{number_format(($item->qtde * $item->preco) + $totaladicional, 2, ',', '.')}}
+                </div> {{-- SUBTOTAL DO PRODUTO --}}
+              </div>
+              {{-- <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
                 <div class="d-sm-flex text-center text-sm-start">
                   <a class="d-inline-block flex-shrink-0 mr-3" href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}" style="width: 10rem;">
                     <img src="{{ $item->produtos->foto != 'default.png' ? url("storage/".$item->produtos->foto) : url("storage/img/logos/default.png")}}" alt="{{$item->produtos->descricao}}">
@@ -80,33 +128,93 @@
                     <h3 class="product-title fs-base mb-2">
                       <a href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}">{{$item->produtos->descricao}}</a>
                     </h3>
-                    {{-- <div class="fs-sm"><span class="text-muted me-2 text-left">Composição: </span>{{$item->produtos->composicao}}</div> --}}
+                    <div class="font-size-sm">
+                      @if (count($order->meioameioitemcart) > 0)
+                      <span class="text-muted me-2">Sabores:
+                        @foreach ($order->meioameioitemcart as $meioameio)
+                          @if($meioameio->cartitems_id == $item->id)
+                            <span class="badge badge-primary">{{$meioameio->produtos->descricao}}</span>
+                          @endif
+                        @endforeach
+                      </span>
+                      @endif
+                    </div>
                     <div class="font-size-sm">
                       @php $totaladicional = 0 @endphp
                       @if (count($order->complementositemcart) > 0)
-                      <span class="text-muted me-2">Adicionais:</span> <br>
+                      <span class="text-muted me-2">Adicionais:
                       @foreach ($order->complementositemcart as $adicionais)
-                        @if($adicionais->complitemcartid == $item->complitemid)
+                        @if($adicionais->cartitems_id == $item->id)
                         @php $totaladicional += $adicionais->complemento->preco @endphp
-                        <span class="bg-dark text-white p-1 rounded"> {{$adicionais->complemento->descricao}}</span>
+                        <span class="badge badge-dark">{{$adicionais->complemento->descricao}}</span>
                         @endif
                         @endforeach
+                      </span>
                       @endif
                     </div>
+                    @if ($item->observacaoitem != null)
+                      <div class="font-size-sm"><span class="text-muted me-2">Observação: </span><span class="font-italic">{{$item->observacaoitem}}</span></div>
+                    @endif
                   </div>
                 </div>
                 <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
-                  <div class="text-muted mb-2">Quantidade: </div>{{$item->qtde}}
+                  <div class="text-muted mb-2">Qtde: </div>{{$item->qtde}}
                 </div>
                 <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
                   <div class="text-muted mb-2">Subtotal: </div><small>R$</small> {{number_format(($item->qtde * $item->preco) + $totaladicional, 2, ',', '.')}}
                 </div>
-              </div>
+              </div> --}}
+
+              {{-- <div class="d-sm-flex justify-content-between mb-4 pb-3 pb-sm-2 border-bottom">
+                <div class="d-sm-flex text-center text-sm-start">
+                  <a class="d-inline-block flex-shrink-0 mr-3" href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}" style="width: 10rem;">
+                    <img src="{{ $item->produtos->foto != 'default.png' ? url("storage/".$item->produtos->foto) : url("storage/img/logos/default.png")}}" alt="{{$item->produtos->descricao}}">
+                  </a>
+                  <div class="ps-sm-4 pt-2 text-left">
+                    <h3 class="product-title fs-base mb-2">
+                      <a href="{{route('catalogo-detalhe-produto', array($empresa->slug, $item->produtos->id))}}">{{$item->produtos->descricao}}</a>
+                    </h3>
+                    <div class="font-size-sm">
+                      @if (count($order->meioameioitemcart) > 0)
+                      <span class="text-muted me-2">Sabores:
+                        @foreach ($order->meioameioitemcart as $meioameio)
+                          @if($meioameio->cartitems_id == $item->id)
+                            <span class="badge badge-primary">{{$meioameio->produtos->descricao}}</span>
+                          @endif
+                        @endforeach
+                      </span>
+                      @endif
+                    </div>
+                    <div class="font-size-sm">
+                      @php $totaladicional = 0 @endphp
+                      @if (count($order->complementositemcart) > 0)
+                      <span class="text-muted me-2">Adicionais:
+                      @foreach ($order->complementositemcart as $adicionais)
+                        @if($adicionais->cartitems_id == $item->id)
+                        @php $totaladicional += $adicionais->complemento->preco @endphp
+                        <span class="badge badge-dark">{{$adicionais->complemento->descricao}}</span>
+                        @endif
+                        @endforeach
+                      </span>
+                      @endif
+                    </div>
+                    @if ($item->observacaoitem != null)
+                      <div class="font-size-sm"><span class="text-muted me-2">Observação: </span><span class="font-italic">{{$item->observacaoitem}}</span></div>
+                    @endif
+                  </div>
+                </div>
+                <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+                  <div class="text-muted mb-2">Qtde: </div>{{$item->qtde}}
+                </div>
+                <div class="pt-2 ps-sm-3 mx-auto mx-sm-0 text-center">
+                  <div class="text-muted mb-2">Subtotal: </div><small>R$</small> {{number_format(($item->qtde * $item->preco) + $totaladicional, 2, ',', '.')}}
+                </div>
+              </div> --}}
               @endforeach
-              <div class="modal-footer flex-wrap justify-content-between bg-secondary fs-md">
-                <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><small>R$ </small><span>{{number_format(($item->qtde * $item->preco) + $totaladicional, 2, ',', '.')}}</span></div>
+              <div class="modal-footer px-0 flex-wrap justify-content-between bg-secondary fs-md">
+                <div class="px-2 py-1"><span class="text-muted">Subtotal:&nbsp;</span><small>R$ </small><span>{{number_format($subtotal, 2, ',', '.')}}</span></div>
                 <div class="px-2 py-1"><span class="text-muted">Entrega:&nbsp;</span><small>R$ </small><span>{{number_format($order->valorentrega, 2, ',', '.')}}</span></div>
-                <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><small>R$ </small><span>{{number_format(($item->qtde * $item->preco) + $totaladicional + $order->valorentrega, 2, ',', '.')}}</span></div>
+                <div class="px-2 py-1"><span class="text-muted">Total:&nbsp;</span><small>R$ </small><span>{{number_format($subtotal + $order->valorentrega, 2, ',', '.')}}</span></div>
                 <div class="px-2 py-1"><span class="text-muted">Forma de Pagamento:&nbsp;</span><small></small><span>{{$order->formapagamento}}</span></div>
               </div>
             </section>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddComplitemidToCartItemsTable extends Migration
+class AddObservacaoitemToCartItemsTable extends Migration
 {
   /**
   * Run the migrations.
@@ -14,7 +14,7 @@ class AddComplitemidToCartItemsTable extends Migration
   public function up()
   {
     Schema::table('cart_items', function (Blueprint $table) {
-      $table->integer('complitemid');
+      $table->text('observacaoitem')->nullable();
     });
   }
 

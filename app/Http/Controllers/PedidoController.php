@@ -18,7 +18,6 @@ use Auth;
 
 class PedidoController extends Controller
 {
-
   protected $repository;
 
   public function __construct(Pedidos $pedidos)
@@ -381,7 +380,6 @@ class PedidoController extends Controller
       public function print($id)
       {
         $pedido = $this->repository->find($id);
-
         return view('pages.pedidos.pdf.order', compact('pedido'));
       }
     }

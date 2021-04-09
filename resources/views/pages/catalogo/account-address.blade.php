@@ -32,7 +32,7 @@
             </div>
             <ul class="list-unstyled mb-0">
               <li class="border-bottom mb-0">
-                <a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('profile-pedidos', array($empresa->slug, auth()->user()->id))}}">
+                <a class="nav-link-style d-flex align-items-center px-4 py-3" href="{{route('profile.pedidos', array($empresa->slug, auth()->user()->id))}}">
                   <i class="fas fa-shopping-bag opacity-60 mr-2"></i>  Pedidos<span class="font-size-sm text-muted ml-auto">1</span>
                 </a>
               </li>

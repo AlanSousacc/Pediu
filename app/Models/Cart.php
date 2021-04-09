@@ -28,4 +28,9 @@ class Cart extends Model
     return $this->hasMany(ComplementoItemCart::class);
   }
 
+  public function meioameioitemcart()
+  {
+    return $this->hasMany(MeioameioItemCart::class);
+  }
+
 }

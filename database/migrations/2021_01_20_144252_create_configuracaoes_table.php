@@ -20,11 +20,11 @@ class CreateConfiguracaoesTable extends Migration
       $table->double('valorentrega', 5,2)->default(0.00);
       $table->string('tempominimoentrega')->default('25 á 40 minutos');
       $table->unsignedBigInteger('empresa_id')->unsigned();
-      $table->string('statusrecebido', 1000)->default('Olá, informamos que recebemos o seu pedido, assim que começarmos a prepara-lo fazemos questão de avisar, agradecemos a preferência.');
-      $table->string('statuspreparando', 1000)->default('Estamos preparando o seu pedido, em alguns minutos ele sairá para entrega, e avisaremos aqui.');
-      $table->string('statusentregando', 1000)->default('O seu pedido está a caminho.');
-      $table->string('statusentregue', 1000)->default('Pedido entregue! Obrigado pela preferência.');
-      $table->string('statuscancelado', 1000)->default('Ola! Seu pedido foi cancelado, entre em contato pelo número do whatsapp para mais informações.');
+      $table->string('statusrecebido', 1000)->default('🔔 Olá, informamos que recebemos o seu pedido, assim que começarmos a prepara-lo fazemos questão de avisar, agradecemos a preferência.');
+      $table->string('statuspreparando', 1000)->default('🍕 🍔 🍟 Estamos preparando o seu pedido, em alguns minutos ele sairá para entrega, e avisaremos aqui.');
+      $table->string('statusentregando', 1000)->default('🛵 O seu pedido está a caminho.');
+      $table->string('statusentregue', 1000)->default('✔ Pedido entregue! Obrigado pela preferência.');
+      $table->string('statuscancelado', 1000)->default('❌ OPS! Seu pedido foi cancelado, entre em contato pelo número do whatsapp para mais informações. 📞');
 
       $table->timestamps();
 

@@ -5,7 +5,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Alterar Status do Pedido</h4>
       </div>
-      <form autocomplete="off" action="{{route('pedidoloja.status', 'id')}}" method="get">
+      <form autocomplete="off" action="{{route('pedidoloja.status', 'id')}}" method="get" id="formstatus">
         {{csrf_field()}}
         <div class="modal-body">
           <input type="hidden" name="pedidoid" id="pedidoid" value="">
@@ -24,8 +24,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times-circle" style="font-size: 15px;"></i> Cancelar</button>
-          <button type="submit" class="btn btn-info"><i class="fa fa-check-circle" style="font-size: 15px;"></i> Somente Definir</button>
-          <button type="submit" class="btn btn-success"><i class="fab fa-whatsapp" style="font-size: 15px;"></i> Definir e Enviar</button>
+          <button type="button" class="btn btn-info define-somente"><i class="fa fa-check-circle" style="font-size: 15px;"></i> Somente Definir</button>
+          <button type="button" class="btn btn-success define-envia"><i class="fab fa-whatsapp" style="font-size: 15px;"></i> Definir e Enviar</button>
         </div>
       </form>
     </div>

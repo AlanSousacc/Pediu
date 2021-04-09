@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Impressão do pedido #{{$pedido->id}}</title>
+  <title>Impressão do pedido #{{isset($pedidoloja) ? $pedidoloja->numberorder : $pedido->id}}</title>
 </head>
 
 <style>
@@ -110,20 +110,37 @@
     </div>
     <p class="titulo-sessao">Detalhes do Pedido</p>
     <div class="pedido">
-      <p>Pedido #ID: {{$pedido->id}}</p>
-      <p>Pedido Realizado: {{$pedido->created_at->format('d/m/Y H:i:s')}}</p>
+      <p>Pedido #ID: {{isset($pedidoloja) ? $pedidoloja->numberorder : $pedido->id}}</p>
+      <p>Pedido Realizado: {{isset($pedidoloja) ? $pedidoloja->created_at->format('d/m/Y H:i:s') : $pedido->created_at->format('d/m/Y H:i:s')}}</p>
     </div>
     <div class="cliente">
       <p class="titulo-sessao">Dados do cliente</p>
-      Nome: {{$pedido->contato->nome}}<br>
-      Endereço: {{$pedido->endereco->endereco}}; Nº {{$pedido->endereco->numero}}<br>
-      Bairro: {{$pedido->endereco->bairro}}; Tel: {{$pedido->contato->telefone}}
-      Observação: {{$pedido->observacao}}
+      Nome: {{isset($pedidoloja) ? $pedidoloja->user->name : $pedido->contato->nome}}<br>
+      Endereço: {{isset($pedidoloja) ? $pedidoloja->endereco->endereco : $pedido->endereco->endereco}}; Nº {{isset($pedidoloja) ? $pedidoloja->endereco->numero : $pedido->endereco->numero}}<br>
+      Bairro: {{isset($pedidoloja) ? $pedidoloja->endereco->bairro : $pedido->endereco->bairro}}; Tel: {{isset($pedidoloja) ? $pedidoloja->endereco->telefone : $pedido->contato->telefone}}
+      Observação: {{isset($pedidoloja) ? $pedidoloja->observacao : $pedido->observacao}}
     </div>
     <div class="itens">
       <p class="titulo-sessao">Detalhes dos Itens</p>
-      <p>Qtde | Produto | Obs | Unit | Total</p>
+      <p>Qtde | Produto {{!isset($pedidoloja) ? '| Obs | Unit' : ''}} | Total</p>
       <ul>
+      <li>
+        @if(isset($pedidoloja))
+        @foreach ($pedidoloja->orderitems as $item)
+          {{$item->qtde}} |
+          {{$item->produtos->descricao}}
+          R$ {{number_format($item->preco * $item->qtde, 2, ',', '.')}}
+            Adicional:
+          @foreach ($pedidoloja->complementositemcart as $adicionais)
+            @if($adicionais->cartitems_id == $item->id)
+              {{$adicionais->complemento->descricao}}
+            @endif
+          @endforeach
+        <br>
+
+        </li>
+        @endforeach
+        @else
         @foreach ($pedido->produtos as $item)
         <li class="lista-itens">
           {{$item->pivot->qtde}} |
@@ -133,22 +150,23 @@
           R$ {{number_format($item->pivot->prvenda * $item->pivot->qtde, 2, ',', '.')}}
         </li>
         @endforeach
+        @endif
       </ul>
     </div>
     <div class="pagamento">
       <p class="titulo-sessao">Detalhes de Pagamento</p>
-      <p>Forma de Pagamento: <span class="detail-list">{{$pedido->forma_pagamento}}</span></p>
-      <p clas="total">Total <span class="detail-list">R$ {{number_format($pedido->total - $pedido->desconto, 2, ',', '.')}}</span></p>
-      @if ($pedido->valortroco != 0)
-      <p>Troco pra <span class="detail-list">R$ {{number_format($pedido->valortroco, 2, ',', '.')}}</span></p>
-      @endif
-      <p>Devolver Troco <span class="detail-list">R$ {{number_format($pedido->devolvertroco, 2, ',', '.')}}</span></p>
+      <p>Forma de Pagamento: <span class="detail-list">{{isset($pedidoloja) ? $pedidoloja->formapagamento : $pedido->forma_pagamento}}</span></p>
+      <p clas="total">Total <span class="detail-list">R$ {{isset($pedidoloja) ? number_format($pedidoloja->totalpedido, 2, ',', '.') : number_format($pedido->total - $pedido->desconto, 2, ',', '.')}}</span></p>
+      <p>Troco pra <span class="detail-list">R$ {{isset($pedidoloja) ? number_format($pedidoloja->valortroco, 2, ',', '.') : number_format($pedido->valortroco, 2, ',', '.')}}</span></p>
+      <p>Devolver Troco <span class="detail-list">R$ {{isset($pedidoloja) ? number_format($pedidoloja->valortroco - $pedidoloja->totalpedido, 2, ',', '.') : number_format($pedido->devolvertroco, 2, ',', '.')}}</span></p>
+      @if (!isset($pedidoloja))
       <p>Total Desconto <span class="detail-list">R$ {{number_format($pedido->desconto, 2, ',', '.')}}</span></p>
       @if ($pedido->forma_pagamento == "Conta do Cliente")
       <div class="assinatura-cliente">
         <p>_____________________________________</p>
         <span class="assinatura">Assinatura do Cliente</span>
       </div>
+      @endif
       @endif
     </div>
     <div class="footer">

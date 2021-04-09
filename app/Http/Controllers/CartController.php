@@ -16,6 +16,10 @@ class CartController extends Controller
     $prod_id          = $request->input('product_id');
     $quantity         = $request->input('quantity');
     $complementos_id  = $request['complementos'];
+    $precoitem        = $request->input('precoitem');
+    $produtosize      = $request->input('produtosize');
+    $observacaoitem   = $request->input('observacaoitem');
+    $saboresdiversos  = $request->input('saboresdiversos');
 
     if(Cookie::get('shopping_cart')) {
       $cookie_data = stripslashes(Cookie::get('shopping_cart'));
@@ -38,12 +42,17 @@ class CartController extends Controller
     //     }
     //   }
     // } else {
-      $produto       = Produto::find($prod_id);
-      $complementos  = DB::table('complemento_produto')->where('produto_id', $prod_id)->get();
-      $prod_name     = $produto->descricao;
-      $prod_comp     = $produto->composicao;
-      $prod_image    = $produto->foto;
-      $priceval      = $produto->precovenda;
+      $produto         = Produto::find($prod_id);
+      $complementos    = DB::table('complemento_produto')->where('produto_id', $prod_id)->get();
+      $prod_name       = $produto->descricao;
+      $prod_comp       = $produto->composicao;
+      $prod_image      = $produto->foto;
+      $item_observacao = $observacaoitem;
+      if($precoitem != $produto->$produtosize){
+        return response()->json(['message' => 'Preço inválido!'], 404);
+      } else {
+        $priceval      = $produto->$produtosize;
+      }
       if(count($complementos) != 0){
         $complem_produ = $complementos_id;
       } else{
@@ -52,20 +61,22 @@ class CartController extends Controller
 
       if($produto){
         $item_array = array(
-          'compl_item_id' => rand(1, 9999),
-          'item_id'       => $prod_id,
-          'item_name'     => $prod_name,
-          'prod_comp'     => $prod_comp,
-          'item_quantity' => $quantity,
-          'item_price'    => $priceval,
-          'item_image'    => $prod_image,
-          'user_id'       => Auth::user()->id,
-          'empresa_id'    => Auth::user()->empresa->id,
-          'complem_produ' => $complem_produ ? $complem_produ : null
+          // 'compl_item_id' => rand(1, 9999),
+          'item_id'         => $prod_id,
+          'item_name'       => $prod_name,
+          'prod_comp'       => $prod_comp,
+          'item_quantity'   => $quantity,
+          'item_price'      => $priceval,
+          'item_image'      => $prod_image,
+          'item_observacao' => $item_observacao,
+          'user_id'         => Auth::user()->id,
+          'empresa_id'      => Auth::user()->empresa->id,
+          'complem_produ'   => $complem_produ ? $complem_produ : null,
+          'meio_a_meio'     => $saboresdiversos ? $saboresdiversos : null
         );
         $cart_data[] = $item_array;
 
-        $item_data = json_encode($cart_data);
+        $item_data = json_encode($cart_data, JSON_UNESCAPED_UNICODE);
 
         $minutes = 60;
         Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
@@ -140,9 +151,9 @@ class CartController extends Controller
     }
   }
 
-  // public function clearcart()
-  // {
-  //   Cookie::queue(Cookie::forget('shopping_cart'));
-  //   return response()->json(['status'=>'Seu carrinho foi limpo!']);
-  // }
+  public function clearcart()
+  {
+    Cookie::queue(Cookie::forget('shopping_cart'));
+    return response()->json(['status'=>'Seu carrinho foi limpo!']);
+  }
 }

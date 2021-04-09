@@ -52,7 +52,7 @@
     <div class="col-md-6">
       <div class="form-group">
         <label for="statusrecebido">Recebimento de Pedido*</label>
-        <input type="text" class="form-control" id="statusrecebido" name="statusrecebido" value="{{$config->statusrecebido}}" required>
+        <input type="text" class="form-control" id="statusrecebido" name="statusrecebido" value="{{$config->statusrecebido. ' Tempo médio para entrega de: '. $config->tempominimoentrega}}" required>
       </div>
     </div>
     <div class="col-md-6">

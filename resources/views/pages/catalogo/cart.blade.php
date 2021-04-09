@@ -27,19 +27,33 @@
                 <h3 class="product-title font-size-base mb-2">
                   <a href="{{route('catalogo-detalhe-produto',array($empresa->slug, $data['item_id']))}}">{{$data['item_name']}}</a>
                 </h3>
-                <div class="font-size-sm">{{$data['prod_comp']}}</div>
+                <div class="font-size-sm">
+                  @if ($data['meio_a_meio'] != null)
+                  <span class="text-muted me-2">Sabores:
+                    @foreach ($data['meio_a_meio'] as $item)
+                      @foreach ($produtos->where('id', $item) as $produto)
+                      <span class="badge badge-primary">{{$produto->descricao}}</span>
+                      @endforeach
+                    @endforeach
+                  </span>
+                  @endif
+                </div>
+                @if ($data['item_observacao'] != null)
+                @endif
                 <div class="font-size-sm">
                   @if ($data['complem_produ'] != null)
                   <span class="text-muted me-2">Adicionais:
                     @foreach ($data['complem_produ'] as $item)
                       @foreach ($complementos->where('id', $item) as $complemento)
-                      <span class="bg-dark text-white p-1 rounded">{{$complemento->descricao}}</span>
+                      <span class="badge badge-dark">{{$complemento->descricao}}</span>
                       @endforeach
                     @endforeach
                     </span>
                   @endif
                 </div>
-                <div class="font-size-lg text-accent pt-2"><small>R$</small> {{ number_format($data['item_price'], 2, ',', '.')}}</div>
+                <div class="font-size-sm"><span class="text-muted me-2">Observação: </span><span class="badge badge-warning">{{$data['item_observacao']}}</span></div>
+                <div class="font-size-sm"><span class="text-muted me-2">Ingredientes: </span><span class="font-italic">{{$data['prod_comp']}}</span></div>
+                <div class="font-size-lg text-accent pt-2"><small>R$</small> {{ number_format($data['item_price'], 2, ',', '.')}} unit.</div>
               </div>
             </div>
             <div class="pt-2 pt-sm-0 pl-sm-3 mx-auto mx-sm-0 text-center text-sm-left" style="max-width: 9rem;" data-id="{{ $data['item_id'] }}">
@@ -84,6 +98,7 @@
               </div>
             </div>
             <a class="btn btn-success btn-shadow btn-block mt-4 mb-3" href="checkout"><i class="fa fa-credit-card font-size-lg mr-2"></i>Checkout</a>
+            <a class="btn btn-warning btn-shadow btn-block clearcart mt-4 mb-3"><i class="fa fa-trash  font-size-lg mr-2"></i></i>Limpar Carrinho</a>
           </div>
         </div>
       </div>
