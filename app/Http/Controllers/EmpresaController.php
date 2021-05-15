@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EmpresaRequest;
 use App\Http\Requests\RequestUpdateEmpresa;
 use Illuminate\Support\Str;
-use App\Models\Cliente;
-use App\Models\Configuracao;
-use App\Models\Empresa;
-use App\Models\Licenca;
+use App\Models\{Cliente, Configuracao, Empresa, Licenca};
 use App\User;
 use Illuminate\Support\Facades\Mail;
+use Auth;
+
 
 class EmpresaController extends Controller
 {
@@ -32,7 +31,8 @@ class EmpresaController extends Controller
   public function create()
   {
     $clientes = $this->repositoryCliente->all();
-    return view('pages.empresas.novaEmpresa', compact('clientes'));
+    $empresas = $this->repository->all();
+    return view('pages.empresas.novaEmpresa', compact('clientes', 'empresas'));
   }
 
   // busca cliente cadastrado
@@ -56,13 +56,14 @@ class EmpresaController extends Controller
     $data['slug'] = Str::kebab($data['slug']);
 
     if(isset($request->logo)){
-      $data['logo'] = $request->logo->store("img/logos");
+      $data['logo'] = $request->logo->store("img/".Auth::user()->empresa->slug. "/logo");
     } else if($data['carregalogo'] != null){
       $data['logo'] = $data['carregalogo'];
     } else {
       $data['logo'] = 'img/logos/default.png';
     }
 
+    // $data['logo'] = 
     $data['uuid'] = $this->repository->uuid = Str::uuid()->toString();
 
     // tratamento da string do cnpj para transforma-lo em senha com os 5 primeiros numeros
@@ -84,7 +85,7 @@ class EmpresaController extends Controller
     ao criar uma nova empresa sempre é criado um novo usuário
     com o email informado no cadastro e a senha é os 5 primeiros digitos do cnpj
     */
-    $user = new User;
+    $user = new User();
     $user->name       = $data['nome'];
     $user->email      = $data['email'];
     $user->profile    = 'Administrador';
@@ -96,15 +97,15 @@ class EmpresaController extends Controller
 
     $saveuser = $user->save();
 
-    if (!$saved || !$saveuser){
+    if ($saved || $saveuser){
       Mail::send('emails.novaEmpresaUsuario', $data, function($message) use ($sendMail){
         $message->to($sendMail)
         ->subject('Sua empresa foi registrada e geramos um login para você!');
       });
 
-      return redirect()->back()->with('error', 'Falha ao cadastrar Empresa ou usuário');
-    } else {
       return redirect()->route('empresa.create')->with('success', 'Empresa e Usuário cadastrado com Sucesso!');
+    } else {
+      return redirect()->back()->with('error', 'Falha ao cadastrar Empresa ou usuário');
     }
   }
 
@@ -129,7 +130,7 @@ class EmpresaController extends Controller
     $data['active'] == 'N' ? $licenca->status = 0 : $licenca->status = 1;
 
     if(isset($request->logo)){
-      $data['logo'] = $request->logo->store("img/logos");
+      $data['logo'] = $request->logo->store("img/".Auth::user()->empresa->slug. "/logo");
     } else if($data['carregalogo'] != null){
       $data['logo'] = $data['carregalogo'];
     } else {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EntregadorRequest;
 use Illuminate\Http\Request;
-
 use App\Models\Entregador;
 use Exception;
 use Auth;

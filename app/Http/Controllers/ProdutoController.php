@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Pedidos;
 use App\Models\Grupo;
-use Exception;
 use Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
@@ -81,7 +79,7 @@ class ProdutoController extends Controller
       $produto->grupo_id   = $data['grupo_id'];
 
     if(isset($request->foto)){
-      $produto->foto = $request->foto->store("img/".Auth::user()->empresa->uuid. "/fotosProdutos");
+      $produto->foto = $request->foto->store("img/".Auth::user()->empresa->slug. "/fotosProdutos");
     } else  {
       $produto->foto = 'img/logos/default.png';
     }
@@ -165,7 +163,7 @@ class ProdutoController extends Controller
     $produto->status     = $data['status'];
 
     if(isset($request->foto)){
-      $produto->foto = $request->foto->store("img/".Auth::user()->empresa->uuid. "/fotosProdutos");
+      $produto->foto = $request->foto->store("img/".Auth::user()->empresa->slug. "/fotosProdutos");
     } else if($data['carregafoto'] != null){
       $produto->foto = $data['carregafoto'];
     } else {

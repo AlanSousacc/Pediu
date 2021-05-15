@@ -31,7 +31,7 @@
       </select>
     </div>
     <div class="form-group col-md-3 mt-3">
-      <a href="" class="btn btn-primary" data-contid={{$item->id}} data-target="#creategrupo" data-toggle="modal"><i class="fa fa-plus" aria-hidden="true"></i> Criar Grupo</a>
+      <a href="" class="btn btn-primary" data-contid="{{$item->id ?? ''}}" data-target="#creategrupo" data-toggle="modal"><i class="fa fa-plus" aria-hidden="true"></i> Criar Grupo</a>
     </div>
   </div>
 
@@ -126,7 +126,7 @@
       <h4 class="mt-0">Complementos / Adicionais</h4>
     </div>
     <div class="col-md-3 text-right">
-      <a href="#" class="btn btn-primary" data-contid={{$item->id}} data-target="#createcomplemento" data-toggle="modal"><i class="fa fa-plus" aria-hidden="true"></i> Cadastrar Complemento</a>
+      <a href="#" class="btn btn-primary" data-contid={{$item->id ?? '' }} data-target="#createcomplemento" data-toggle="modal"><i class="fa fa-plus" aria-hidden="true"></i> Cadastrar Complemento</a>
     </div>
   </div>
 

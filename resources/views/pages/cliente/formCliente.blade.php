@@ -74,11 +74,16 @@
         @include('alerts.feedback', ['field' => 'fantasia'])
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="form-group">
+    <div class="col-md-2">
+      <div class="form-group" id="tooltip" data-toggle="tooltip" data-placement="top" title="Não é permitido caracteres especiais e espaços, utilize - para separar as palavras">
         <label for="cnpj">Nome da Loja*</label>
         <input type="text" class="form-control slug" id="slug" name="slug" value="{{ isset($empresa) ? $empresa->slug : old('slug')}}" placeholder="minha-loja" required>
         @include('alerts.feedback', ['field' => 'slug'])
+      </div>
+    </div>
+    <div class="col-md-2 pl-0 mt-2">
+      <div class="form-group">
+        <button type="button" class="btn btn-success verificar-slug">Verificar</button>
       </div>
     </div>
   </div>
@@ -105,6 +110,16 @@
         <input type="file" class="custom-file-input" id="logo" name="logo">
         <label class="custom-file-label" for="customFile">Escolha sua logo</label>
       </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="form-group col-md-4">
+      <label for="plano">Plano Escolhido*</label>
+      <select id="plano" class="form-control" name="plano" required>
+        <option {{isset($plano) && $plano == 1 ? 'selected' : ''}} value="1" >Mensal</option>
+        <option {{isset($plano) && $plano == 2 ? 'selected' : ''}} value="2" >Trimestral</option>
+        <option {{isset($plano) && $plano == 3 ? 'selected' : ''}} value="3" >Anual</option>
+      </select>
     </div>
   </div>
 </div>

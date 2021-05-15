@@ -2,7 +2,7 @@
   <h4 class="mt-1">Configurações de Pedidos</h4>
   <span class="d-block mb-3">Esta opção define se a empresa realiza pedidos de venda dentro do sistema.</span>
   <div class="row">
-    <div class="col-md-8 mt-1">
+    <div class="col-md-2 mt-1" data-toggle="tooltip" data-placement="top" title="Esta opção determina se o lojista fará pedidos no balcão, atendimento a clientes.">
       <div class="form-group">
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" name="controlepedidosbalcao" id="controlepedidosbalcao"
@@ -16,12 +16,12 @@
 
   <h4 class="mt-1">Configurações de Entrega</h4>
   <div class="row">
-    <div class="col-md-2 mt-1">
+    <div class="col-md-2 mt-1" data-toggle="tooltip" data-placement="top" title="Esta opção determina se o usuário escolherá um entregador para fazer a entrega, caso esteja habilitado, o usuário deverá fazer o a conferência do valor recebido pelo entregador, caso contrário, o cliente ficará em débito no sistema!">
       <div class="form-group">
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" name="controlaentrega" id="controlaentrega"
           {{$config->controlaentrega != null && $config->controlaentrega == 1 ?	'checked' : ''}}>
-          <label class="custom-control-label pt-1" for="controlaentrega">Controla Entrega</label>
+          <label class="custom-control-label pt-1" for="controlaentrega">Controla Entrega Balcao</label>
         </div>
       </div>
     </div>

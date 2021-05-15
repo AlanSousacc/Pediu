@@ -2,6 +2,7 @@
   <!--
     Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
   -->
+  @php $config = \App\Models\Configuracao::where('empresa_id', Auth::user()->empresa->id)->first(); @endphp
   <div class="logo">
     <img src="{{ Auth::user()->empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .Auth::user()->empresa->logo) }}" alt="" style="max-width: 100px; margin: 0 auto; display: inherit; border-radius: 100px">
     <a href="{{ route('home') }}" class="simple-text logo-normal text-lg-center">
@@ -24,7 +25,7 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse @if ($activePage == 'editarpedido' || $activePage == 'detalhepedido' || $activePage == 'novopedido' || $activePage == 'listagemPedidos') show @endif" id="pedidos">
+        <div class="collapse @if ($activePage == 'editarpedido' || $activePage == 'listagemPedidosLoja' || $activePage == 'detalhepedido' || $activePage == 'novopedido' || $activePage == 'listagemPedidos') show @endif" id="pedidos">
           <ul class="nav">
             <li class="active">
               <a href="{{ route('pedidosloja.index') }}" style="background: #2ca8ff; color: #fff">
@@ -32,7 +33,14 @@
                 <p> {{ __("Pedidos da Loja") }} </p>
               </a>
             </li>
-            @if (\App\Models\Configuracao::where('empresa_id', Auth::user()->empresa->id)->first()->controlepedidosbalcao == 1)
+            <li class="@if ($activePage == 'listagemPedidosLoja') active @endif">
+              <a href="{{ route('pedidosloja.all') }}">
+                <i class="ionicons ion-ios-list-outline"></i>
+                <p> {{ __("Listagem Pedidos Loja") }} </p>
+              </a>
+            </li>
+            <hr class="my-3">
+            @if ($config->controlepedidosbalcao == 1)
             <li class="@if ($activePage == 'novopedido') active @endif">
               <a href="{{ route('pedido.create') }}">
                 <i class="now-ui-icons shopping_bag-16"></i>
@@ -104,6 +112,7 @@
       {{-- end contatos --}}
 
       {{-- Entregadores --}}
+      @if($config->controlaentrega == 1)
       <li>
         <a data-toggle="collapse" href="#entregadores">
           <i class="now-ui-icons shopping_delivery-fast"></i>
@@ -167,6 +176,7 @@
           </ul>
         </div>
       </li>
+      @endif
       {{-- end Endereço de entrega --}}
 
       {{-- Produtos --}}

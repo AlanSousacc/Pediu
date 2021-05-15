@@ -47,6 +47,22 @@
 @endif
 <!--Begin input user type-->
 
+<!--Begin input email -->
+<div class="input-group {{ $errors->has('telefone') ? ' has-danger' : '' }}">
+  <div class="input-group-prepend">
+    <div class="input-group-text">
+      <i class="fa fa-phone"></i>
+    </div>
+  </div>
+  <input class="form-control{{ $errors->has('telefone') ? ' is-invalid' : '' }}" placeholder="(00) 00000-0000" type="telefone" name="telefone" value="{{isset($user) ? $user->telefone : old('telefone')}}" required>
+</div>
+@if ($errors->has('telefone'))
+<span class="invalid-feedback" style="display: block;" role="alert">
+  <strong>{{ $errors->first('telefone') }}</strong>
+</span>
+@endif
+<!--Begin input user type-->
+
 <!--Begin input password -->
 <div class="input-group {{ $errors->has('password') ? ' has-danger' : '' }}">
   <div class="input-group-prepend">
@@ -54,7 +70,7 @@
       <i class="now-ui-icons objects_key-25"></i>
     </div>
   </div>
-  <input class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Senha') }}" type="password" name="password" required>
+  <input class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('(Senha)') }}" type="password" name="password" required>
   @if ($errors->has('password'))
   <span class="invalid-feedback" style="display: block;" role="alert">
     <strong>{{ $errors->first('password') }}</strong>

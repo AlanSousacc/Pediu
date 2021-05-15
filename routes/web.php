@@ -1,13 +1,21 @@
 <?php
 
-use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('site');
+Route::get('/dashboard', 'DashboardController@index')->name('home');
+Route::get('/vendas-balcao-mensal', 'DashboardController@vendasBalcaoMensal')->name('vendas.balcao.mensal');
+Route::get('/vendas-loja-mensal', 'DashboardController@vendasLojaMensal')->name('vendas.loja.mensal');
+
+// Cliente
+Route::resource('cliente', 'ClienteController');
+Route::get('formulario-cadastro/{plano?}', 'ClienteController@novoCliente')->name('novo.cliente');
+Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('verificar.slug');
 
 Route::group(['middleware' => 'auth'], function () {
+
 	// users
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
@@ -37,9 +45,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('endereco', 'EnderecoController');
     Route::get('enderecos/{id?}', 'EnderecoController@returnEndereco')->name('busca.enderecos');
     Route::get('entrega/create/{id}', 'EnderecoController@createEndereco')->name('novo.endereco');
-
-    // home
-    Route::get('/', 'ChartController@getWeekSales')->name('home');
 
     // produto
     Route::resource('produto', 'ProdutoController');
@@ -87,15 +92,13 @@ Route::group(['middleware' => 'auth'], function () {
 
   // pedidos loja
   Route::get('pedidos-loja', 'PedidosLojaController@index')->name('pedidosloja.index');
+  Route::get('pedidos-loja-geral', 'PedidosLojaController@listagemPedidosLoja')->name('pedidosloja.all');
   Route::get('pedidos-loja/status/{status}', 'PedidosLojaController@filterstatus')->name('pedidosloja.filterstatus');
   Route::get('processa-status/{id?}', 'PedidosLojaController@aplicarStatus')->name('pedidoloja.status');
   Route::get('detalhe-pedido-loja/{id}', 'PedidosLojaController@detalhePedidoLoja')->name('detalhe.pedido.loja');
   Route::any('imprimir/pedidoloja/{id}', 'PedidosLojaController@printloja')->name('imprimir.pedidoloja');
+  Route::any('filtro-dia/{dia?}', 'PedidosLojaController@filtrodia')->name('filtro.por.dia');
 });
-
-// Cliente
-Route::resource('cliente', 'ClienteController');
-Route::get('formulario-cadastro', 'ClienteController@novoCliente')->name('novo.cliente');
 
 //Catalogo
 Route::post('add-to-cart','CartController@addToCart');

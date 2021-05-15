@@ -13,6 +13,7 @@ mix
     .js('resources/js/pedidos/pedidos.js', 'public/js/pedidos')
     .js('resources/js/empresas/empresas.js', 'public/js/empresas')
     .js('resources/js/licenca/licenca.js', 'public/js/licenca')
+    .js('resources/js/dashboard/dashboard.js', 'public/js/dashboard')
     .js('resources/js/catalogo/bootstrap.bundle.min.js', 'public/js/catalogo')
     .js('resources/js/catalogo/bs-custom-file-input.min.js', 'public/js/catalogo')
     .js('resources/js/catalogo/jquery.slim.min.js', 'public/js/catalogo')
@@ -21,4 +22,5 @@ mix
     .js('resources/js/catalogo/theme.min.js', 'public/js/catalogo')
     .js('resources/js/catalogo/scripts-custom.js', 'public/js/catalogo')
     .js('resources/js/catalogo/tiny-slider.js', 'public/js/catalogo')
-    .js('resources/js/entregadores/entregadores.js', 'public/js/entregadores');
+    .js('resources/js/entregadores/entregadores.js', 'public/js/entregadores')
+    .js('resources/js/site/main.js', 'public/js/main');

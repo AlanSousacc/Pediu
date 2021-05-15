@@ -37,9 +37,11 @@
                   <li class="nav-item">
                     <a class="nav-link" href="#pedidosRealizados" data-toggle="tab">Pedidos do Dia</a>
                   </li>
+                  @if ($config->controlaentrega == 1)
                   <li class="nav-item">
                     <a class="nav-link" href="#conferencia" data-toggle="tab">Conferência</a>
                   </li>
+                  @endif
                   <li class="nav-item">
                     <a class="nav-link" href="#resumo" data-toggle="tab">Resumo</a>
                   </li>
@@ -73,15 +75,18 @@
               {{-- tab fim listagem pedido --}}
 
               {{-- tab conferencia --}}
+              @if ($config->controlaentrega == 1)
               <div class="tab-pane" id="conferencia">
                 <div class="card-header">
                   <h4 class="card-title"> Pedidos por Entregadores</h4>
                 </div>
                 @include('pages.entregadores.listagemPedidosEntregadores')
               </div>
+              @endif
               {{-- fim tab conferencia --}}
 
               {{-- tab resumo --}}
+              
               <div class="tab-pane" id="resumo">
                 @include('pages.entregadores.listagemResumoEntregadores')
               </div>

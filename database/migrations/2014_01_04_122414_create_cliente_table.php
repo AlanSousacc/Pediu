@@ -19,7 +19,7 @@ class CreateClienteTable extends Migration
       $table->string('cidade', 30);
       $table->string('endereco', 60);
       $table->string('numero', 5);
-      $table->string('bairro', 15);
+      $table->string('bairro', 65);
       $table->string('celular', 15);
       $table->string('razao', 30);
       $table->string('fantasia', 30);

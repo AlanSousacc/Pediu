@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClienteRequest;
 use App\Models\Cliente;
+use App\Models\Empresa;
 use Illuminate\Support\Facades\Mail;
 use Image;
 use File;
@@ -19,9 +20,30 @@ class ClienteController extends Controller
     $this->repository = $cliente;
   }
 
-  public function novoCliente()
+  public function novoCliente($plano = '')
   {
-    return view('pages.cliente.novoCliente');
+    return view('pages.cliente.novoCliente', compact('plano'));
+  }
+
+  public function consultaSlug($slug)
+  {
+    $empresas = Empresa::where('slug', $slug)->first();
+
+    if(!$empresas){
+      return response()->json([
+        'data' => [
+          'message' => 'Este nome está disponível para uso!',
+          'status'  => 'Disponível',
+        ]
+      ]);
+    } else {
+      return response()->json([
+        'data' => [
+          'message' => 'Este nome não está disponível para uso!',
+          'status'  => 'Indisponível',
+        ]
+      ]);
+    }    
   }
 
   public function create()

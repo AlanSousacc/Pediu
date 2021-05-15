@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Exception;
+use Auth;
 use DB;
 
 use App\Models\{
@@ -14,7 +15,6 @@ use App\Models\{
   Contato,
   Produto,
 };
-use Auth;
 
 class PedidoController extends Controller
 {
@@ -90,21 +90,22 @@ class PedidoController extends Controller
   // cria a tela de novo pedido com os dados do banco.
   public function create(){
     $user         = Auth::user()->empresa_id;
-    $consulta     = $this->repository->whereDay('created_at', date('d'))->orderby('created_at', 'desc')->paginate(10);
-    $resumo       = $this->repository->where('pedidos.created_at', '>=', Carbon::now()->sub('hour', 12))->get();
+    $consulta     = $this->repository->whereDay('created_at', date('d'))->orderby('created_at', 'desc')->where('empresa_id', $user)->paginate(10);
+    $resumo       = $this->repository->where('pedidos.created_at', '>=', Carbon::now()->sub('hour', 12))->where('empresa_id', $user)->get();
     $resumoEntre  = DB::table('pedidos')
     ->join('entregadores', 'entregadores.id', '=', 'pedidos.entregador_id')
     ->select('entregadores.nome as nomeEntregador', (DB::raw('sum(pedidos.total) as somaTotal')))
     ->where('pedidos.created_at', '>=', Carbon::now()->sub('hour', 12))
     ->where('pedidos.statusentrega', 0)
+    ->where('pedidos.empresa_id', $user)
     ->groupBy('pedidos.entregador_id')
     ->get();
 
-    $movimentacao = Movimentacao::all();
-    $contatos     = Contato::all();
-    $entregador   = Entregador::all();
-    $produtos     = Produto::all();
-    $config     = Configuracao::where('empresa_id', $user)->first();
+    $movimentacao = Movimentacao::where('empresa_id', $user)->get();
+    $contatos     = Contato::where('empresa_id', $user)->get();
+    $entregador   = Entregador::where('empresa_id', $user)->get();
+    $produtos     = Produto::where('empresa_id', $user)->get();
+    $config       = Configuracao::where('empresa_id', $user)->first();
 
     return view('pages.pedidos.novoPedido', compact('resumoEntre', 'resumo', 'contatos', 'entregador', 'produtos', 'consulta', 'movimentacao', 'config'));
   }
@@ -116,7 +117,9 @@ class PedidoController extends Controller
   */
   public function store(Request $request)
   {
-    $data = $request->except('_token');
+    $data   = $request->except('_token');
+    $user   = Auth::user()->empresa_id;
+    $config = Configuracao::where('empresa_id', $user)->first();
 
     if(count($data['produtos_listagem_id']) < count($data['produtos_qtde']))
     return redirect()->back()->with('error', 'Quantidade de itens diferente de quantidade de unidade!');
@@ -124,7 +127,7 @@ class PedidoController extends Controller
     try{
       // dados do pedido
       $pedido             = new Pedidos;
-      $pedido->empresa_id = Auth::user()->empresa_id;
+      $pedido->empresa_id = $user;
       $pedido->observacao = $data['observacao'];
       $pedido->desconto   = $data['desconto'] != null ? $data['desconto'] : 0;
 
@@ -160,12 +163,18 @@ class PedidoController extends Controller
       // aplica o pedido na movimentação
       $mov                  = new Movimentacao;
       $mov->tipo            = 'Entrada';
-      $mov->empresa_id      = Auth::user()->empresa_id;
+      $mov->empresa_id      = $user;
       $mov->forma_pagamento = $pedido->forma_pagamento;
       $mov->valortotal      = $pedido->valortroco != null ? $pedido->total + $pedido->valortroco : $pedido->total;
       $mov->valorrecebido   = 0;
       $mov->valorpendente   = $mov->valortotal;
-      $pedido->local_pagamento == 'Local de Entrega' ? $mov->status = 0 : $mov->status = 1;
+      if($config->controlaentrega == 0){
+        $mov->status = 1;
+      } else if($pedido->local_pagamento == 'Local de Entrega'){
+        $mov->status = 0;
+      } else {
+        $mov->status = 1;
+      }
       $mov->pedido_id       = $pedido->id;
       $mov->contato_id      = $pedido->contato_id;
 
@@ -201,8 +210,8 @@ class PedidoController extends Controller
     public function edit($id)
     {
       $pedido   = $this->repository->find($id);
-      $contatos = Contato::all();
-      $produtos = Produto::all();
+      $contatos = Contato::where('empresa_id', Auth::user()->empresa_id)->get();
+      $produtos = Produto::where('empresa_id', Auth::user()->empresa_id)->get();
 
       return view('pages.pedidos.editar', compact('pedido', 'contatos', 'produtos'));
     }
@@ -220,7 +229,6 @@ class PedidoController extends Controller
       return redirect()->back()->with('error', 'Quantidade de itens diferente de quantidade de unidade!');
 
       try{
-
         $pedido                  = $this->repository->findOrFail($id);
         $pedido->observacao      = $data['observacao'];
         $pedido->desconto        = $data['desconto'] != null ? $data['desconto'] : 0;
@@ -243,7 +251,7 @@ class PedidoController extends Controller
         DB::beginTransaction();
 
         $saved = $pedido->save();
-
+        
         // aplica o pedido na movimentação
         $mov                  = Movimentacao::where('pedido_id', $pedido->id)->first();
         $mov->tipo            = 'Entrada';
@@ -291,8 +299,9 @@ class PedidoController extends Controller
       public function destroy(Request $request)
       {
         try{
-          $pedido = $this->repository->find($request->pedido_id);
-          $mov    = Movimentacao::where('pedido_id', $pedido->id)->first();
+          $user   = Auth::user()->empresa_id;
+          $pedido = $this->repository->where('empresa_id', $user)->find($request->pedido_id);
+          $mov    = Movimentacao::where('pedido_id', $pedido->id)->where('empresa_id', $user)->first();
 
           $savedmov = $mov->delete();
           if (!$savedmov){
@@ -333,6 +342,7 @@ class PedidoController extends Controller
       public function resumoPeriodo(Request $request)
       {
         $data = $request->except('_toquen');
+        $user = Auth::user()->empresa_id;
 
         if(!empty($data['dtstart']) && !empty($data['dtstart'])){
           $data['dtstart'] = Carbon::createFromFormat('d/m/Y H:m:s', $data['dtstart']);
@@ -340,30 +350,32 @@ class PedidoController extends Controller
         }
 
         if(isset($data['dtstart']) && isset($data['dtend'])){
-          $resumo      = $this->repository->whereBetween('created_at', [$data['dtstart'], $data['dtend']])->get();
+          $resumo      = $this->repository->whereBetween('created_at', [$data['dtstart'], $data['dtend']])->where('empresa_id', $user)->get();
           $resumoEntre = DB::table('pedidos')
           ->join('entregadores', 'entregadores.id', '=', 'pedidos.entregador_id')
           ->select('entregadores.nome as nomeEntregador', (DB::raw('sum(pedidos.total) as somaTotal')))
           ->whereBetween('pedidos.created_at', [$data['dtstart'], $data['dtend']])
           ->where('pedidos.statusentrega', 0)
+          ->where('pedidos.empresa_id', $user)
           ->groupBy('pedidos.entregador_id')
           ->get();
         } else {
-          $resumo      = $this->repository->where('created_at', Carbon::now()->sub('hour', 12))->get();
+          $resumo      = $this->repository->where('created_at', Carbon::now()->sub('hour', 12))->where('empresa_id', $user)->get();
           $resumoEntre = DB::table('pedidos')
           ->join('entregadores', 'entregadores.id', '=', 'pedidos.entregador_id')
           ->select('entregadores.nome as nomeEntregador', (DB::raw('sum(pedidos.total) as somaTotal')))
           ->where('pedidos.created_at', '>=', Carbon::now()->sub('hour', 12))
           ->where('pedidos.statusentrega', 0)
+          ->where('pedidos.empresa_id', $user)
           ->groupBy('pedidos.entregador_id')
           ->get();
         }
 
-        $contatos     = Contato::all();
-        $entregador   = Entregador::all();
-        $produtos     = Produto::all();
-        $movimentacao = Movimentacao::all();
-        $consulta     = $this->repository->whereDay('created_at', date('d'))->orderby('created_at', 'desc')->paginate(10);
+        $contatos     = Contato::where('empresa_id', $user)->get();
+        $entregador   = Entregador::where('empresa_id', $user)->get();
+        $produtos     = Produto::where('empresa_id', $user)->get();
+        $movimentacao = Movimentacao::where('empresa_id', $user)->get();
+        $consulta     = $this->repository->whereDay('created_at', date('d'))->orderby('created_at', 'desc')->where('empresa_id', $user)->paginate(10);
 
         return view('pages.pedidos.novoPedido', compact('movimentacao', 'resumo', 'contatos', 'entregador', 'produtos', 'consulta', 'resumoEntre'));
       }
@@ -371,7 +383,7 @@ class PedidoController extends Controller
       // após finalizar pedido e clicar em imprimir
       public function imprimirPedido($id)
       {
-        $pedido = $this->repository->find($id);
+        $pedido = $this->repository->where('empresa_id', Auth::user()->empresa_id)->find($id);
 
         return view('pages.pedidos.pdf.order', compact('pedido'));
       }
@@ -379,7 +391,7 @@ class PedidoController extends Controller
       // ao clicar em detalhar pedidoe clicar em imprimir
       public function print($id)
       {
-        $pedido = $this->repository->find($id);
+        $pedido = $this->repository->where('empresa_id', Auth::user()->empresa_id)->find($id);
         return view('pages.pedidos.pdf.order', compact('pedido'));
       }
     }

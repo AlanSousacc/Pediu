@@ -1,7 +1,7 @@
 @extends('layouts.app', [
 'namePage' => 'Listagem de Pedidos da loja',
 'class' => 'sidebar-mini',
-'activePage' => 'listagemPedidos',
+'activePage' => 'listagemPedidosLoja',
 ])
 
 @section('content')
@@ -26,6 +26,13 @@
             <li class="nav-item active"><a class="nav-link" href="{{route('pedidosloja.filterstatus', 4)}}"><i class="fa fa-check-double"></i> Entregue</a></li>
             <li class="nav-item active"><a class="nav-link" href="{{route('pedidosloja.filterstatus', 5)}}"><i class="fa fa-ban"></i> Cancelado</a></li>
           </ul>
+          <div class="form-inline col-sm-12 col-md-4 d-block w-100">
+            <div class="form-group">
+              <a class="navbar-brand ml-3" href="#">Filtrar Por Período</a>
+              <input type="date" name="datapedido" class="form-control form-control-md mx-sm-3" id="filtro_por" value="{{isset(Request::route()->parameters['dia']) ? Request::route()->parameters['dia'] : ''}}" />
+              <a href="{{route('pedidosloja.all')}}">Limpar</a>
+            </div>
+          </div>
         </nav>
         <div class="card-header">
           <h4 class="card-title"> Pedidos</h4>
@@ -249,5 +256,21 @@
       });
     });
   </script>
+
+<script>
+  $('#filtro_por').on('change', function (e) {
+    var dia = this.value;
+    $.ajax({
+      url: '{{route('filtro.por.dia')}}' + '/' +  dia,
+      method: "GET",
+      success: function (response) {
+        window.location.href = '{{route('filtro.por.dia')}}' + '/' +  dia;
+      },
+      error: function(response){
+
+      }
+    });
+  });
+</script>
   @endpush
   @endsection

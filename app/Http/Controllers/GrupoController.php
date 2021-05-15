@@ -34,7 +34,7 @@ class GrupoController extends Controller
     $data['empresa_id'] = Auth::user()->empresa_id;
 
     if(isset($request->image)){
-      $data['image'] = $request->image->store("img/".Auth::user()->empresa->uuid. "/imagesGrupos");
+      $data['image'] = $request->image->store("img/".Auth::user()->empresa->slug. "/grupos");
     } else  {
       $data['image'] = 'img/logos/default.png';
     }
@@ -62,7 +62,7 @@ class GrupoController extends Controller
     $data = $request->except('_token');
 
     if(isset($request->image)){
-      $data['image'] = $request->image->store("img/".Auth::user()->empresa->uuid. "/imagesGrupos");
+      $data['image'] = $request->image->store("img/".Auth::user()->empresa->slug. "/grupos");
     } else if($data['carregaimage'] != null){
       $data['image'] = $data['carregaimage'];
     } else {

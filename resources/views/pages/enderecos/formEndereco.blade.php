@@ -33,8 +33,8 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
-        <label for="bairro">Bairro</label>
-        <input type="text" class="form-control" id="bairro" name="bairro" value="{{isset($entrega) ? $entrega->bairro : old('bairro')}}" placeholder="Bairro">
+        <label for="bairro">Bairro*</label>
+        <input type="text" class="form-control" id="bairro" name="bairro" value="{{isset($entrega) ? $entrega->bairro : old('bairro')}}" placeholder="Bairro" required>
         @include('alerts.feedback', ['field' => 'bairro'])
       </div>
     </div>

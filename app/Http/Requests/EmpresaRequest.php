@@ -29,11 +29,12 @@ class EmpresaRequest extends FormRequest
       'cidade'  => ['required', 'max:30'],
       'endereco'=> ['required', 'max:60'],
       'numero'  => ['required', 'max:5'],
-      'bairro'  => ['required', 'max:15'],
+      'bairro'  => ['required', 'max:65'],
       'cnpj'    => ['required', 'max:20', "unique:empresas,cnpj,{$id},id"],
       'email'   => ['required', 'email', "unique:empresas,email,{$id},id"],
       'slug'    => ['required', 'max:30', "unique:empresas,slug,{$id},id"],
-      'logo'    => ['image']
+      'logo'    => ['image'],
+      'plano'   => ['required']
     ];
   }
 
@@ -55,12 +56,13 @@ class EmpresaRequest extends FormRequest
       'numero.required'   => 'O campo Número deve ser informado!',
       'numero.max'        => 'O campo Endereço deve conter no máximo 5 caracteres!',
       'bairro.required'   => 'O campo Bairro deve ser informado!',
-      'bairro.max'        => 'O campo Bairro deve conter no máximo 15 caracteres!',
+      'bairro.max'        => 'O campo Bairro deve conter no máximo 65 caracteres!',
       'cnpj.required'     => 'O campo CNPJ deve ser informado!',
       'cnpj.max'          => 'O campo CNPJ deve conter no máximo 20 caracteres!',
       'email.required'    => 'O campo Email é obrigatório!',
       'slug.required'     => 'O campo Nome da loja deve ser informado!',
       'slug.max'          => 'O campo Nome da loja deve conter no máximo 30 caracteres!',
+      'plano.required'    => 'O campo Plano do cliente deve ser informado!',
     ];
   }
 }

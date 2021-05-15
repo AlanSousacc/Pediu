@@ -24,6 +24,20 @@ class PedidosLojaController extends Controller
     return view('pages.pedidos.loja.listagemPedidosLoja', compact('pedidos', 'config'));
   }
 
+  public function listagemPedidosLoja()
+  {
+    $pedidos = $this->repository->where('empresa_id', Auth::user()->empresa_id)->with('endereco')->orderBy('created_at', 'asc')->paginate(10);
+    $config  = Configuracao::where('empresa_id', Auth::user()->empresa_id)->first();
+    return view('pages.pedidos.loja.listagemPedidosLoja', compact('pedidos', 'config'));
+  }
+
+  public function filtrodia($dia)
+  {
+    $pedidos = $this->repository->where('empresa_id', Auth::user()->empresa_id)->with('endereco')->orderBy('created_at', 'asc')->whereDate('created_at', date($dia))->paginate(10);
+    $config  = Configuracao::where('empresa_id', Auth::user()->empresa_id)->first();
+    return view('pages.pedidos.loja.listagemPedidosLoja', compact('pedidos', 'config'));
+  }
+
   public function filterstatus($status)
   {
     $pedidos = $this->repository->where('empresa_id', Auth::user()->empresa_id)->with('endereco')->where('statuspedido', $status)->whereDate('created_at', today())->paginate(10);

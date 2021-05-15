@@ -15,7 +15,7 @@
       <select id="cliente_id" class="form-control" name="cliente_id" {{\Request::route()->getName() == "empresa.edit" ? 'disabled' : ''}}>
         <option value="0" >Escolha um Cliente</option>
         @foreach ($clientes as $item)
-        <option value="{{$item->id}}" {{(old('cliente_id') == $item->id ) ? 'selected' : ''}} >{{$item->nome}}</option>
+        <option value="{{$item->id}}" {{(old('cliente_id') == $item->id ) ? 'selected' : ''}}>{{$item->nome}}</option>
         @endforeach
       </select>
     </div>
@@ -134,4 +134,14 @@
     </div>
   </div>
   <input type="hidden" id="carregalogo" name="carregalogo" value="">
+  <div class="row mt-3">
+    <div class="form-group col-md-4">
+      <label for="plano">Plano Escolhido*</label>
+      <select id="plano" class="form-control" name="plano" required>
+        <option value="1" >Mensal</option>
+        <option value="2" >Trimestral</option>
+        <option value="3" >Anual</option>
+      </select>
+    </div>
+  </div>
 </div>

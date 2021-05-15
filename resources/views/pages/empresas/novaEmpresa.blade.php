@@ -44,7 +44,6 @@
       dataType: "json"
 
     }).done(function(resposta) {
-      console.log(resposta.data)
       let dados = resposta.data;
       $('#nome').val(dados[0].nome)
       $('#bairro').val(dados[0].bairro)
@@ -60,6 +59,7 @@
       $('#telefone').val(dados[0].telefone)
       $('#imglogo').attr('src', '{{url("storage")}}' + '/' + dados[0].logo)
       $('#carregalogo').val(dados[0].logo)
+      $('#plano').val(dados[0].plano)
 
 
 
