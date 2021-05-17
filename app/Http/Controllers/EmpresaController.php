@@ -63,7 +63,6 @@ class EmpresaController extends Controller
       $data['logo'] = 'img/logos/default.png';
     }
 
-    // $data['logo'] = 
     $data['uuid'] = $this->repository->uuid = Str::uuid()->toString();
 
     // tratamento da string do cnpj para transforma-lo em senha com os 5 primeiros numeros
@@ -145,10 +144,5 @@ class EmpresaController extends Controller
     }
 
     return redirect()->back()->with('success', 'Empresa alterada com sucesso!');
-  }
-
-  public function destroy($id)
-  {
-    //
   }
 }
