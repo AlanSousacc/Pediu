@@ -18,30 +18,6 @@
             <a href="{{route('catalogo-detalhe-produto',array($empresa->slug, $item->id))}}">{{$item->descricao}}</a>
           </h3>
           <p class="font-size-ms text-muted">{{$item->composicao}}</p>
-          {{-- <div class="d-flex mb-1">
-            <div class="custom-control custom-option custom-control-justified mb-2">
-              <input class="custom-control-input" type="radio" name="size1" id="s1" checked>
-              <label class="custom-option-label" for="s1">Pequeno</label>
-            </div>
-            <div class="custom-control custom-option custom-control-justified mb-2">
-              <input class="custom-control-input" type="radio" name="size1" id="m1">
-              <label class="custom-option-label" for="m1">Médio</label>
-            </div>
-            <div class="custom-control custom-option custom-control-justified mb-2">
-              <input class="custom-control-input" type="radio" name="size1" id="l1">
-              <label class="custom-option-label" for="l1">Grande</label>
-            </div>
-          </div>
-          <div class="d-flex mb-3">
-            <div class="custom-control custom-option custom-control-justified mb-2">
-              <input class="custom-control-input" type="radio" name="base1" id="standard1" checked>
-              <label class="custom-option-label" for="standard1">Standard</label>
-            </div>
-            <div class="custom-control custom-option custom-control-justified mb-2">
-              <input class="custom-control-input" type="radio" name="base1" id="thin1">
-              <label class="custom-option-label" for="thin1">Thin</label>
-            </div>
-          </div> --}}
           <div class="d-flex align-items-center justify-content-between">
             <div class="product-price">
               <span class="text-accent">R$ {{number_format($item->precovenda, 2, ',', '.')}}</span>
@@ -60,8 +36,7 @@
     @endforeach
   </div>
 </section>
-
-</section>
+{{-- </section> --}}
 
 @push('scripts')
 @endpush

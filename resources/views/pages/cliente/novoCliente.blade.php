@@ -30,7 +30,7 @@
 </div>
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-<script src='{{asset('js/cliente/cliente.js')}}'></script>
+
 <script>
   $('#tooltip').tooltip('update')
 </script>
@@ -69,5 +69,12 @@
       }
     });
   })
+
+  $(document).ready(function () {
+    $('.telefone').mask('(00) 00000-0000');
+    $('.celular').mask('(00) 00000-0000');
+
+    $('#cnpj').mask('00.000.000/0001-00');
+  });
 </script>
 @endpush

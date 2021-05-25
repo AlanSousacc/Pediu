@@ -44,7 +44,7 @@
           <li><a href="#features">Recursos</a></li>
           <li><a href="#gallery">Galeria</a></li>
           <li><a href="#gallery">Perguntas Frequentes</a></li>
-          <li><a href="#team">Planos</a></li>
+          <li><a href="#plans">Planos</a></li>
           <li><a href="#contact">Contato</a></li>
           <li><a href="{{@Auth::check() ? route('home') : route('login')}}">Área do Cliente</a></li>
         </ul>
@@ -458,7 +458,7 @@
     </section><!-- End F.A.Q Section -->
 
     <!-- ======= Pricing Section ======= -->
-    <section id="pricing" class="pricing">
+    <section id="plans" class="pricing">
       <div class="container">
 
         <div class="section-title" data-aos="fade-up">

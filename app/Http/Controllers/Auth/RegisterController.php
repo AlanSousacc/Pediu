@@ -54,16 +54,12 @@ class RegisterController extends Controller
 
   protected function create(array $data)
   {
+    // dd($data);
     $user =  User::create([
       'name'      => $data['name'],
       'email'     => $data['email'],
       'profile'   => $data['profile'],
       'isAdmin'   => isset($data['isAdmin']) ? $data['isAdmin'] : 0,
-      'cidade'    => isset($data['cidade']) ? $data['cidade'] : '',
-      'endereco'  => isset($data['endereco']) ? $data['endereco'] : '',
-      'numero'    => isset($data['numero']) ? $data['numero'] : '',
-      'bairro'    => isset($data['bairro']) ? $data['bairro'] : '',
-      'telefone'  => isset($data['telefone']) ? $data['telefone'] : '',
       'empresa_id'=> Auth::user() ? Auth::user()->empresa_id : $data['empresa_id'],
       'password'  => Hash::make($data['password']),
     ]);
@@ -74,7 +70,7 @@ class RegisterController extends Controller
       'numero'     => isset($data['numero']) ? $data['numero'] : '',
       'bairro'     => isset($data['bairro']) ? $data['bairro'] : '',
       'telefone'   => isset($data['telefone']) ? $data['telefone'] : '',
-      'principal'  => $data['principal'],
+      'principal'  => 1,
       'user_id'    => $user->id,
       'empresa_id' => $user->empresa->id,
     ]);

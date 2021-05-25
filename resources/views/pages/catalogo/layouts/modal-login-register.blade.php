@@ -47,8 +47,9 @@
           </div>
           <button class="btn btn-primary btn-block btn-shadow" type="submit">Logar</button>
         </form>
-        <form class="needs-validation tab-pane fade" action="{{ route('register') }}" method="POST" autocomplete="off" novalidate id="signup-tab">
+        <form class="needs-validation tab-pane fade" action="{{ route('register') }}" method="POST" autocomplete="off" id="signup-tab">
           @csrf
+          <h6 class="text-center">Preencha todos os campos abaixo</h6>
           <input type="hidden" name="principal" value="1">
           <div class="form-group">
             <label for="su-name">Nome Completo</label>
@@ -105,7 +106,7 @@
             <div class="invalid-feedback">Por favor, informe seu bairro.</div>
           </div>
           <div class="form-group">
-            <label for="su-telefone">Telefone</label>
+            <label for="su-telefone">Telefone*</label>
             <input class="form-control" type="tel" id="su-telefone" name="telefone" placeholder="(16) 99999-9999" required>
             <div class="invalid-feedback">Por favor, forneça seu telefone.</div>
           </div>

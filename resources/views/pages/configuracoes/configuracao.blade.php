@@ -1,7 +1,7 @@
 @extends('layouts.app', [
 'namePage' => 'Configurações da empresa',
 'class' => 'sidebar-mini',
-'activePage' => '',
+'activePage' => 'configuracaogeral',
 ])
 @section('content')
 <div class="col-md-3 offset-md-9 fixed-top mt-3" style="z-index: 9999;">
@@ -52,6 +52,11 @@
   $(document).ready(function() {
     verificaCobraEntrega();
     $('#valorentrega').mask("#.##0,00", {reverse: true});
+  });
+
+  $('input[name="colorsidebar"]').on('change', function() {
+    console.log('teste')
+    $('input[name="colorsidebar"]').not(this).prop('checked', false);
   });
 
 </script>

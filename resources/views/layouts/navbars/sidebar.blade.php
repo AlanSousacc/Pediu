@@ -1,26 +1,27 @@
-<div class="sidebar" data-color="orange">
+@php $config = \App\Models\Configuracao::where('empresa_id', Auth::user()->empresa->id)->first(); @endphp
+
+<div class="sidebar" data-color="{{$config->colorsidebar}}">
   <!--
     Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
   -->
-  @php $config = \App\Models\Configuracao::where('empresa_id', Auth::user()->empresa->id)->first(); @endphp
   <div class="logo">
-    <img src="{{ Auth::user()->empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .Auth::user()->empresa->logo) }}" alt="" style="max-width: 100px; margin: 0 auto; display: inherit; border-radius: 100px">
     <a href="{{ route('home') }}" class="simple-text logo-normal text-lg-center">
-      {{ Auth::user()->empresa->fantasia }}
+      <img src="{{ Auth::user()->empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .Auth::user()->empresa->logo) }}" alt="Ir ao Dashboard" title="Ir ao Dashboard" style="max-width: 100px; margin: 0 auto; display: inherit; border-radius: 100px">
+      {{-- {{ Auth::user()->empresa->fantasia }} --}}
     </a>
-    <div class="row w-100">
-      <div class="col-md-12 text-center" style="background: #28a745; padding: 5px; margin-left: 15px; border-radius: 20px;">
-        <a href="{{route('catalogo', Auth::user()->empresa->slug)}}" target="_blank" class="text-white">Loja <i class="fa fa-store"></i></a>
+    <div class="row w-100 m-0">
+      <div class="col-md-12 text-center">
+        <a href="{{route('catalogo', Auth::user()->empresa->slug)}}" target="_blank" class="text-white">Visitar Loja <i class="fa fa-store"></i></a>
       </div>
     </div>
   </div>
   <div class="sidebar-wrapper" id="sidebar-wrapper">
     <ul class="nav">
       {{-- start pedidos --}}
-      <li class="active">
+      <li class="">
         <a data-toggle="collapse" href="#pedidos">
-          <i class="now-ui-icons shopping_shop" style="color: #f96332;"></i>
-          <p style="color: #f96332;">
+          <i class="now-ui-icons shopping_shop"></i>
+          <p>
             {{ __("Pedidos") }}
             <b class="caret"></b>
           </p>
@@ -327,9 +328,9 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse @if ($activePage == 'configuracoesgerais') show @endif" id="configuracoes">
+        <div class="collapse @if ($activePage == 'configuracaogeral') show @endif" id="configuracoes">
           <ul class="nav">
-            <li class="@if ($activePage == 'configuracoesgerais') active @endif">
+            <li class="@if ($activePage == 'configuracaogeral') active @endif">
               <a href="{{route('configuracao.create')}}">
                 <i class="fa fa-users-cog"></i>
                 <p> {{ __("Configurações Gerais") }} </p>

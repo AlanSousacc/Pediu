@@ -17,14 +17,15 @@
       <div class="card">
         <div class="card-header">
           <h4 class="card-title"> Novo Usuário</h4>
+          <h6>Preencha Todos os Campos a Seguir</h6>
         </div>
         <div class="card-body">
-          <form method="POST" action="{{ route('register') }}">
+          <form method="POST" action="{{ route('register') }}" autocomplete="off">
             @csrf
             <!--Begin input name -->
             @include('users.formUsers')
             <div class="card-footer ">
-              <button type="submit" class="btn btn-primary btn-round btn-lg">{{__('Cadastrar')}}</button>
+              <button type="submit" class="btn btn-primary btn-round">{{__('Cadastrar')}}</button>
             </div>
           </form>
         </div>
@@ -33,10 +34,13 @@
   </div>
 </div>
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script>
   $(document).ready(function() {
     demo.checkFullPageBackgroundImage();
   });
+
+  $('.telefone').mask('(00) 00000-0000');
 </script>
 @endpush
 @endsection

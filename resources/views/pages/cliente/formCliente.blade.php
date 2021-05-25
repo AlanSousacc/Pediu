@@ -97,8 +97,8 @@
     </div>
     <div class="col-md-4">
       <div class="form-group">
-        <label for="telefone">Telefone</label>
-        <input type="text" class="form-control telefone" id="telefone" name="telefone" value="{{ old('telefone')}}" placeholder="Ex. (99) 9999-9999">
+        <label for="telefone">Telefone*</label>
+        <input type="text" class="form-control telefone" id="telefone" name="telefone" value="{{ old('telefone')}}" placeholder="Ex. (99) 99999-9999" required>
         @include('alerts.feedback', ['field' => 'telefone'])
       </div>
     </div>

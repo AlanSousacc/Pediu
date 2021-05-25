@@ -85,3 +85,21 @@
     </div>
   </div>
 </div>
+
+<hr>
+<h4 class="mt-1">Personalização visual</h4>
+<span class="d-block mb-3">Escolha uma cor para personalizar o menu à esquerda</span>
+<div class="row">
+  <div class="col-md-12 my-2">
+    <input type="checkbox" name="colorsidebar" value="red" {{$config->colorsidebar == 'red' ?	'checked' : ''}}> <i class="fa fa-circle text-danger"></i> Vermelho
+  </div>
+  <div class="col-md-12 my-2">
+    <input type="checkbox" name="colorsidebar" value="yellow" {{$config->colorsidebar == 'yellow' ?	'checked' : ''}}> <i class="fa fa-circle text-warning"></i> Amarelo
+  </div>
+  <div class="col-md-12 my-2">
+    <input type="checkbox" name="colorsidebar" value="blue" {{$config->colorsidebar == 'blue' ?	'checked' : ''}}> <i class="fa fa-circle text-info"></i> Azul
+  </div>
+  <div class="col-md-12 my-2">
+    <input type="checkbox" name="colorsidebar" value="green" {{$config->colorsidebar == 'green' ?	'checked' : ''}}> <i class="fa fa-circle text-success"></i> Verde
+  </div>
+</div>

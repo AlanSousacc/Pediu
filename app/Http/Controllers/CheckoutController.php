@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\models\CartItems;
+use App\Models\CartItems;
 use App\Models\ComplementoItemCart;
 use App\Models\Configuracao;
 use App\Models\EnderecoUsers;
@@ -19,16 +19,17 @@ class CheckoutController extends Controller
   public function processaPedido(Request $request)
   {
     $data = $request->except('_token');
-
+    
     // if(isset($_POST['place-order-btn'])){
       $user_id      = Auth::id();
       $user         = User::find($user_id);
       $cookie_data  = stripslashes(Cookie::get('shopping_cart'));
       $cart_data    = json_decode($cookie_data, true);
 
-      if(count($cart_data) <= 0)
-        return redirect()->back()->with('error', 'O Pedido deve haver 1 ou mais itens!');
-
+      if(count($cart_data) <= 0){
+        $data = ['message' => 'O Pedido deve haver 1 ou mais itens!'];
+        return response()->json($data, 500);
+      }
 
       // ############ ENDEREÇO DE ENTREGA DO PEDIDO ############
       // caso o endereco de entrega seja o endereço padrão no cadastro pega o id do endereço.
@@ -36,23 +37,40 @@ class CheckoutController extends Controller
         $entrega = EnderecoUsers::where('user_id', $user_id)->where('empresa_id', $user->empresa_id)->where('principal', 1)->first()->id; //aqui eu obtenho o id do endereço de entrega padrão
       } else if($data['entrega'] == 'outroendereco'){
         if(isset($data['entrega_id']) && $data['entrega_id'] == 'novoendereco'){ //verifica se existe entrega id e se é um novo endereço.
+
+          if($data['novo-endereco'] == "")
+            return response()->json($data = ['message' => 'Para novos endereços o campo ENDEREÇO é obrigatório'], 500);
+          if($data['novo-numero']  == "")
+            return response()->json($data = ['message' => 'Para novos endereços o campo NÚMERO é obrigatório'], 500);
+          if($data['novo-bairro']  == "")
+            return response()->json($data = ['message' => 'Para novos endereços o campo BAIRRO é obrigatório'], 500);
+          if($data['nova-cidade']  == "")
+            return response()->json($data = ['message' => 'Para novos endereços o campo CIDADE é obrigatório'], 500);
+          if($data['novo-telefone']  == "")
+            return response()->json($data = ['message' => 'Para novos endereços o campo TELETONE é obrigatório'], 500);
+          
           // aqui ele cadastra um novo endereço na conta do usuário
-          $enduser = new EnderecoUsers();
+          $enduser             = new EnderecoUsers();
           $enduser->endereco   = $data['novo-endereco'];
           $enduser->numero     = $data['novo-numero'];
-          $enduser->bairro     = $data['nova-cidade'];
-          $enduser->cidade     = $data['novo-telefone'];
-          $enduser->telefone   = $data['telefone'];
+          $enduser->bairro     = $data['novo-bairro'];
+          $enduser->cidade     = $data['nova-cidade'];
+          $enduser->telefone   = $data['novo-telefone'];
           $enduser->principal  = 0;
           $enduser->user_id    = $user_id;
           $enduser->empresa_id = $user->empresa_id;
 
           $saved = $enduser->save();
-          if (!$saved)
-            return redirect()->back()->with('error', 'Falha ao salvar endereço de entrega!');
+
+          if (!$saved){
+            $data = ['message' => 'Falha ao salvar endereço de entrega!'];
+            return response()->json($data, 500);
+          }
+
           $entrega = $enduser->id;
         } else if(!isset($data['entrega_id'])) { //se não existir um entrega_id ele redireciona p pagina anterior pois é necessário informar um endereço novo ou existente na listagem ou padrão
-          return redirect()->back()->with('error', 'Você deve escolher um endereço para entrega, ou cadastrar um novo!');
+          $data = ['message' => 'Você deve escolher um endereço para entrega, ou cadastrar um novo!'];
+            return response()->json($data, 500);
         } else {
           $entrega = EnderecoUsers::where('user_id', $user_id)->where('id', $data['entrega_id'])->first()->id; //obtendo o id do endereço de entrega da listagem
         }

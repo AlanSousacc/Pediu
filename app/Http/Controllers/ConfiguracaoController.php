@@ -43,6 +43,7 @@ class ConfiguracaoController extends Controller
     $config->statusentregando   = $data['statusentregando'];
     $config->statusentregue     = $data['statusentregue'];
     $config->statuscancelado    = $data['statuscancelado'];
+    $config->colorsidebar       = $data['colorsidebar'];
 
     $save = $config != null ? $config->save() : $save = $this->repository->create($data);
 

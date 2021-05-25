@@ -198,9 +198,10 @@
             },
 
             error: function(response){
+              console.log(response.responseJSON.message)
               Swal.fire(
                 'Ops, algo deu errado!',
-                'Infelizmente houve um problema interno, e não conseguimos processar seu pedido. Código: ' + response.status,
+                response.responseJSON.message,
                 'error'
               )
             }

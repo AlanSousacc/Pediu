@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EmpresaRequest;
 use App\Http\Requests\RequestUpdateEmpresa;
 use Illuminate\Support\Str;
-use App\Models\{Cliente, Configuracao, Empresa, Licenca};
+use App\Models\{Cliente, Configuracao, Empresa, EnderecoUsers, Licenca};
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use Auth;
@@ -78,8 +78,6 @@ class EmpresaController extends Controller
     $savedconfig = $config->save();
     if (!$savedconfig)
       return redirect()->back()->with('error', 'Falha ao aplicar Configurações!');
-
-
     /*
     ao criar uma nova empresa sempre é criado um novo usuário
     com o email informado no cadastro e a senha é os 5 primeiros digitos do cnpj
@@ -95,6 +93,20 @@ class EmpresaController extends Controller
     $sendMail = $user->email;
 
     $saveuser = $user->save();
+
+    $endereco = new EnderecoUsers();
+    $endereco->cidade     = $data['cidade'];
+    $endereco->endereco   = $data['endereco'];
+    $endereco->numero     = $data['numero'];
+    $endereco->bairro     = $data['bairro'];
+    $endereco->telefone   = $data['telefone'];
+    $endereco->principal  = 1;
+    $endereco->user_id    = $user->id;
+    $endereco->empresa_id = $user->empresa->id;
+
+    $saveendereco = $endereco->save();
+    if (!$saveendereco)
+      return redirect()->back()->with('error', 'Falha ao aplicar o endereço deste usuário da nova empresa!');
 
     if ($saved || $saveuser){
       Mail::send('emails.novaEmpresaUsuario', $data, function($message) use ($sendMail){

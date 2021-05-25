@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\models\CartItems;
+use App\Models\CartItems;
 use App\Models\Complemento;
 use App\Models\ComplementoItemCart;
 use App\Models\Configuracao;
@@ -205,7 +205,7 @@ class CatalogoController extends Controller
   public function PedidoDetail($slug, $id, $pedido)
   {
     $totaladicional = 0; $totalprodutos = 0;
-
+    
     $empresa         = $this->empresa->where('slug', $slug)->first();
     $grupos          = $this->grupos->where('empresa_id', $empresa->id)->get();
     $produtos        = $this->produtos->where('empresa_id', $empresa->id)->get();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Models\EnderecoUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -27,23 +28,30 @@ class UserController extends Controller
   public function edit($id)
 	{
     $user = User::find($id);
-		return view('users.editar', compact('user'));
+    $endereco = EnderecoUsers::where('user_id', $id)->first();
+
+		return view('users.editar', compact('user', 'endereco'));
   }
 
   public function update(Request $request){
     $data = $request->except('_token');
 
     try{
-      $user = User::find($data['user_id']);
+      $user     = User::find($data['user_id']);
+      $endereco = EnderecoUsers::where('user_id', $data['user_id'])->where('principal', 1)->first();
 
       if (!$user)
-      throw new Exception("Nenhum usuário encontrado");
+        throw new Exception("Nenhum usuário encontrado");
+      
+      if (!$endereco)
+        throw new Exception("Endereço de usuário foi encontrado");
 
       // aqui então faz todo o tratamento e seta o que foi alterado;
-      $user->name     = $data['name'];
-      $user->email    = $data['email'];
-      $user->telefone = $data['telefone'];
-      $user->password = bcrypt($data['password']);
+      $endereco->endereco = $data['endereco'];
+      $endereco->cidade   = $data['cidade'];
+      $endereco->telefone = $data['telefone'];
+      $endereco->bairro   = $data['bairro'];
+      $endereco->numero   = $data['numero'];
 
     } catch (Exception $e) {
       return redirect()->back()->with('error', $e->getMessage());
@@ -54,15 +62,16 @@ class UserController extends Controller
     try{
       DB::beginTransaction();
 
-      $saved = $user->save();
-      if (!$saved){
+      $saveduser     = $user->save();
+      $savedendereco = $endereco->save();
+
+      if (!$saveduser && !$savedendereco){
         throw new Exception('Falha ao salvar usuário!');
       }
       DB::commit();
-      // se chegou aqui é pq deu tudo certo
       return redirect()->back()->with('success', 'Usuário #' . $user->id . ' alterado com sucesso.');
+
     } catch (Exception $e) {
-      // se deu pau ao salvar no banco de dados, faz rollback de tudo e retorna erro
       DB::rollBack();
       return redirect()->back()->with('error', $e->getMessage());
     }

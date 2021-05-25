@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Configuracao extends Model
 {
   protected $table = "configuracaoes";
-  protected $fillable = ['controlaentrega', 'empresa_id', 'valorentrega', 'statuscancelado', 'statusentregue', 'statusentregando', 'statuspreparando', 'statusrecebido', 'tempominimoentrega', 'controlepedidosbalcao'];
+  protected $fillable = ['controlaentrega', 'empresa_id', 'valorentrega', 'statuscancelado', 'statusentregue', 'statusentregando', 'statuspreparando',
+   'statusrecebido', 'tempominimoentrega', 'controlepedidosbalcao', 'colorsidebar'
+  ];
 
 }
