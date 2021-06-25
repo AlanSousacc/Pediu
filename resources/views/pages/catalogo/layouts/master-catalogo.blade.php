@@ -214,7 +214,7 @@
             @foreach ($empresa->grupos as $item)
             <li class="nav-item text-center" style="display: inline-block; vertical-align: top;">
               <a class="nav-link active" href="{{ route('catalogoporgrupo', array($empresa->slug, $item->descricao)) }}">
-              <img src="{{url("storage/" .$item->image)}}" alt="{{ $empresa->razao}}" style="height: 150px; width: 150px; border-radius: 100px; padding: 5px;"/> <br>
+              <img src="{{url("storage/" .$item->image)}}" alt="{{ $empresa->razao}}" style="height: 75px; width: 75px; border-radius: 100px; padding: 5px;"/> <br>
               {{$item->descricao}}
               </a>
             </li>
@@ -223,7 +223,6 @@
         </div>
       </div>
     </nav>
-
 
     @yield('content')
 

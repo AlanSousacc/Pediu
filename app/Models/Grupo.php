@@ -13,6 +13,6 @@ class Grupo extends Model
 	}
 
   public function empresa(){
-		return $this->belongsTo('App\Models\Empresas');
+		return $this->belongsTo('App\Models\Empresa');
   }
 }

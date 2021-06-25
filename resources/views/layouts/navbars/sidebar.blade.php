@@ -1,9 +1,6 @@
 @php $config = \App\Models\Configuracao::where('empresa_id', Auth::user()->empresa->id)->first(); @endphp
 
 <div class="sidebar" data-color="{{$config->colorsidebar}}">
-  <!--
-    Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
-  -->
   <div class="logo">
     <a href="{{ route('home') }}" class="simple-text logo-normal text-lg-center">
       <img src="{{ Auth::user()->empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .Auth::user()->empresa->logo) }}" alt="Ir ao Dashboard" title="Ir ao Dashboard" style="max-width: 100px; margin: 0 auto; display: inherit; border-radius: 100px">
@@ -28,8 +25,8 @@
         </a>
         <div class="collapse @if ($activePage == 'editarpedido' || $activePage == 'listagemPedidosLoja' || $activePage == 'detalhepedido' || $activePage == 'novopedido' || $activePage == 'listagemPedidos') show @endif" id="pedidos">
           <ul class="nav">
-            <li class="active">
-              <a href="{{ route('pedidosloja.index') }}" style="background: #2ca8ff; color: #fff">
+            <li class="">
+              <a href="{{ route('pedidosloja.index') }}">
                 <i class="fa fa-store-alt text-white"></i>
                 <p> {{ __("Pedidos da Loja") }} </p>
               </a>
@@ -44,14 +41,14 @@
             @if ($config->controlepedidosbalcao == 1)
             <li class="@if ($activePage == 'novopedido') active @endif">
               <a href="{{ route('pedido.create') }}">
-                <i class="now-ui-icons shopping_bag-16"></i>
+                <i class="fa fa-hard-hat"></i>
                 <p> {{ __("Novo Pedido") }} </p>
               </a>
             </li>
             <li class="@if ($activePage == 'listagemPedidos') active @endif">
               <a href="{{ route('pedido.index') }}">
                 <i class="ionicons ion-ios-list-outline"></i>
-                <p> {{ __("Listagem Pedidos") }} </p>
+                <p> {{ __("Listagem Pedidos Balcão") }} </p>
               </a>
             </li>
             @if ($activePage == 'detalhepedido')
@@ -279,6 +276,58 @@
         </div>
       </li>
       {{-- end usuários --}}
+
+      {{-- financeiro --}}
+      <li>
+        <a data-toggle="collapse" href="#financeiro">
+          <i class="fa fa-donate"></i>
+          <p>
+            {{ __("Financeiro") }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse @if ($activePage == 'pagamentosdia' || $activePage == 'detalhefinanceiro' || $activePage == 'pagamentosgeral' || $activePage == 'recebimentosgeral' || $activePage == 'recebimentodia') show @endif" id="financeiro">
+          <ul class="nav">
+            <li class="@if ($activePage == 'pagamentosgeral') active @endif">
+              <a href="{{route('movimentacao.pagamentos')}}">
+                <i class="fa fa-minus-circle"></i>
+                <p> {{ __("Pagamentos") }} </p>
+              </a>
+            </li>
+            @if ($activePage == 'pagamentosdia')
+            <li class="@if ($activePage == 'pagamentosdia') active @endif">
+              <a href="{{route('movimentacao.pagamentos.dia')}}">
+                <i class="fa fa-sort-numeric-down"></i>
+                <p> {{ __("Pagamentos do Dia") }} </p>
+              </a>
+            </li>
+            @endif
+            <li class="@if ($activePage == 'recebimentosgeral') active @endif">
+              <a href="{{route('movimentacao.recebimentos')}}">
+                <i class="fa fa-plus-circle"></i>
+                <p> {{ __("Recebimentos") }} </p>
+              </a>
+            </li>
+            @if ($activePage == 'recebimentodia')
+            <li class="@if ($activePage == 'recebimentodia') active @endif">
+              <a href="{{route('movimentacao.recebimentos.dia')}}">
+                <i class="fa fa-sort-numeric-up"></i>
+                <p> {{ __("Recebimentos do Dia") }} </p>
+              </a>
+            </li>
+            @endif
+            @if ($activePage == 'detalhefinanceiro')
+            <li class="@if ($activePage == 'detalhefinanceiro') active @endif">
+              <a href="#">
+                <i class="fa fa-clipboard-list"></i>
+                <p> {{ __("Detalhe da Movimentação") }} </p>
+              </a>
+            </li>
+            @endif
+          </ul>
+        </div>
+      </li>
+      {{-- end financeiro --}}
 
       {{-- Administrativo --}}
       @if ((Auth::user()->isAdmin == 1) && (Auth::user()->profile == 'Administrador'))

@@ -137,7 +137,7 @@
       <div class="col-md-12">
         <select id="complemento_id" name="complemento_id" class="form-control js-example-basic-single">
           @foreach($complementos as $item)
-          <option value="{{ $item->id }}">{!! $item->id !!} - {!! $item->descricao !!}</option>
+          <option value="{{ $item->id }}">{!! $item->descricao !!}</option>
           @endforeach
         </select>
       </div>

@@ -5,55 +5,23 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Receber Valor</h4>
       </div>
-      <form autocomplete="off" action="{{route('movimentacao.receber', $item->id)}}" method="get">
+      <form autocomplete="off" action="{{route('recebebimento.cliente', $item->id)}}" method="get">
 				{{csrf_field()}}
         <div class="modal-body">
           <input type="hidden" name="movimentacaoid" id="movimentacaoid" value="">
           <input type="hidden" name="restante" id="restante" value="">
-          <div class="row">
-            <div class="col-md-12">
-              <label for="valorrecebido" class="ml-4">Valor Total</label>
-              <div class="input-group col">
-                <div class="input-group-prepend">
-                  <span class="input-group-text sifra">R$</span>
-                </div>
-                <input type="text" class="form-control text-center" id="valtotal" name="valtotal" value="" readonly>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <label for="valorrecebido" class="ml-4">Valor Recebido</label>
-              <div class="input-group col">
-                <div class="input-group-prepend">
-                  <span class="input-group-text sifra">R$</span>
-                </div>
-                <input type="text" class="form-control text-center" id="valorrecebido" name="valorrecebido" value="" readonly>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <label for="valorpendente" class="ml-4">Valor a Receber</label>
-              <div class="input-group col">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">R$</span>
-                </div>
-                <input type="text" class="form-control text-center" id="valorpendente" name="valorpendente" value="" aria-describedby="valorpendente" required>
-                <div id="valorpendente" class="invalid-feedback">
-                  Valor a receber informado é maior que o valor total, ou maior que o valor restante!
-                </div>
-              </div>
-            </div>
-          </div>
-
+          @include('pages.financeiro.formReceberPagar')
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success receber-movimentacao">Receber</button>
-          <button type="button" class="btn btn-danger mr-4" data-dismiss="modal">Cancelar</button>
-        </div>
+        <div class="modal-footer d-block px-0">
+					<div class="row mx-0">
+						<div class="col-md-6 mb-1">
+							<button type="submit" class="btn btn-success receber-movimentacao w-100"><i class="fa fa-check-circle"></i> Receber</button>
+						</div>
+						<div class="col-md-6 mb-1">
+							<button type="button" class="btn btn-default w-100" data-dismiss="modal"><i class="fa fa-times-circle"></i> Cancelar</button>
+						</div>
+					</div>
+				</div>
       </form>
     </div>
   </div>

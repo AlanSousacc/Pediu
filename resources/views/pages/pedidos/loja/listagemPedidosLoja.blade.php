@@ -35,7 +35,7 @@
           </div>
         </nav>
         <div class="card-header">
-          <h4 class="card-title"> Pedidos</h4>
+          <h4 class="card-title"> Pedidos da Loja</h4>
           <small>* Mantenha essa página aberta! A cada minuto ela te atualiza sobre novos pedidos!</small>
         </div>
         <div class="card-body">
@@ -114,7 +114,6 @@
   </div>
   @push('scripts')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
   <script>
     $(document).ready(function () {
       // envia pelo whatsapp caso clique em enviar
@@ -267,7 +266,6 @@
         window.location.href = '{{route('filtro.por.dia')}}' + '/' +  dia;
       },
       error: function(response){
-
       }
     });
   });

@@ -112,7 +112,7 @@
         <div class="col-sm-6 mb-4 mb-sm-0">
           <h2 class="h5 pb-2">Pagamento na Entrega</h2>
           <div class="custom-control custom-radio custom-control-inline mb-3">
-            <input class="custom-control-input" type="radio" name="formapagamento" value="dinheiro" checked id="dinheiro">
+            <input class="custom-control-input" type="radio" name="formapagamento" value="Dinheiro" checked id="dinheiro">
             <label class="custom-control-label" for="dinheiro">Pagar em Dinheiro</label>
           </div>
           <div class="d-flex align-items-center divtrocopara">
@@ -124,7 +124,7 @@
           </div>
           <hr class="my-4">
           <div class="custom-control custom-radio custom-control-inline pb-4">
-            <input class="custom-control-input" type="radio" name="formapagamento" value="cartao" id="cartao">
+            <input class="custom-control-input" type="radio" name="formapagamento" value="Cartão de Crédito" id="cartao">
             <label class="custom-control-label" for="cartao">Pagar com Cartão:&nbsp;&nbsp;&nbsp;<img class="d-inline-block align-middle" src="{{asset('assets/img/cards.png')}}" style="width: 187px;" alt="Cerdit Cards"></label>
           </div>
           <button class="btn btn-primary btn-block mt-3 finalizar-pedido" type="button">Finalizar Pedido</button>

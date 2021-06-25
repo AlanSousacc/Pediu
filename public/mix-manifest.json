@@ -9,17 +9,18 @@
     "/js/catalogo/smooth-scroll.polyfills.min.js": "/js/catalogo/smooth-scroll.polyfills.min.js",
     "/js/catalogo/theme.min.js": "/js/catalogo/theme.min.js",
     "/js/catalogo/tiny-slider.js": "/js/catalogo/tiny-slider.js",
-    "/js/cliente/cliente.js": "/js/cliente/cliente.js",
     "/js/complementos/complementos.js": "/js/complementos/complementos.js",
     "/js/contato/contato.js": "/js/contato/contato.js",
     "/js/dashboard/dashboard.js": "/js/dashboard/dashboard.js",
     "/js/empresas/empresas.js": "/js/empresas/empresas.js",
     "/js/enderecos/entrega.js": "/js/enderecos/entrega.js",
     "/js/entregadores/entregadores.js": "/js/entregadores/entregadores.js",
+    "/js/financeiro/financeiro.js": "/js/financeiro/financeiro.js",
     "/js/grupos/grupos.js": "/js/grupos/grupos.js",
     "/js/licenca/licenca.js": "/js/licenca/licenca.js",
     "/js/main/main.js": "/js/main/main.js",
     "/js/pedidos/pedidos.js": "/js/pedidos/pedidos.js",
     "/js/produtos/produtos.js": "/js/produtos/produtos.js",
-    "/js/usuarios/usuarios.js": "/js/usuarios/usuarios.js"
+    "/js/usuarios/usuarios.js": "/js/usuarios/usuarios.js",
+    "/js/vue/app.js": "/js/vue/app.js"
 }

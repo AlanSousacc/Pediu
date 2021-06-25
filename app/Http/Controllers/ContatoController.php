@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Contato;
 use App\Models\Endereco;
+use App\Models\FluxoMovimentacao;
 use App\Models\Movimentacao;
 use Exception;
 use Auth;
@@ -23,17 +24,40 @@ class ContatoController extends Controller
 
   public function index()
   {
-    $consulta = $this->contato->where('empresa_id', Auth::user()->empresa_id)->paginate();
+    $consulta = $this->contato->where('empresa_id', Auth::user()->empresa_id)->with('entregas')->paginate();
 
     return view('pages.contatos.listagemContato', compact('consulta'));
   }
 
+  public function getContato()
+	{
+    $contatos = $this->contato->where('empresa_id', Auth::user()->empresa_id)->where('ativo', 1)->get();
+
+		return response()->json([
+      'data' => [
+        'contatos' => $contatos
+      ]
+    ]);
+	}
+
+  public function getEnderecoCliente($id)
+	{
+    $enderecos = $this->endereco->where('empresa_id', Auth::user()->empresa_id)->where('contato_id', $id)->get();
+
+		return response()->json([
+      'data' => [
+        'enderecos' => $enderecos
+      ]
+    ]);
+	}
+
   public function listaFinanceiroContato($id)
   {
     $contato      = $this->contato->findOrFail($id);
-    $movimentacao = Movimentacao::where('contato_id', $id)->paginate();
+    $movimentacao = Movimentacao::where('contato_id', $id)->with('pedido','contato')->paginate();
+    $fluxomovi    = FluxoMovimentacao::where('empresa_id', Auth::user()->empresa_id)->get();
 
-    return view('pages.contatos.listagemFinanceiroContato', compact('contato', 'movimentacao'));
+    return view('pages.contatos.listagemFinanceiroContato', compact('contato', 'movimentacao', 'fluxomovi'));
   }
 
   public function create()

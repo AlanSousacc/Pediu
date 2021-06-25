@@ -24,7 +24,6 @@ class CreatePedidosTable extends Migration
       $table->unsignedBigInteger('contato_id');
       $table->unsignedBigInteger('endereco_id');
       $table->unsignedBigInteger('entregador_id')->nullable();
-      $table->integer('statusentrega');
       $table->double('valortroco', 5,2)->nullable();
       $table->timestamps();
 

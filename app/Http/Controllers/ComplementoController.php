@@ -49,6 +49,27 @@ class ComplementoController extends Controller
     return view('pages.complementos.editar', compact('complemento'));
   }
 
+  public function cadastrar(Request $request)
+  {
+    $data = $request->all();
+
+    $complementos = $this->complemento->where('descricao', $data['descricao'])->count();
+
+    if($complementos != 0)
+      return response()->json(['resposta' => [ 'warning' => 'Já esite um complemento com este nome!']]);
+
+    $data['empresa_id'] = Auth::user()->empresa_id;
+
+    $data['preco'] = str_replace (',', '.', str_replace ('.', '', $data['preco']));
+
+    $complemento = $this->complemento->create($data);
+
+    if (!$complemento)
+      return response()->json(['resposta' => [ 'error' => 'Falha ao salvar este Complemento!.']]);
+      
+    return response()->json(['resposta' => [ 'success' => 'Complemento criado com sucesso!']]);
+  }
+
   public function update(Request $request, $id)
   {
     if (!$complemento = $this->complemento->find($id))

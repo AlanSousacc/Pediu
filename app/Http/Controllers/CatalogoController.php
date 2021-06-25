@@ -23,6 +23,7 @@ class CatalogoController extends Controller
   private $empresa, $produtos, $grupos, $config;
   private $totalprodutos  = 0;
   private $totaladicional = 0;
+
   public function __construct(Empresa $empresa, Grupo $grupos, Produto $produtos, Configuracao $configuracao)
   {
     $this->empresa  = $empresa;
@@ -35,7 +36,6 @@ class CatalogoController extends Controller
   {
     $empresa  = $this->empresa->where('slug', $slug)->first();
     $produto  = $this->produtos::where('empresa_id', $empresa->id)->where('id', $produtoid)->first()->$tamanho;
-    // dd($produtoid);
 
     return response()->json([
       "data" => $produto
@@ -121,7 +121,6 @@ class CatalogoController extends Controller
 
     if($cart_data){
       foreach ($cart_data as $data){
-        // dd($data);
         if ($data['complem_produ'] != null){
           foreach ($data['complem_produ'] as $item){
             foreach ($complementos->where('id', $item) as $complemento){

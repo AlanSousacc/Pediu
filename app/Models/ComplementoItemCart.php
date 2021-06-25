@@ -25,5 +25,4 @@ class ComplementoItemCart extends Model
   {
     return $this->belongsTo(CartItems::class, 'cartitems_id', 'id');
   }
-
 }

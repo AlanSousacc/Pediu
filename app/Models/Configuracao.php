@@ -8,7 +8,7 @@ class Configuracao extends Model
 {
   protected $table = "configuracaoes";
   protected $fillable = ['controlaentrega', 'empresa_id', 'valorentrega', 'statuscancelado', 'statusentregue', 'statusentregando', 'statuspreparando',
-   'statusrecebido', 'tempominimoentrega', 'controlepedidosbalcao', 'colorsidebar'
+   'statusrecebido', 'tempominimoentrega', 'controlepedidosbalcao', 'colorsidebar', 'maiorprecomeioameio'
   ];
 
 }

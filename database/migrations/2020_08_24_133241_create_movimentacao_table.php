@@ -22,7 +22,7 @@ class CreateMovimentacaoTable extends Migration
       $table->double('valorpendente', 10, 2);
       $table->boolean('status');
       $table->unsignedBigInteger('pedido_id')->nullable();
-      $table->unsignedBigInteger('contato_id');
+      $table->unsignedBigInteger('contato_id')->nullable();
       $table->timestamps();
 
       $table->foreign('contato_id')->references('id')->on('contatos')->onDelete('cascade');

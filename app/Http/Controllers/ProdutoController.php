@@ -59,6 +59,7 @@ class ProdutoController extends Controller
     $produto->empresa_id        = Auth::user()->empresa_id;
     $produto->composicao        = $data['composicao'];
     $produto->saboresdiversos   = $data['saboresdiversos'];
+
     if($data['controlatamanho'] == 1){
       $produto->precopequeno    = str_replace (',', '.', str_replace ('.', '', $data['precopequeno']));
       $produto->precomedio      = str_replace (',', '.', str_replace ('.', '', $data['precomedio']));
@@ -72,6 +73,7 @@ class ProdutoController extends Controller
       $produto->controlatamanho = 0;
       $produto->precovenda      = str_replace (',', '.', str_replace ('.', '', $data['precovenda']));
     }
+    
     $produto->precocusto        = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
     $produto->status            = $data['status'];
 
@@ -133,6 +135,39 @@ class ProdutoController extends Controller
     ]);
 	}
 
+  public function searchItem($item = null)
+	{
+    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->with('complementos')->where('descricao', 'like', '%'.$item.'%')->get();
+
+		return response()->json([
+      'data' => [
+        'produto' => $produto
+      ]
+    ]);
+	}
+
+  public function getItemFromGroup($id)
+	{
+    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->where('grupo_id', $id)->get();
+
+		return response()->json([
+      'data' => [
+        'produto' => $produto
+      ]
+    ]);
+	}
+
+  public function getItemsPizza()
+	{
+    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->where('grupo_id', 1)->get();
+
+		return response()->json([
+      'data' => [
+        'produto' => $produto
+      ]
+    ]);
+	}
+
   public function update(ProdutoRequest $request, $id)
   {
     $data = $request->except('_token');
@@ -162,12 +197,9 @@ class ProdutoController extends Controller
     $produto->precocusto = str_replace (',', '.', str_replace ('.', '', $data['precocusto']));
     $produto->status     = $data['status'];
 
-    if(isset($request->foto)){
+    if($request->hasFile('foto') && $request->foto->isValid()){
+      Storage::delete($produto->foto);
       $produto->foto = $request->foto->store("img/".Auth::user()->empresa->slug. "/fotosProdutos");
-    } else if($data['carregafoto'] != null){
-      $produto->foto = $data['carregafoto'];
-    } else {
-      $produto->foto = 'img/logos/default.png';
     }
 
     $saved = $produto->save();

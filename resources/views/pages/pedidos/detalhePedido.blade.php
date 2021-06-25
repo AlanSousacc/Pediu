@@ -55,10 +55,20 @@
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="form-group">
-                        <label class="col ml-2">Status do Pedido</label>
-                        @if ($pedido->statusentrega == 0)
-                        <input type="text" class="form-control text-warning" value="Pedido Processado">
+                      <div class="form-group w-100">
+                        <label class="col text-center">Status do Pedido</label>
+                        @if ($pedido->statuspedido == 0)
+                        <span class="text-light w-100 d-block text-center bg-warning p-1 rounded">Pendente</span>
+                        @elseif($pedido->statuspedido == 1)
+                        <span class="text-light w-100 d-block text-center bg-info p-1 rounded">Aprovado</span>
+                        @elseif($pedido->statuspedido == 2)
+                        <span class="text-light w-100 d-block text-center bg-secondary p-1 rounded">Preparando</span>
+                        @elseif($pedido->statuspedido == 3)
+                        <span class="text-light w-100 d-block text-center bg-dark p-1 rounded">Saiu para Entrega</span>
+                        @elseif($pedido->statuspedido == 4)
+                        <span class="text-light w-100 d-block text-center bg-success p-1 rounded">Entregue</span>
+                        @elseif($pedido->statuspedido == 5)
+                        <span class="text-light w-100 d-block text-center bg-danger p-1 rounded">Cancelado</span>
                         @endif
                       </div>
                     </div>
@@ -126,25 +136,37 @@
                     <div class="col-md-12">
                       <div class="table-responsive" style="overflow: initial!important;">
                         <table class="table">
-                          <thead class=" text-primary">
-                            <th class="text-center">#ID</th>
+                          <thead class="text-primary">
                             <th class="text-center">Descrição</th>
+                            <th class="text-center">Obs.</th>
+                            <th class="text-center">Adicionais</th>
+                            <th class="text-center">Sabores</th>
                             <th class="text-center">Qtde</th>
-                            <th class="text-center">Vlr. Unitário</th>
-                            <th class="text-center">Vlr. Total</th>
+                            <th class="text-center">SubTotal</th>
+                            <th class="text-center">Total</th>
                           </thead>
                           <tbody>
-                            @foreach ($pedido->produtos as $item)
-                            <tr>
-                              <td class="text-center">{{$item->id}}</td>
-                              <td class="text-center">{{$item->descricao}}
-                                @if ($item->pivot->obsitem != null)
-                                <br><small class="obs-item">{{$item->pivot->obsitem}}</small></td>
-                                @endif
+                            @foreach ($pedido->itenspedidos as $item)
+                            <tr style="font-size: 16px;">
+                              <td class="text-center">{{$item->produtos->descricao}}</td>
+                              <td class="text-center">{{$item->obsitem}}</td>
+                              <td class="text-center">
+                                @foreach ($pedido->complementositenspedido as $adicional)
+                                @if($adicional->pedidoproduto_id == $item->id)
+                                  <span class="bg-primary text-white p-1 rounded"> {{$adicional->complemento->descricao}}</span>
+                                  @endif
+                                @endforeach
                               </td>
-                              <td class="text-center">{{$item->pivot->qtde}}</td>
-                              <td class="text-center">R$ {{number_format($item->pivot->prvenda, 2, ',', '.')}}</td>
-                              <td class="text-center">R$ {{number_format($item->pivot->prvenda * $item->pivot->qtde, 2, ',', '.')}}</td>
+                              <td class="text-center">
+                                @foreach ($pedido->meioameioitempedido as $meioameio)
+                                @if($meioameio->pedidoproduto_id == $item->id)
+                                  <span class="px-1">{{$meioameio->produto->descricao}}; </span>
+                                  @endif
+                                @endforeach
+                              </td>
+                              <td class="text-center">{{$item->qtde}}</td>
+                              <td class="text-center">R$ {{number_format($item->prvenda, 2, ',', '.')}}</td>
+                              <td class="text-center">R$ {{number_format($item->prvenda * $item->qtde, 2, ',', '.')}}</td>
                             </tr>
                             @endforeach
                           </tbody>
@@ -163,12 +185,29 @@
                         <input type="text" disabled class="form-control" value="{{isset($pedido) ? $pedido->forma_pagamento : ''}}" >
                       </div>
                     </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="col ml-2">Local de Pagamento</label>
+                        <input type="text" disabled class="form-control" value="{{isset($pedido) ? $pedido->local_pagamento : ''}}" >
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <label class="col ml-2">Taxa de Entrega</label>
+                      <div class="input-group ">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">R$</span>
+                        </div>
+                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? $pedido->taxaentrega : '', 2, ',', '.')}}">
+                      </div>
+                    </div>
                   </div>
 
                   <div class="row">
                     <div class="col-md-3">
                       <label class="col ml-2">Desconto</label>
-                      <div class="input-group col">
+                      <div class="input-group ">
                         <div class="input-group-prepend">
                           <span class="input-group-text">R$</span>
                         </div>
@@ -178,17 +217,17 @@
 
                     <div class="col-md-3">
                       <label class="col ml-2">Sub Total</label>
-                      <div class="input-group col">
+                      <div class="input-group ">
                         <div class="input-group-prepend">
                           <span class="input-group-text">R$</span>
                         </div>
-                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? $pedido->total : '', 2, ',', '.')}}">
+                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? $pedido->subtotal : '', 2, ',', '.')}}">
                       </div>
                     </div>
 
                     <div class="col-md-3">
                       <label class="col ml-2">Levar Troco</label>
-                      <div class="input-group col">
+                      <div class="input-group ">
                         <div class="input-group-prepend">
                           <span class="input-group-text">R$</span>
                         </div>
@@ -198,20 +237,18 @@
 
                     <div class="col-md-3">
                       <label class="col ml-2">Total</label>
-                      <div class="input-group col">
+                      <div class="input-group ">
                         <div class="input-group-prepend">
                           <span class="input-group-text">R$</span>
                         </div>
-                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? $pedido->total - $pedido->desconto : '', 2, ',', '.')}}">
+                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? ($pedido->total) - $pedido->desconto : '', 2, ',', '.')}}">
                       </div>
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
-
         </div>
         <div class="card-footer text-right">
           <a href="{{route('imprimir.pedido', $pedido->id)}}" target="_blank" class="btn btn-success btn-round"><i class="ionicons ion-printer"></i> Imprimir Pedido</a>

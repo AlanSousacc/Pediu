@@ -19,6 +19,15 @@ class ConfiguracaoController extends Controller
     return view('pages.configuracoes.configuracao', compact('config'));
   }
 
+  public function getConfigEmpresa()
+  {
+    $config = $this->repository::where('empresa_id', Auth::user()->empresa_id)->first();
+
+    return response()->json([
+      'config' => $config
+    ]);
+  }
+
   public function update(Request $request, $id)
   {
     $data = $request->except('_token');
@@ -32,6 +41,8 @@ class ConfiguracaoController extends Controller
       $data['valorentrega'] = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
     } else {
       $config->controlaentrega = isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
+      $config->maiorprecomeioameio = isset($data['maiorprecomeioameio']) && $data['maiorprecomeioameio'] == 'on' ? 1 : 0;
+
       $config->controlepedidosbalcao = isset($data['controlepedidosbalcao']) && $data['controlepedidosbalcao'] == 'on' ? 1 : 0;
       $config->valorentrega = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
       $config->empresa_id = $user;

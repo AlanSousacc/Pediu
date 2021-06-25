@@ -1,11 +1,11 @@
 <div id="creategrupo" class="modal fade bd-example-modal-lg text-primary" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header bg-primary" style="text-align: center; display: inline;">
 				<button type="button" aria-hidden="true" data-dismiss="alert" class="close">
 					<i class="now-ui-icons ui-1_simple-remove" style="color: #fff"></i>
 			</button>
-				<h4 class="modal-title text-center" style="color:#fff">Cadastro de Grupo</h4>
+				<h4 class="modal-title text-center m-0" style="color:#fff">Cadastro de Grupo</h4>
 			</div>
 			<form action="{{route('grupo.store')}}" method="post" autocomplete="off" enctype="multipart/form-data">
         {{csrf_field()}}

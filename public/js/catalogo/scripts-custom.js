@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -131,30 +131,7 @@ $(document).ready(function () {
       }
     });
   });
-}); // $(document).ready(function () {
-//   cartload();
-// });
-// function cartload(){
-//   $.ajaxSetup({
-//     headers: {
-//       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//     }
-//   });
-//   $.ajax({
-//     url: '/load-cart-data',
-//     method: "GET",
-//     success: function (response) {
-//       console.log(response)
-//       $('.navbar-tool-label').html('');
-//       $('.cz-handheld-toolbar-icon .carrinho').html('');
-//       var parsed = jQuery.parseJSON(response)
-//       var value = parsed; //Single Data Viewing
-//       $('.navbar-tool-label').append($('<span class="badge badge-pill red">'+ value['totalcart'] +'</span>'));
-//       $('.cz-handheld-toolbar-icon .carrinho').append($('<span class="badge badge-pill red ml-1">'+ value['totalcart'] +'</span>'));
-//     }
-//   });
-// }
-
+});
 $(document).ready(function () {
   $('.increment-btn').click(function (e) {
     e.preventDefault();
@@ -346,7 +323,7 @@ $(document).ready(function () {
 
 /***/ }),
 
-/***/ 18:
+/***/ 17:
 /*!*******************************************************!*\
   !*** multi ./resources/js/catalogo/scripts-custom.js ***!
   \*******************************************************/

@@ -14,7 +14,16 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
   // movimentacao
   Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
     Route::get('movimentacao/baixar/{id}', 'MovimentacaoController@baixarMovimentacao')->name('movimentacao.baixar');
-    Route::get('movimentacao/receber/{id}', 'MovimentacaoController@receber')->name('movimentacao.receber');
+    Route::get('recebebimento-cliente/{id}', 'MovimentacaoController@movimentar')->name('recebebimento.cliente');
+    Route::get('movimentar/{id}', 'MovimentacaoController@movimentar')->name('movimentar');
+    Route::get('detalhe-movimentacao/{id}', 'MovimentacaoController@detalhe')->name('detalhe.movimentacao');
+    Route::post('movimentacao-caixa', 'MovimentacaoController@movimentar')->name('movimentacao.caixa');
+    Route::get('movimentacoes/pagamentos/dia', 'MovimentacaoController@pagamentosDia')->name('movimentacao.pagamentos.dia');
+    Route::get('movimentacao/{tipo}', 'MovimentacaoController@show')->name('movimentacao.show');
+    Route::get('movimentacoes/recebimentos/dia', 'MovimentacaoController@recebimentosDia')->name('movimentacao.recebimentos.dia');
+    Route::get('movimentacoes/recebimentos', 'MovimentacaoController@movimentacoesrecebimentos')->name('movimentacao.recebimentos');
+    Route::get('movimentacoes/pagamentos', 'MovimentacaoController@movimentacoespagamentos')->name('movimentacao.pagamentos');
+    Route::get('caixa', 'MovimentacaoController@caixa')->name('caixa');
 
     // users
     Route::resource('user', 'UserController', ['except' => ['show']]);
@@ -25,12 +34,18 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
     // pedido
     Route::resource('pedido', 'PedidoController');
     Route::post('finalizar-pedido', 'PedidoController@store')->name('store.pedido');
-    Route::get('pedido/detalhe/{id}', 'PedidoController@detalhePedido')->name('pedido.detalhe');
+    Route::get('editar/pedido/{id?}', 'PedidoController@edit')->name('editar.pedido');
+    Route::get('pedido/detalhe/{id?}', 'PedidoController@detalhePedido')->name('pedido.detalhe');
     Route::get('pedido/status/{id}', 'PedidoController@aplicarStatus')->name('pedido.status');
     Route::any('imprimir/pedido/{id}', 'PedidoController@print')->name('imprimir.pedido');
     Route::any('imprimir/pedido/venda/{id?}', 'PedidoController@imprimirPedido')->name('imprimir.pedido.venda');
-    Route::any('resumo/periodo', 'PedidoController@resumoPeriodo')->name('pedidos.resumo.periodo');
+    Route::post('processa-pedido-balcao', 'PedidoController@processaPedidoBalcao')->name('processa.pedido.balcao');
+    Route::get('processa-status-pedido/{id?}', 'PedidoController@aplicarStatusBalcao')->name('pedido.status.balcao');
+    Route::get('pedidos-balcao/status/{status}', 'PedidoController@filterstatus')->name('pedidosbalcao.filterstatus');
+    Route::any('filtro-dia-balcao/{dia?}', 'PedidoController@filtrodia')->name('filtro.por.dia.balcao');
+    Route::get('editar-pedidos/{id?}', 'PedidoController@editar')->name('edit.pedido');
 
+    // dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('home');
     Route::get('/vendas-balcao-mensal', 'DashboardController@vendasBalcaoMensal')->name('vendas.balcao.mensal');
     Route::get('/vendas-loja-mensal', 'DashboardController@vendasLojaMensal')->name('vendas.loja.mensal');
@@ -49,6 +64,9 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
     Route::get('produto-pedido-json/{id?}', 'ProdutoController@returnProdutoPedido')->name('busca.produtopedido');
     Route::get('produto-complementos-json/{id?}', 'ProdutoController@returnProdutoComplementos')->name('busca.complementosproduto');
     Route::get('produto-pedido/{id?}', 'ProdutoController@buscaProdutoPedido')->name('busca.produto.pedido');
+    Route::get('search-item/{item?}', 'ProdutoController@searchItem')->name('search.item');
+    Route::get('get-item-from-group/{id?}', 'ProdutoController@getItemFromGroup')->name('get.item.from.group');
+    Route::get('get-items-pizza', 'ProdutoController@getItemsPizza')->name('get.item.pizza');
 
     // Licença
     Route::post('licenca/salvar', 'LicencaController@store')->name('licenca.store');
@@ -57,6 +75,8 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
     Route::resource('contato', 'ContatoController');
     Route::get('contato/endereco/{id}', 'EnderecoController@listaEnderecoContato')->name('contato.endereco');
     Route::get('financeiro/contato/{id}', 'ContatoController@listaFinanceiroContato')->name('contato.financeiro');
+    Route::get('lista-contatos-pedido', 'ContatoController@getContato')->name('lista.contatos.pedido');
+    Route::get('endereco-cliente-pedido/{id?}', 'ContatoController@getEnderecoCliente')->name('get.endereco.cliente');
 
     // grupos
     Route::resource('grupo', 'GrupoController');
@@ -64,6 +84,7 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
     // complementos
     Route::resource('complemento', 'ComplementoController');
     Route::get('preco-complemento/{id?}', 'ComplementoController@returnPreco')->name('busca.precocomplemento');
+    Route::post('cadastrar-complemento', 'ComplementoController@cadastrar')->name('cadastrar.complemento');
     Route::get('complemento-produto/{id?}', 'ComplementoController@buscaComplementoProduto')->name('busca.complemento.produto');
 
     //empresa
@@ -71,12 +92,13 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
       Route::resource('empresa', 'EmpresaController');
       Route::get('cliente-id/{id?}', 'EmpresaController@returnCliente')->name('busca.clienteid');
       Route::any('empresa-licenca', 'EmpresaController@licencaEmpresa')->name('empresa.licenca');
+
       // configurações
       Route::resource('configuracao', 'ConfiguracaoController');
+      Route::get('obtem-configuracao-epresa', 'ConfiguracaoController@getConfigEmpresa')->name('get.config.empresa');
     });
 
   });
-
 
   // acessos ao sistema
   Route::middleware(['roleProfile'])->group(function () {

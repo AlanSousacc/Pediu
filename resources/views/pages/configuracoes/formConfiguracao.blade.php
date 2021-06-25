@@ -11,12 +11,21 @@
         </div>
       </div>
     </div>
+    <div class="col-md-4 mt-1" data-toggle="tooltip" data-placement="top" title="Se esta opção estiver marcada, o produto mais caro é base na escolha do meio a meio.(somente para balcao)">
+      <div class="form-group">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" name="maiorprecomeioameio" id="maiorprecomeioameio"
+          {{$config->maiorprecomeioameio != null && $config->maiorprecomeioameio == 1 ?	'checked' : ''}}>
+          <label class="custom-control-label pt-1" for="maiorprecomeioameio">Maior Preço Meio a Meio(Balcão)</label>
+        </div>
+      </div>
+    </div>
   </div>
   <hr>
 
   <h4 class="mt-1">Configurações de Entrega</h4>
   <div class="row">
-    <div class="col-md-2 mt-1" data-toggle="tooltip" data-placement="top" title="Esta opção determina se o usuário escolherá um entregador para fazer a entrega, caso esteja habilitado, o usuário deverá fazer o a conferência do valor recebido pelo entregador, caso contrário, o cliente ficará em débito no sistema!">
+    <div class="col-md-2 mt-1" data-toggle="tooltip" data-placement="top" title="Esta opção determina se o usuário escolherá um entregador para fazer a entrega.">
       <div class="form-group">
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" name="controlaentrega" id="controlaentrega"

@@ -30,7 +30,7 @@ $('#receber').on('show.bs.modal', function (event) {
 });
 
 $('#valorpendente').on('change', function(){
-  if($('#valorpendente').val() > $('#valtotal').val() || $('#valorpendente').val() > $('#restante').val()){
+  if(Number($('#valorpendente').val()) > Number($('#valtotal').val()) || Number($('#valorpendente').val()) > Number($('#restante').val())){
     $('.receber-movimentacao').prop('disabled', true)
     $('#valorpendente').addClass('is-invalid');
   } else {

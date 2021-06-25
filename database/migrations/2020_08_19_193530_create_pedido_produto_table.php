@@ -14,6 +14,7 @@ class CreatePedidoProdutoTable extends Migration
   public function up()
   {
     Schema::create('pedido_produto', function (Blueprint $table) {
+      $table->id();
       $table->integer('qtde');
       $table->text('obsitem')->nullable();
       $table->double('prvenda',5,2);

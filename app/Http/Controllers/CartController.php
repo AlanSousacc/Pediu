@@ -28,20 +28,6 @@ class CartController extends Controller
       $cart_data = array();
     }
 
-    // $item_id_list = array_column($cart_data, 'item_id');
-    // $prod_id_is_there = $prod_id;
-
-    // if(in_array($prod_id_is_there, $item_id_list)){
-    //   foreach($cart_data as $keys => $values){
-    //     if($cart_data[$keys]["item_id"] == $prod_id){
-    //       $cart_data[$keys]["item_quantity"] = $request->input('quantity');
-    //       $item_data = json_encode($cart_data);
-    //       $minutes = 60;
-    //       Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
-    //       return response()->json(['status'=>''.$cart_data[$keys]["item_name"].' Foi adicionado ao seu carrinho!','status2'=>'2']);
-    //     }
-    //   }
-    // } else {
       $produto         = Produto::find($prod_id);
       $complementos    = DB::table('complemento_produto')->where('produto_id', $prod_id)->get();
       $prod_name       = $produto->descricao;
@@ -61,7 +47,6 @@ class CartController extends Controller
 
       if($produto){
         $item_array = array(
-          // 'compl_item_id' => rand(1, 9999),
           'item_id'         => $prod_id,
           'item_name'       => $prod_name,
           'prod_comp'       => $prod_comp,
@@ -84,22 +69,6 @@ class CartController extends Controller
       }
     // }
   }
-
-  // public function cartloadbyajax()
-  // {
-  //   if(Cookie::get('shopping_cart')){
-  //     $cookie_data = stripslashes(Cookie::get('shopping_cart'));
-  //     $cart_data = json_decode($cookie_data, true);
-  //     $totalcart = count($cart_data);
-
-  //     echo json_encode(array('totalcart' => $totalcart)); die;
-  //     return;
-  //   } else {
-  //     $totalcart = "0";
-  //     echo json_encode(array('totalcart' => $totalcart)); die;
-  //     return;
-  //   }
-  // }
 
   public function updatetocart(Request $request)
   {

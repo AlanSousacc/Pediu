@@ -27,7 +27,6 @@
       <div class="card">
         <div class="card card-nav-tabs card-plain">
           <div class="card-header card-header-warning">
-            <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
             <div class="nav-tabs-navigation">
               <div class="nav-tabs-wrapper">
                 <ul class="nav nav-tabs" data-tabs="tabs">
@@ -43,7 +42,7 @@
                   </li>
                   @endif
                   <li class="nav-item">
-                    <a class="nav-link" href="#resumo" data-toggle="tab">Resumo</a>
+                    <a class="nav-link" href="#resumo" data-toggle="tab">Resumo Entregadores</a>
                   </li>
                 </ul>
               </div>
@@ -85,8 +84,7 @@
               @endif
               {{-- fim tab conferencia --}}
 
-              {{-- tab resumo --}}
-              
+              {{-- tab resumo --}}              
               <div class="tab-pane" id="resumo">
                 @include('pages.entregadores.listagemResumoEntregadores')
               </div>
@@ -276,44 +274,6 @@
     }
 
   </script>
-
-  {{-- inicia a configuração dos inputs de filtro por data e hora --}}
-  <script>
-    $(function() {
-      $('#dtstart').daterangepicker({
-        singleDatePicker: true,
-        timePickerSeconds: true,
-        timePicker: true,
-        timePicker24Hour: true,
-        timePickerIncrement: 20,
-        "locale": {
-          "applyLabel": "Aplicar",
-          "cancelLabel": "Cancelar",
-          "format": "DD/MM/YYYY HH:mm:ss"
-        },
-        "startDate": moment(),
-        "endDate": moment()
-      });
-    });
-
-    $(function() {
-      $('#dtend').daterangepicker({
-        singleDatePicker: true,
-        timePicker: true,
-        timePickerSeconds: true,
-        timePicker24Hour: true,
-        timePickerIncrement: 30,
-        "locale": {
-          "applyLabel": "Aplicar",
-          "cancelLabel": "Cancelar",
-          "format": "DD/MM/YYYY HH:mm:ss"
-        },
-        "startDate": moment(),
-        "endDate": moment()
-      });
-    });
-  </script>
-  {{-- fim filtro inputs --}}
 
   {{-- fecha modal de impressao --}}
   <script>

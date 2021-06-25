@@ -36,7 +36,7 @@
                 @foreach ($consulta as $item)
                 <tr>
                   <td class="text-center">{{$item->id}}</td>
-                  <td class="text-center"><img class="rounded-circle" style="max-width: 100px" src="{{ $item->image != 'default.png' ? url("storage/".$item->image) : url("storage/img/logos/default.png")}}"/></td>
+                  <td class="text-center"><img class="rounded-circle" style="width: 80px; height: 80px" src="{{ $item->image != 'default.png' ? url("storage/".$item->image) : url("storage/img/logos/default.png")}}"/></td>
                   <td class="text-center">{{$item->descricao}}</td>
                   <td class="text-center">
                     <div class="btn-group">

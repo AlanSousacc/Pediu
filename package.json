@@ -22,5 +22,9 @@
         "sass-loader": "^8.0.0",
         "vue": "^2.6.12",
         "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
+        "v-money": "^0.8.1",
+        "vue-search-select": "^2.9.3"
     }
 }

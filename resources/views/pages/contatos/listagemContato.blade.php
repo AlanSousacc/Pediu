@@ -44,9 +44,7 @@
                     <tr>
                       <td class="text-center">{{$item->id}}</td>
                       <td class="text-center">{{$item->nome}}</td>
-                      @foreach ($item->entregas->where('principal', 1) as $i)
-                        <td class="text-center">{{$i->endereco}}</td>
-                      @endforeach
+                      <td class="text-center">{{$item->entregas->where('principal', 1)->first()->endereco}}</td>
                       <td class="text-center">{{$item->telefone}}</td>
                       <td class="text-center">
                         <div class="btn-group">

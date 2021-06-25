@@ -11,21 +11,23 @@
 <div class="panel-header panel-header-sm">
 </div>
 <div class="content">
-  <div class="row">
-    <div class="col-md-10 offset-1">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="">{{__(" Novo Produto")}}</h5>
-        </div>
-        <div class="card-body">
-          <form action="{{route('produto.store')}}" method="post" autocomplete="off" enctype="multipart/form-data">
-            {{csrf_field()}}
-            @include('alerts.success')
-            @include('pages.produtos.formProduto')
-            <div class="card-footer text-right">
-              <button type="submit" class="btn btn-success btn-round">{{__('Salvar Produto')}}</button>
-            </div>
-          </form>
+  <div id="app">
+    <div class="row">
+      <div class="col-md-10 offset-1">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="">{{__(" Novo Produto")}}</h5>
+          </div>
+          <div class="card-body">
+            <form action="{{route('produto.store')}}" method="post" autocomplete="off" enctype="multipart/form-data">
+              {{csrf_field()}}
+              @include('alerts.success')
+              @include('pages.produtos.formProduto')
+              <div class="card-footer text-right">
+                <button type="submit" class="btn btn-success btn-round">{{__('Salvar Produto')}}</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -115,6 +117,69 @@
     function removerItem(id){
       $('#'+ id).remove()
     }
+
+    $('.salvar-complemento').click(function(){ 
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      Swal.fire({
+        title: 'Criar Complemento?',
+        text: "Você deseja realmente cadastrar este complemento?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4caf50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, Cadastrar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '{{route('cadastrar.complemento')}}',
+            type: "POST",
+            data: {
+              preco: $('#preco').val(),
+              descricao: $('.descricao').val(),
+            },
+            dataType: "json"
+      
+          }).done(function(response) {
+            if(response.resposta.error){
+              Swal.fire(
+                'Falha ao Registrar Complemento',
+                response.resposta.error,
+                'error'
+              )
+              return
+            }
+
+            if(response.resposta.warning){
+              Swal.fire(
+                'Complemento Existente',
+                response.resposta.warning,
+                'warning'
+              )
+              return
+            }
+
+            Swal.fire(
+              'Concluído',
+              response.resposta.success,
+              'success'
+            )
+            
+            $('#preco').val(null);
+            $('.descricao').val("");
+            
+            $('#createcomplemento').modal('hide').data('bs.modal', null);
+          }).fail(function(jqXHR, textStatus ) {
+            console.log('erro', textStatus);
+          });  
+        }
+      })
+    })
+
   </script>
   @endpush
   @endsection
