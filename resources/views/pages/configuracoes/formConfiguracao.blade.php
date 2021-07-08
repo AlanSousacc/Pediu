@@ -11,12 +11,30 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4 mt-1" data-toggle="tooltip" data-placement="top" title="Se esta opção estiver marcada, o produto mais caro é base na escolha do meio a meio.(somente para balcao)">
+    <div class="col-md-3 mt-1" data-toggle="tooltip" data-placement="top" title="Se esta opção estiver marcada, o produto mais caro é base na escolha do meio a meio.(somente para balcao)">
       <div class="form-group">
         <div class="custom-control custom-switch">
           <input type="checkbox" class="custom-control-input" name="maiorprecomeioameio" id="maiorprecomeioameio"
           {{$config->maiorprecomeioameio != null && $config->maiorprecomeioameio == 1 ?	'checked' : ''}}>
           <label class="custom-control-label pt-1" for="maiorprecomeioameio">Maior Preço Meio a Meio(Balcão)</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mt-1" data-toggle="tooltip" data-placement="top" title="Se esta opção estiver marcada, você irá gerenciar os pedidos como status e tempo do pedido, até sair para entrega.">
+      <div class="form-group">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" name="controlecozinha" id="controlecozinha"
+          {{$config->controlecozinha != null && $config->controlecozinha == 1 ?	'checked' : ''}}>
+          <label class="custom-control-label pt-1" for="controlecozinha">Controle de Pedidos na Cozinha</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" data-toggle="tooltip" data-placement="top" title="Determine um tempo médio de preparo de cada produto para gerenciar o tempo até a entrega ao seu cliente, este valor será definido automaticamente em cada item por padrão.">
+      <div class="d-flex align-items-center">
+        <label class="text-nowrap mr-3 mb-2" for="fd-change">Tempo Médio de Preparo:</label>
+        <div class="input-group" style="width: 8rem;">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-stopwatch"></i></span></span></div>
+          <input class="form-control bg-0 pr-3 text-center" type="text" name="tempomediopreparo" value="{{$config->tempomediopreparo}}" placeholder="0">
         </div>
       </div>
     </div>

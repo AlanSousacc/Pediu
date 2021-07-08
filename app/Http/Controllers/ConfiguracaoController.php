@@ -37,15 +37,19 @@ class ConfiguracaoController extends Controller
     if(!$config){
       isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
       isset($data['controlepedidosbalcao']) && $data['controlepedidosbalcao'] == 'on' ? 1 : 0;
-      $data['empresa_id'] = $user;
-      $data['valorentrega'] = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
+      isset($data['controlecozinha']) && $data['controlecozinha'] == 'on' ? 1 : 0;
+      $data['empresa_id']        = $user;
+      $data['valorentrega']      = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
+      $data['tempomediopreparo'] = $data['tempomediopreparo'];
     } else {
-      $config->controlaentrega = isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
+      $config->controlaentrega     = isset($data['controlaentrega']) && $data['controlaentrega'] == 'on' ? 1 : 0;
       $config->maiorprecomeioameio = isset($data['maiorprecomeioameio']) && $data['maiorprecomeioameio'] == 'on' ? 1 : 0;
+      $config->controlecozinha     = isset($data['controlecozinha']) && $data['controlecozinha'] == 'on' ? 1 : 0;
 
       $config->controlepedidosbalcao = isset($data['controlepedidosbalcao']) && $data['controlepedidosbalcao'] == 'on' ? 1 : 0;
-      $config->valorentrega = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
-      $config->empresa_id = $user;
+      $config->valorentrega          = str_replace (',', '.', str_replace ('.', '', $data['valorentrega']));
+      $config->tempomediopreparo     = $data['tempomediopreparo'];
+      $config->empresa_id            = $user;
     }
 
     $config->tempominimoentrega = $data['tempominimoentrega'];

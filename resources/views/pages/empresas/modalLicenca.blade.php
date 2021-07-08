@@ -1,9 +1,9 @@
 <div class="modal fade" id="licenca" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document" style="min-width:600px">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="min-width:600px">
     <div class="modal-content">
       <div class="modal-header" style="text-align: center; display: inline;">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Gerar Licença da Empresa</h4>
+        <h4 class="modal-title m-0">Gerar Licença da Empresa</h4>
       </div>
       <form action="{{route('licenca.store')}}" method="post">
 				{{csrf_field()}}

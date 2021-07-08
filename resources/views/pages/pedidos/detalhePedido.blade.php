@@ -241,7 +241,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text">R$</span>
                         </div>
-                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? ($pedido->total) - $pedido->desconto : '', 2, ',', '.')}}">
+                        <input type="text" disabled class="form-control text-center" value="{{number_format(isset($pedido) ? $pedido->total : '', 2, ',', '.')}}">
                       </div>
                     </div>
                   </div>

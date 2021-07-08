@@ -180,6 +180,12 @@ class PedidoController extends Controller
         return response()->json(['resposta' => [ 'error' => 'Falha ao salvar endereço de entrega, por isso o pedido não foi finallizado, tente novamente ou contate o suporte!']]);
       }
 
+      // calcula o total monetário da lista de itens do pedido
+      $totalItens = 0;
+      foreach($data['itemsPedido'] as $item){
+        $totalItens += $item['totalItemLista'];
+      }
+      
       // dados do pedido
       $pedido                     = new Pedidos;
       $pedido->empresa_id         = $user;
@@ -188,9 +194,9 @@ class PedidoController extends Controller
       $pedido->local_pagamento    = $data['pagamento']['local_pagamento'];
       $pedido->forma_pagamento    = $data['pagamento']['forma_pagamento'];
       $pedido->contato_id         = !$data['contato_id'] ? $contato->id : $data['contato_id'];
-      $pedido->total              = floatval($data['pagamento']['total']);
+      $pedido->subtotal           = $totalItens + floatval($data['pagamento']['taxaentrega']);
       $pedido->taxaentrega        = str_replace (',', '.', str_replace ('.', '', $data['pagamento']['taxaentrega']));
-      $pedido->subtotal           = $pedido->total - $pedido->taxaentrega;
+      $pedido->total              = floatval($data['pagamento']['total']);
       if($pedido->forma_pagamento == 'Conta do Cliente') {
         $pedido->valortroco       = 0;
         $pedido->devolvertroco    = 0;
@@ -220,7 +226,7 @@ class PedidoController extends Controller
     $mov->tipo            = 'Entrada';
     $mov->empresa_id      = $user;
     $mov->forma_pagamento = $pedido->forma_pagamento;
-    $mov->valortotal      = $pedido->valortroco != null ? $pedido->total + $pedido->valortroco : $pedido->total;
+    $mov->valortotal      = $pedido->total;
     $mov->valorpendente   = $mov->valortotal;
     $mov->origem          = 'balcao';
 

@@ -75,7 +75,7 @@
                     </div>
                     <button
                       type="button"
-                      :disabled="!contato && (!novocliente.nome || !novocliente.telefone || !novocliente.endereco || !novocliente.numero || !novocliente.bairro || !novocliente.cidade)"
+                      :disabled="!contatoId && (!novocliente.nome || !novocliente.telefone || !novocliente.endereco || !novocliente.numero || !novocliente.bairro || !novocliente.cidade)"
                       class="btn btn-info btn-round next position-sticky"
                       style="bottom: 30px"
                       name="next">ESCOLHER PRODUTOS <i class="fa fa-arrow-circle-right"></i>
@@ -94,7 +94,7 @@
                         <div class="row w-100 m-0 py-2">
                           <div class="col-md-12">
                             <div class="form-group">
-                              <input type="search" class="w-100 mt-1 form-control consultaitem" v-model="search" @input="consultaItem" placeholder="Procurar item pelo nome [SHIFT + ENTER]" autofocus>
+                              <input type="search" class="w-100 mt-1 form-control consultaitem" v-model="search" @input="consultaItem" placeholder="Procurar item pelo nome" autofocus>
                             </div>
                           </div>
                         </div>

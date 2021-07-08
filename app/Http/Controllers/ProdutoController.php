@@ -148,9 +148,9 @@ class ProdutoController extends Controller
 
   public function getItemFromGroup($id)
 	{
-    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->where('grupo_id', $id)->get();
+    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->with('complementos')->where('grupo_id', $id)->get();
 
-		return response()->json([
+    return response()->json([
       'data' => [
         'produto' => $produto
       ]
@@ -159,7 +159,13 @@ class ProdutoController extends Controller
 
   public function getItemsPizza()
 	{
-    $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->where('grupo_id', 1)->get();
+    // $produto = Produto::where('empresa_id', Auth::user()->empresa_id)->with('complementos')->where('grupo_id', 1)->get();
+    $produto = DB::table('produtos')
+      ->select('produtos.id', 'produtos.descricao', 'produtos.precocusto', 'produtos.precogrande', 'produtos.precomedio', 'produtos.precopequeno', 'produtos.precovenda', 'produtos.saboresdiversos')
+      ->join('grupos', 'grupos.id', 'produtos.grupo_id')
+      ->where('grupos.descricao', 'like', '%pizza%')
+      ->where('produtos.empresa_id', Auth::user()->empresa_id)
+      ->get();
 
 		return response()->json([
       'data' => [
