@@ -19,7 +19,11 @@ class CreateContatosTable extends Migration
       $table->string('documento', 30)->nullable();
       $table->string('telefone', 20);
       $table->enum('tipo', ['Cliente', 'Fornecedor']);
+      $table->boolean('ativo')->default(1);
+      $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->timestamps();
+      
+			$table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
     });
   }
   

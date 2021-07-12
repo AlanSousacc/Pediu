@@ -196,10 +196,10 @@
     </header>
     <section class="bg-darker bg-size-cover bg-position-center py-5" style="background-image: url({{asset('assets/img/pt-bg.jpg')}});">
       <div class="container py-md-4 text-center">
-        <a href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', auth()->user()->empresa->slug)}}" class="d-none d-md-block">
+        <a href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', $empresa->slug)}}" class="d-none d-md-block">
           <img width="142" src="{{$empresa->logo == 'default.png' ? asset('assets/img/pediu.png') : url("storage/" .$empresa->logo)}}" alt="{{ $empresa->razao}}"/>
         </a>
-        <h4 href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', auth()->user()->empresa->slug)}}" class="d-block d-md-none pb-5 pt-2 text-white" >
+        <h4 href="{{!auth()->check() ? route('catalogo', $empresa->slug) : route('catalogo', $empresa->slug)}}" class="d-block d-md-none pb-5 pt-2 text-white" >
           {{Str::upper($empresa->slug)}}
         </h4>
       </div>

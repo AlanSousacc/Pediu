@@ -22,6 +22,5 @@ mix
     .js('resources/js/catalogo/scripts-custom.js', 'public/js/catalogo')
     .js('resources/js/catalogo/tiny-slider.js', 'public/js/catalogo')
     .js('resources/js/entregadores/entregadores.js', 'public/js/entregadores')
-    .js('resources/js/financeiro/financeiro.js', 'public/js/financeiro')
     .js('resources/js/vue/app.js', 'public/js/vue')
     .js('resources/js/site/main.js', 'public/js/main');

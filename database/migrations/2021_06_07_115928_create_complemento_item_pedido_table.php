@@ -14,7 +14,9 @@ class CreateComplementoItemPedidoTable extends Migration
       $table->unsignedBigInteger('produto_id');
       $table->unsignedBigInteger('complemento_id')->unsigned();
       $table->unsignedBigInteger('empresa_id')->unsigned();
-
+      $table->unsignedBigInteger('pedidoproduto_id')->nullable();
+      
+      $table->foreign('pedidoproduto_id')->references('id')->on('pedido_produto')->onDelete('cascade');
       $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');
       $table->foreign('produto_id')->references('id')->on('produtos');
       $table->foreign('complemento_id')->references('id')->on('complementos')->onDelete('cascade');

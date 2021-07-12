@@ -11,20 +11,7 @@ Route::resource('cliente', 'ClienteController');
 Route::get('formulario-cadastro/{plano?}', 'ClienteController@novoCliente')->name('novo.cliente');
 Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('verificar.slug');
 
-  // movimentacao
   Route::middleware(['auth', 'checkLicense', 'roleProfile'])->group(function () {
-    Route::get('movimentacao/baixar/{id}', 'MovimentacaoController@baixarMovimentacao')->name('movimentacao.baixar');
-    Route::get('recebebimento-cliente/{id}', 'MovimentacaoController@movimentar')->name('recebebimento.cliente');
-    Route::get('movimentar/{id}', 'MovimentacaoController@movimentar')->name('movimentar');
-    Route::get('detalhe-movimentacao/{id}', 'MovimentacaoController@detalhe')->name('detalhe.movimentacao');
-    Route::post('movimentacao-caixa', 'MovimentacaoController@movimentar')->name('movimentacao.caixa');
-    Route::get('movimentacoes/pagamentos/dia', 'MovimentacaoController@pagamentosDia')->name('movimentacao.pagamentos.dia');
-    Route::get('movimentacao/{tipo}', 'MovimentacaoController@show')->name('movimentacao.show');
-    Route::get('movimentacoes/recebimentos/dia', 'MovimentacaoController@recebimentosDia')->name('movimentacao.recebimentos.dia');
-    Route::get('movimentacoes/recebimentos', 'MovimentacaoController@movimentacoesrecebimentos')->name('movimentacao.recebimentos');
-    Route::get('movimentacoes/pagamentos', 'MovimentacaoController@movimentacoespagamentos')->name('movimentacao.pagamentos');
-    Route::get('caixa', 'MovimentacaoController@caixa')->name('caixa');
-
     // users
     Route::resource('user', 'UserController', ['except' => ['show']]);
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
@@ -74,7 +61,6 @@ Route::get('verificar-slug/{slug?}', 'ClienteController@consultaSlug')->name('ve
     // contato
     Route::resource('contato', 'ContatoController');
     Route::get('contato/endereco/{id}', 'EnderecoController@listaEnderecoContato')->name('contato.endereco');
-    Route::get('financeiro/contato/{id}', 'ContatoController@listaFinanceiroContato')->name('contato.financeiro');
     Route::get('lista-contatos-pedido', 'ContatoController@getContato')->name('lista.contatos.pedido');
     Route::get('endereco-cliente-pedido/{id?}', 'ContatoController@getEnderecoCliente')->name('get.endereco.cliente');
 

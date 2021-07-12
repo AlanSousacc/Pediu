@@ -277,58 +277,6 @@
       </li>
       {{-- end usuários --}}
 
-      {{-- financeiro --}}
-      <li>
-        <a data-toggle="collapse" href="#financeiro">
-          <i class="fa fa-donate"></i>
-          <p>
-            {{ __("Financeiro") }}
-            <b class="caret"></b>
-          </p>
-        </a>
-        <div class="collapse @if ($activePage == 'pagamentosdia' || $activePage == 'detalhefinanceiro' || $activePage == 'pagamentosgeral' || $activePage == 'recebimentosgeral' || $activePage == 'recebimentodia') show @endif" id="financeiro">
-          <ul class="nav">
-            <li class="@if ($activePage == 'pagamentosgeral') active @endif">
-              <a href="{{route('movimentacao.pagamentos')}}">
-                <i class="fa fa-minus-circle"></i>
-                <p> {{ __("Pagamentos") }} </p>
-              </a>
-            </li>
-            @if ($activePage == 'pagamentosdia')
-            <li class="@if ($activePage == 'pagamentosdia') active @endif">
-              <a href="{{route('movimentacao.pagamentos.dia')}}">
-                <i class="fa fa-sort-numeric-down"></i>
-                <p> {{ __("Pagamentos do Dia") }} </p>
-              </a>
-            </li>
-            @endif
-            <li class="@if ($activePage == 'recebimentosgeral') active @endif">
-              <a href="{{route('movimentacao.recebimentos')}}">
-                <i class="fa fa-plus-circle"></i>
-                <p> {{ __("Recebimentos") }} </p>
-              </a>
-            </li>
-            @if ($activePage == 'recebimentodia')
-            <li class="@if ($activePage == 'recebimentodia') active @endif">
-              <a href="{{route('movimentacao.recebimentos.dia')}}">
-                <i class="fa fa-sort-numeric-up"></i>
-                <p> {{ __("Recebimentos do Dia") }} </p>
-              </a>
-            </li>
-            @endif
-            @if ($activePage == 'detalhefinanceiro')
-            <li class="@if ($activePage == 'detalhefinanceiro') active @endif">
-              <a href="#">
-                <i class="fa fa-clipboard-list"></i>
-                <p> {{ __("Detalhe da Movimentação") }} </p>
-              </a>
-            </li>
-            @endif
-          </ul>
-        </div>
-      </li>
-      {{-- end financeiro --}}
-
       {{-- Administrativo --}}
       @if ((Auth::user()->isAdmin == 1) && (Auth::user()->profile == 'Administrador'))
       <li>

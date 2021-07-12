@@ -16,13 +16,9 @@
       </div>
       <div class="top-menu d-flex align-items-center">
         <div class="dropdown">
-          <a class="text-decoration-none mr-4" href="{{route('caixa')}}"><i class="fa fa-inbox"></i> Caixa</a>
-        </div>
-
-        <div class="dropdown">
           <a class="dropdown-toggle text-decoration-none" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="now-ui-icons users_single-02"></i>
+            <i class="now-ui-icons users_single-02"></i> {{Auth::user()->name}}
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
             @if (Auth::user()->profile == 'Administrador')

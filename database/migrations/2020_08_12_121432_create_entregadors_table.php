@@ -25,7 +25,10 @@ class CreateEntregadorsTable extends Migration
       $table->enum('veiculo', ['Carro', 'Moto', 'Bicicleta', 'Nenhum']);
       $table->string('placa', 15)->nullable();
       $table->boolean('status')->default(1);
+      $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->timestamps();
+      
+			$table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
     });
   }
   

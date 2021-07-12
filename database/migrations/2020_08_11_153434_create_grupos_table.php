@@ -16,7 +16,11 @@ class CreateGruposTable extends Migration
     Schema::create('grupos', function (Blueprint $table) {
       $table->id();
       $table->string('descricao', 60);
+      $table->string('image')->default('default.png')->nullable();
+      $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->timestamps();
+      
+			$table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
     });
   }
   

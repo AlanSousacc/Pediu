@@ -55,7 +55,6 @@
                             <a class="dropdown-item" href="{{ route('contato.edit', $item->id) }}"><i class="ionicons ion-ios-paper-outline"></i> Alterar</a>
                             <a class="dropdown-item" href="{{$item->id}}" data-contid={{$item->id}} data-target="#delete" data-toggle="modal"><i class="ionicons ion-ios-close-outline"></i> Remover</a>
                             <a class="dropdown-item" href="{{ route('contato.endereco', $item->id)}}"><i class="ionicons ion-ios-location-outline"></i> Endereços</a>
-                            <a class="dropdown-item" href="{{ route('contato.financeiro', $item->id)}}"><i class="ionicons ion-social-usd-outline"></i> Financeiro</a>
                           </div>
                         </div>
                       </td>
@@ -100,7 +99,6 @@
                             <a class="dropdown-item" href="{{ route('contato.edit', $item->id) }}"><i class="ionicons ion-ios-paper-outline"></i> Alterar</a>
                             <a class="dropdown-item" href="{{$item->id}}" data-contid={{$item->id}} data-target="#delete" data-toggle="modal"><i class="ionicons ion-ios-close-outline"></i> Remover</a>
                             <a class="dropdown-item" href="{{ route('contato.endereco', $item->id)}}"><i class="ionicons ion-ios-location-outline"></i> Endereços</a>
-                            <a class="dropdown-item" href="{{ route('contato.financeiro', $item->id)}}"><i class="ionicons ion-social-usd-outline"></i> Financeiro</a>
                           </div>
                         </div>
                       </td>

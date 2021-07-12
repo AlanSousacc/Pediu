@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Contato;
 use App\Models\Endereco;
-use App\Models\FluxoMovimentacao;
-use App\Models\Movimentacao;
 use Exception;
 use Auth;
 
@@ -50,15 +48,6 @@ class ContatoController extends Controller
       ]
     ]);
 	}
-
-  public function listaFinanceiroContato($id)
-  {
-    $contato      = $this->contato->findOrFail($id);
-    $movimentacao = Movimentacao::where('contato_id', $id)->with('pedido','contato')->paginate();
-    $fluxomovi    = FluxoMovimentacao::where('empresa_id', Auth::user()->empresa_id)->get();
-
-    return view('pages.contatos.listagemFinanceiroContato', compact('contato', 'movimentacao', 'fluxomovi'));
-  }
 
   public function create()
   {

@@ -21,6 +21,7 @@ class CreateCartItemsTable extends Migration
       $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->double('preco', 5,2);
       $table->integer('qtde');
+      $table->text('observacaoitem')->nullable();
       $table->timestamps();
 
       $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');

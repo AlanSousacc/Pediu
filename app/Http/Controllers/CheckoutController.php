@@ -8,7 +8,6 @@ use App\Models\ComplementoItemCart;
 use App\Models\Configuracao;
 use App\Models\EnderecoUsers;
 use App\Models\MeioameioItemCart;
-use App\Models\Movimentacao;
 use App\Models\Produto;
 use App\User;
 use Illuminate\Http\Request;
@@ -135,26 +134,6 @@ class CheckoutController extends Controller
         }
       }
 
-    }
-    
-    // Cria uma movimentação financeira
-    $mov                  = new Movimentacao();
-    $mov->tipo            = 'Entrada';
-    $mov->empresa_id      = $user->empresa_id;
-    $mov->forma_pagamento = $cart->formapagamento;
-    $mov->valortotal      = $cart->totalpedido;
-    $mov->valorrecebido   = $cart->totalpedido;
-    $mov->valorpendente   = 0;
-    $mov->status          = 1;
-    $mov->origem          = 'loja';
-    $mov->cart_id         = $cart->id;
-    $mov->user_id         = $cart->user_id;
-
-    $savemovimentacao = $mov->save();
-
-    if (!$savemovimentacao){
-      $data = ['message' => 'Houve um problema em gerar a movimentação, mas fique tranquilo, seu pedido foi registrado!'];
-      return response()->json($data, 500);
     }
 
     Cookie::queue(Cookie::forget('shopping_cart'));

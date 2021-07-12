@@ -25,8 +25,10 @@ class CreateEnderecosTable extends Migration
       $table->boolean('status')->default(1);
       $table->boolean('principal');
       $table->unsignedBigInteger('contato_id');
+      $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->timestamps();
-
+      
+			$table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
       $table->foreign('contato_id')->references('id')->on('contatos')->onDelete('cascade');
     });
   }

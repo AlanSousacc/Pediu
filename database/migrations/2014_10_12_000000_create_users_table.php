@@ -21,6 +21,11 @@ class CreateUsersTable extends Migration
       $table->string('password');
       $table->enum('profile', ['Administrador', 'Usuario', 'User Loja'])->nullable();
       $table->boolean('isAdmin')->default(0);
+      $table->string('telefone', 30)->nullable();
+      $table->string('cidade', 30)->nullable();
+      $table->string('endereco', 60)->nullable();
+      $table->string('numero', 5)->nullable();
+      $table->string('bairro', 15)->nullable();
       $table->unsignedBigInteger('empresa_id')->unsigned();
       $table->rememberToken();
       $table->timestamps();

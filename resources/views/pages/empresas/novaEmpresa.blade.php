@@ -61,8 +61,6 @@
       $('#carregalogo').val(dados[0].logo)
       $('#plano').val(dados[0].plano)
 
-
-
     }).fail(function(jqXHR, textStatus ) {
       alert("Falha ao carregar os campos com as informações deste cliente: " + textStatus);
     });

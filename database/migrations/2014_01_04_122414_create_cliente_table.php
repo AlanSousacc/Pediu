@@ -27,6 +27,8 @@ class CreateClienteTable extends Migration
       $table->string('email', 100);
       $table->string('telefone', 20)->nullable();
       $table->string('logo')->default('default.jpg')->nullable();
+      $table->string('slug', 30)->unique()->nullable();
+      $table->integer('plano');
       $table->timestamps();
     });
   }

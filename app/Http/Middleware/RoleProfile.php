@@ -21,7 +21,7 @@ class RoleProfile
 
     // verifica se usuário é administrador da empresa
     if (auth()->user()->profile != 'Administrador' && auth()->user()->profile != 'Usuario')
-    return redirect('catalogo/'. auth()->user()->empresa->slug);
+    return redirect('/'. auth()->user()->empresa->slug);
 
     return $next($request);
   }

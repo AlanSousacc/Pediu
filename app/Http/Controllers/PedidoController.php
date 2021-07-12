@@ -10,7 +10,6 @@ use DB;
 use App\Models\{
   ComplementoItemPedido,
   Configuracao,
-  Movimentacao,
   Entregador,
   Pedidos,
   Contato,
@@ -88,7 +87,6 @@ class PedidoController extends Controller
     $data = $request->except('_token');
     try{
       $pedido  = $this->repository->findOrFail($data['pedidoid']);
-      $mov     = Movimentacao::where('pedido_id', $pedido->id)->first();
       $total   = $pedido->total;
 
       if(isset($data['entregador_id'])){
@@ -99,8 +97,6 @@ class PedidoController extends Controller
         $pedido->valortroco == 0;
       } else{
         $pedido->valortroco = $data['troco'];
-        $mov->valortotal    = $total + $data['troco'];
-        $savedmov           = $mov->save();
       }
 
     } catch (Exception $e) {
@@ -221,31 +217,7 @@ class PedidoController extends Controller
     DB::beginTransaction();
     $pedidosaved = $pedido->save();
 
-    // aplica o pedido na movimentação
-    $mov                  = new Movimentacao;
-    $mov->tipo            = 'Entrada';
-    $mov->empresa_id      = $user;
-    $mov->forma_pagamento = $pedido->forma_pagamento;
-    $mov->valortotal      = $pedido->total;
-    $mov->valorpendente   = $mov->valortotal;
-    $mov->origem          = 'balcao';
-
-    if($pedido->forma_pagamento == 'Conta do Cliente'){
-      $mov->status = 0;
-      $mov->valorrecebido = 0;
-    } else {
-      $mov->status = 1;
-      $mov->valorrecebido = $mov->valortotal;
-    }
-
-    $mov->pedido_id       = $pedido->id;
-    $mov->contato_id      = !$data['contato_id'] ? $contato->id : $data['contato_id'];
-
-    $movisaved = $mov->save();
-    if (!$movisaved)
-    return response()->json(['resposta' => [ 'error' => 'Falha ao salvar movimentação deste pedido']]);
-
-    // dados do pedidoproduto
+     // dados do pedidoproduto
     foreach($data['itemsPedido'] as $i => $produto_id){
       $pedprod              = new PedidoProduto();
       $pedprod->pedido_id   = $pedido->id;
@@ -325,8 +297,7 @@ class PedidoController extends Controller
 
   /**
   * Esta função foi projetada para salvar o pedido em questão e também associar os itens do pedido
-  * ao pedido atual. Criar uma movimentação para que haja necessidade futuramente de conferencia,
-  * como se fosse um caixa.
+  * ao pedido atual.
   */
   public function update(Request $request, $id)
   {
@@ -358,21 +329,6 @@ class PedidoController extends Controller
       DB::beginTransaction();
 
       $saved = $pedido->save();
-      
-      // aplica o pedido na movimentação
-      $mov                  = Movimentacao::where('pedido_id', $pedido->id)->first();
-      $mov->tipo            = 'Entrada';
-      $mov->forma_pagamento = $pedido->forma_pagamento;
-      $mov->valortotal      = $pedido->total;
-      $mov->valorrecebido   = 0;
-      $mov->valorpendente   = $mov->valortotal;
-      $mov->status          = 0; //emaberto, aguardando entregador
-      $mov->pedido_id       = $pedido->id;
-      $mov->contato_id      = $pedido->contato_id;
-
-      $savemovi = $mov->save();
-      if (!$savemovi)
-      return redirect()->back()->with('error', 'Falha ao alterar o Pedido e Movimentação!');
 
       $produtos = [];
       $qtde = 0;
@@ -406,12 +362,6 @@ class PedidoController extends Controller
     try{
       $user   = Auth::user()->empresa_id;
       $pedido = $this->repository->where('empresa_id', $user)->find($request->pedido_id);
-      $mov    = Movimentacao::where('pedido_id', $pedido->id)->where('empresa_id', $user)->first();
-
-      $savedmov = $mov->delete();
-      if (!$savedmov){
-        return redirect()->back()->with('error', 'Falha ao remover a movimentação!');
-      }
 
       if (!$pedido)
       return redirect()->back()->with('error', "Nenhum Pedido encontrado!");

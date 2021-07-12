@@ -7,7 +7,7 @@
 			</button>
 				<h4 class="modal-title text-center" style="color:#fff">Confirmar Recebimento</h4>
 			</div>
-			<form action="{{route('movimentacao.baixar', 'id')}}" method="get">
+			<form  method="get">
 				{{ csrf_field() }}
 				<div class="modal-body">
 					<p class="text-center text-primary">Você confirma o recebimento total de R$ <strong><span id="vltotal" class="medi"></span></strong> <br>do entregador <strong><span id="entregador"></span></strong></p>

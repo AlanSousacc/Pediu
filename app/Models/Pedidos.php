@@ -20,10 +20,6 @@ class Pedidos extends Model
     return $this->belongsTo('App\Models\Entregador');
   }
 
-  public function movimentacao(){
-    return $this->belongsTo('App\Models\Movimentacao');
-  }
-
   public function endereco(){
     return $this->belongsTo('App\Models\Endereco');
   }
