@@ -19,15 +19,12 @@ class CreateTipoMovimentoTable extends Migration
         3 - Compra
         4 - Pagamento
         5 - Recebimento Avulso
-        6 - Pagamento Avuls
+        6 - Pagamento Avulso
       */
         Schema::create('tipo_movimento', function (Blueprint $table) {
           $table->id();
           $table->string('descricao', 30);
-          // $table->unsignedBigInteger('empresa_id')->unsigned();
           $table->timestamps();
-
-          // $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
         });
     }
 

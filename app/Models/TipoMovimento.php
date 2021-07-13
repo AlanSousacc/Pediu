@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoMovimento extends Model
 {
-  protected $table = 'tipo_faturamento';
+  protected $table = 'tipo_movimento';
   protected $primaryKey = 'id';
   protected $fillable = ['descricao'];
   protected $guarded 		= ['id', 'created_at', 'update_at'];
