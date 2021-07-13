@@ -17,7 +17,7 @@ class CreateMeioameioItemPedidoTable extends Migration
       
       $table->foreign('pedidoproduto_id')->references('id')->on('pedido_produto')->onDelete('cascade');
       $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');
-      $table->foreign('produto_id')->references('id')->on('produtos');
+      $table->foreign('produto_id')->references('id')->on('produtos')->onDelete('cascade');
       $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
     });
   }

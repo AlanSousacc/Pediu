@@ -41,6 +41,9 @@
         "psr-4": {
             "App\\": "app/"
         },
+        "files": [
+            "app/Helpers/EmpresaCreate.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"

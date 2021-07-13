@@ -25,7 +25,7 @@ class CreateCartItemsTable extends Migration
       $table->timestamps();
 
       $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
-      $table->foreign('produto_id')->references('id')->on('produtos');
+      $table->foreign('produto_id')->references('id')->on('produtos')->onDelete('cascade');
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
     });

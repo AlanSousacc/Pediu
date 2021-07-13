@@ -9,10 +9,11 @@ class FormaPagamento extends Model
 	protected $table      = 'forma_pagamento';
 	protected $primaryKey = 'id';
   public $timestamps = true;
-	protected $guarded 		= ['id', 'empresa_id', 'created_at', 'update_at'];
+	protected $guarded 		= ['id', 'created_at', 'update_at'];
 	protected $filable 		= [
 		'descricao',
-		'parcela',
+		'empresa_id',
+		'parcelas',
 		'status',
   ];
 

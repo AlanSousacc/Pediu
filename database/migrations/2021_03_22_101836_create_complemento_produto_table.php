@@ -18,8 +18,8 @@ class CreateComplementoProdutoTable extends Migration
       $table->unsignedBigInteger('produto_id');
       $table->unsignedBigInteger('complemento_id');
 
-      $table->foreign('produto_id')->references('id')->on('produtos');
-      $table->foreign('complemento_id')->references('id')->on('complementos');
+      $table->foreign('produto_id')->references('id')->on('produtos')->onDelete('cascade');
+      $table->foreign('complemento_id')->references('id')->on('complementos')->onDelete('cascade');
     });
   }
 
