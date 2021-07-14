@@ -281,7 +281,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\site\main.js */"./resources/js/site/main.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\site\main.js */"./resources/js/site/main.js");
 
 
 /***/ })

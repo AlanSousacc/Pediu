@@ -16,13 +16,13 @@ class CreateFaturamentoTable extends Migration
         Schema::create('faturamento', function (Blueprint $table) {
           $table->id();
           $table->unsignedBigInteger('empresa_id')->unsigned();
-          $table->unsignedBigInteger('user_id')->unsigned();
           $table->unsignedBigInteger('tipo_movimento_id')->unsigned(); // Origem da transação (Venda, Compra, Pagamento Avulso, etc)
           $table->date('dtmovimento');
           $table->double('total');
           $table->unsignedBigInteger('pedido_id')->nullable();
-          $table->unsignedBigInteger('cart_id')->nullable();
           $table->unsignedBigInteger('contato_id')->nullable();
+          $table->unsignedBigInteger('cart_id')->nullable();
+          $table->unsignedBigInteger('user_id')->nullable();
           $table->timestamps();
 
           $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');

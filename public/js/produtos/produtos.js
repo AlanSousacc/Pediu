@@ -168,7 +168,7 @@ function readURL(input) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\produtos\produtos.js */"./resources/js/produtos/produtos.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\produtos\produtos.js */"./resources/js/produtos/produtos.js");
 
 
 /***/ })

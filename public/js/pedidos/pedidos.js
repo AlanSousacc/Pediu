@@ -216,7 +216,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\pedidos\pedidos.js */"./resources/js/pedidos/pedidos.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\pedidos\pedidos.js */"./resources/js/pedidos/pedidos.js");
 
 
 /***/ })

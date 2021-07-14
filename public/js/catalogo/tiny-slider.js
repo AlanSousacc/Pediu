@@ -1673,7 +1673,7 @@ var tns = function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\catalogo\tiny-slider.js */"./resources/js/catalogo/tiny-slider.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\catalogo\tiny-slider.js */"./resources/js/catalogo/tiny-slider.js");
 
 
 /***/ })

@@ -120,7 +120,7 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\complementos\complementos.js */"./resources/js/complementos/complementos.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\complementos\complementos.js */"./resources/js/complementos/complementos.js");
 
 
 /***/ })
