@@ -131,7 +131,7 @@ function readURL(input) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\grupos\grupos.js */"./resources/js/grupos/grupos.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\grupos\grupos.js */"./resources/js/grupos/grupos.js");
 
 
 /***/ })

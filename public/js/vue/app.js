@@ -26385,7 +26385,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\laragon\www\pediu\resources\js\vue\app.js */"./resources/js/vue/app.js");
+module.exports = __webpack_require__(/*! X:\Laragon\www\Pediu\resources\js\vue\app.js */"./resources/js/vue/app.js");
 
 
 /***/ })

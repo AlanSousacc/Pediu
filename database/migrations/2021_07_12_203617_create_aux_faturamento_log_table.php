@@ -17,8 +17,9 @@ class CreateAuxFaturamentoLogTable extends Migration
           $table->id();
           $table->unsignedBigInteger('aux_faturamento_id')->unsigned();
           $table->unsignedBigInteger('forma_pagamento_id')->unsigned();
-          $table->date('dtpagamento');
-          $table->date('dtvencimento');
+          $table->date('dtmovimento'); // Data da Movimentação do Faturamento
+          $table->date('dtquitacao')->nullable(); // Data da Quitação do Faturamento
+          $table->date('dtvencimento')->nullable(); // Data do Vencimento do Faturamento
           $table->double('valorfatura');
           $table->double('valorpago');
           $table->double('valorrestante');

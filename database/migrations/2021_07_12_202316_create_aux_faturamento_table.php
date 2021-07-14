@@ -17,11 +17,12 @@ class CreateAuxFaturamentoTable extends Migration
           $table->id();
           $table->unsignedBigInteger('faturamento_id')->unsigned();
           $table->unsignedBigInteger('forma_pagamento_id')->unsigned();
-          $table->date('dtpagamento');
-          $table->date('dtvencimento');
+          $table->date('dtmovimento'); // Data da Movimentação do Faturamento
+          $table->date('dtquitacao')->nullable(); // Data da Quitação do Faturamento
+          $table->date('dtvencimento')->nullable(); // Data do Vencimento do Faturamento
           $table->double('valorfatura');
-          $table->double('valorpago');
-          $table->double('valorrestante');
+          $table->double('valorpago')->default(0.00);
+          $table->double('valorrestante')->default(0.00);;
           $table->timestamps();
 
           $table->foreign('faturamento_id')->references('id')->on('faturamento')->onDelete('cascade');
